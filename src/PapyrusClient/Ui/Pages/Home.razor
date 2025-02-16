@@ -1,0 +1,203 @@
+﻿@page "/"
+@inject ILogger<Home> Logger
+@inject IJSRuntime Js
+@inject IToastService ToastService
+@inject IDialogService DialogService
+@inject ISettingsManager SettingsManager
+@inject IWorkScheduleReader WorkScheduleReader
+@inject IWorkScheduleValidator WorkScheduleValidator
+@inject ITimeSheetWriter TimeSheetWriter
+
+<PageTitle>Papyrus</PageTitle>
+
+<FluentStack Orientation="@Orientation.Vertical"
+             HorizontalAlignment="@HorizontalAlignment.Center"
+             VerticalAlignment="@VerticalAlignment.Center"
+             VerticalGap="15">
+
+    <FluentInputFile Id="work-schedule-file-uploader"
+                     Style="width: 100%; height: 300px;"
+                     Disabled="@(_state != Status.Idle || _dialog != null)"
+                     Multiple="@true"
+                     Mode="@InputFileMode.Stream"
+                     MaximumFileCount="@MaximumFileCountPerLoad"
+                     MaximumFileSize="@int.MaxValue"
+                     Accept="@string.Join(", ", WorkScheduleReader.SupportedFileExtensions)"
+                     OnFileCountExceeded="@OnFileCountExceeded"
+                     OnFileUploaded="@OnFileLoadedAsync"
+                     OnCompleted="@OnFileLoadCompleted"
+                     @bind-ProgressPercent="_loadProgressPercent">
+        <ChildContent>
+            <div style="margin: 15px;">
+                <label for="work-schedule-file-uploader">
+                    @if (_state != Status.Idle || _dialog != null)
+                    {
+                        <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"/>
+                    }
+                    else
+                    {
+                        <FluentIcon Value="@(new Icons.Regular.Size24.ArrowUpload())"/>
+                    }
+                </label>
+                <div>
+                    Drag Excel files here to load, or <label for="work-schedule-file-uploader">browse</label> for them.
+                    <br/>
+                    <em>Up to @MaximumFileCountPerLoad files are allowed per load.</em>
+                </div>
+                <div>
+                    <br/>
+                    Supported file formats:
+                    [
+                    <span> </span>
+                    @foreach (var extension in WorkScheduleReader.SupportedFileExtensions)
+                    {
+                        <a href="#">@extension</a>
+                        <span> </span>
+                    }
+                    ]
+                    <br/>
+                </div>
+            </div>
+        </ChildContent>
+    </FluentInputFile>
+
+    <FluentToolbar Style="width: 100%; position: sticky; top: 0; z-index: 50;">
+        <FluentButton Appearance="@Appearance.Stealth"
+                      IconStart="@(new Icons.Regular.Size24.Settings())"
+                      Disabled="@(_state != Status.Idle || _dialog != null)"
+                      OnClick="@OpenSettingsDialogAsync">
+        </FluentButton>
+        <FluentSpacer/>
+        <FluentButton Appearance="@Appearance.Accent"
+                      IconStart="@(new Icons.Regular.Size24.ArrowDown())"
+                      Disabled="@(_state != Status.Idle || _dialog != null)"
+                      OnClick="@ProcessSelectedFilesAsync">
+            Process
+        </FluentButton>
+        <FluentButton Appearance="@Appearance.Neutral"
+                      IconStart="@(new Icons.Regular.Size24.Delete())"
+                      Disabled="@(_state != Status.Idle || _dialog != null)"
+                      OnClick="@RemoveSelectedFiles">
+            Remove
+        </FluentButton>
+    </FluentToolbar>
+
+    @switch (_state)
+    {
+        case Status.Idle:
+            <FluentDataGrid TGridItem="WorkScheduleFile"
+                            ItemKey="@(file => file.Id)"
+                            Style="width: 100%;"
+                            Items="@WorkScheduleFiles.AsQueryable()"
+                            DisplayMode="@DataGridDisplayMode.Grid"
+                            GenerateHeader="@GenerateHeaderOption.Default"
+                            ShowHover="@true"
+                            Virtualize="@true"
+                            OverscanCount="4"
+                            ItemSize="44">
+                <ChildContent>
+                    <SelectColumn TGridItem="WorkScheduleFile"
+                                  @bind-SelectedItems="@_selectedWorkScheduleFiles"
+                                  Align="@Align.Center"
+                                  Width="58px"
+                                  SelectMode="@DataGridSelectMode.Multiple"
+                                  SelectFromEntireRow="@true"
+                                  Selectable="@(_ => true)">
+                        <SelectAllTemplate>
+                            <!-- Added margin-left to fix a weird right shift caused by the parent div, which I can't change -->
+                            <FluentButton Style="margin-left: -12px"
+                                          BackgroundColor="rgba(0, 0, 0, 0)">
+                                @switch (context.AllSelected)
+                                {
+                                    case true:
+                                        <FluentIcon
+                                            Value="@(new Icons.Filled.Size20.CheckboxChecked())"/>
+                                        break;
+                                    case false:
+                                        <FluentIcon
+                                            Value="@(new Icons.Filled.Size20.CheckboxUnchecked())"/>
+                                        break;
+                                    default:
+                                        <FluentIcon
+                                            Value="@(new Icons.Filled.Size20.CheckboxIndeterminate())"/>
+                                        break;
+                                }
+                            </FluentButton>
+                        </SelectAllTemplate>
+                        <ChildContent>
+                            <FluentButton BackgroundColor="rgba(0, 0, 0, 0)">
+                                @if (_selectedWorkScheduleFiles.Contains(context))
+                                {
+                                    <FluentIcon
+                                        Value="@(new Icons.Filled.Size20.CheckboxChecked())"/>
+                                }
+                                else
+                                {
+                                    <FluentIcon
+                                        Value="@(new Icons.Filled.Size20.CheckboxUnchecked())"/>
+                                }
+                            </FluentButton>
+                        </ChildContent>
+                    </SelectColumn>
+                    <TemplateColumn TGridItem="WorkScheduleFile"
+                                    Align="@Align.Center"
+                                    Width="50px"
+                                    IsDefaultSortColumn="@true"
+                                    Sortable="@true"
+                                    SortBy="@(GridSort<WorkScheduleFile>.ByAscending(file => file.Status.State))"
+                                    InitialSortDirection="@SortDirection.Ascending">
+                        <ChildContent>
+                            <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
+                                          StopPropagation="@true"
+                                          OnClick="@(() => OpenFileDetailsDialogAsync(context))">
+                                @switch (context.Status.State)
+                                {
+                                    case WorkScheduleFileState.Ok:
+                                        <FluentIcon
+                                            Value="@(new Icons.Filled.Size20.CheckmarkCircle().WithColor(Color.Success))"/>
+                                        break;
+                                    case WorkScheduleFileState.ReadError:
+                                    case WorkScheduleFileState.ValidateError:
+                                        <FluentIcon
+                                            Value="@(new Icons.Filled.Size20.Warning().WithColor(Color.Warning))"/>
+                                        break;
+                                    case WorkScheduleFileState.GeneralError:
+                                    default:
+                                        <FluentIcon
+                                            Value="@(new Icons.Filled.Size20.Bug().WithColor(Color.Error))"/>
+                                        break;
+                                }
+                            </FluentButton>
+                        </ChildContent>
+                    </TemplateColumn>
+                    <PropertyColumn TGridItem="WorkScheduleFile"
+                                    TProp="string"
+                                    Title="File"
+                                    Align="@Align.Start"
+                                    Property="@(file => file.Name)"
+                                    Sortable="@true"
+                                    SortBy="@(GridSort<WorkScheduleFile>.ByAscending(file => file.Name))"/>
+                </ChildContent>
+                <EmptyContent>
+                    <FluentSkeleton Height="32px"
+                                    Width="100%"
+                                    Shimmer="true"/>
+                </EmptyContent>
+            </FluentDataGrid>
+
+            break;
+        case Status.Loading or Status.Processing:
+            <FluentMessageBar Title="@(_state == Status.Loading ? "Loading file(s)..." : "Processing file(s)...")"
+                              Intent="@MessageIntent.Info"
+                              Type="@MessageType.Notification"
+                              AllowDismiss="@false"
+                              Style="min-width: 200px; max-width: 500px; width: 100%; border: 1px solid var(--accent-fill-rest)">
+                <p>The browser window may freeze temporarily during this process.</p>
+            </FluentMessageBar>
+
+            break;
+        default:
+                throw new ArgumentOutOfRangeException(nameof(_state), _state, $"Unhandled state: '{_state}' in '{nameof(Home)}' page");
+    }
+</FluentStack>
+

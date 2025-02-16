@@ -1,0 +1,139 @@
+﻿@using System.Globalization
+@implements IDialogContentComponent
+@inject ISettingsManager SettingsManager
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="false">
+    <FluentStack Orientation="@Orientation.Horizontal"
+                 HorizontalAlignment="@HorizontalAlignment.Start"
+                 VerticalAlignment="@VerticalAlignment.Center">
+        <FluentLabel Typo="Typography.Header">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+        <FluentSpacer/>
+        <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
+                      OnClick="@CancelAsync">
+            <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"
+                        Color="@(Color.Info)"/>
+        </FluentButton>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Body *@
+<FluentDialogBody>
+    <FluentStack Orientation="Orientation.Vertical"
+                 HorizontalAlignment="HorizontalAlignment.Start"
+                 VerticalAlignment="VerticalAlignment.Top"
+                 Style="height: 100%;"
+                 VerticalGap="12">
+
+        <div>
+            <FluentSelect
+                TOption="CultureInfo"
+                Immediate="true"
+                Position="SelectPosition.Below"
+                Label="Language (currently not used)"
+                Items="@SettingsManager.SupportedCultures"
+                OptionText="@(culture => culture.NativeName)"
+                @bind-SelectedOption="@_selectedCulture"
+                @bind-SelectedOption:after="@SelectedCultureChangedAsync"/>
+        </div>
+
+        <div>
+            <FluentSelect
+                TOption="DesignThemeModes"
+                Immediate="true"
+                Position="SelectPosition.Below"
+                Label="Theme"
+                Items="@SettingsManager.SupportedThemes"
+                OptionText="@(theme => theme.ToString("G"))"
+                @bind-SelectedOption="@_selectedTheme"
+                @bind-SelectedOption:after="@SelectedThemeChangedAsync"/>
+        </div>
+
+        <div style="width: 250px">
+            <FluentStack Orientation="@Orientation.Horizontal"
+                         HorizontalAlignment="@HorizontalAlignment.Start"
+                         VerticalAlignment="@VerticalAlignment.Center">
+                <FluentInputLabel ForId="holidaysCalendar"
+                                  Label="Holidays"/>
+                <FluentSpacer/>
+                <FluentButton Appearance="@Appearance.Stealth"
+                              OnClick="@ResetHolidaysChanges">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.ArrowBounce())"
+                                Color="@(Color.Accent)"/>
+                </FluentButton>
+                <FluentButton Appearance="@Appearance.Stealth"
+                              OnClick="@ClearAllHolidays">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.Delete())"
+                                Color="@(Color.Error)"/>
+                </FluentButton>
+            </FluentStack>
+
+            <FluentCalendar Id="holidaysCalendar"
+                            @bind-SelectedDates="@_selectedDays"
+                            @bind-SelectedDates:after="@SelectedDatesChangedAsync"
+                            SelectMode="CalendarSelectMode.Multiple"
+                            Label="Holidays"
+                            Culture="@SettingsManager.Culture"/>
+
+            @if (!_holidaysStore.Any())
+            {
+                <FluentMessageBar Title="No holidays selected."
+                                  Intent="@MessageIntent.Info"
+                                  Type="@MessageType.Notification"
+                                  AllowDismiss="@false"
+                                  Style="border: 1px solid var(--accent-fill-rest)">
+                    <p>Use the calendar above to select holidays.</p>
+                </FluentMessageBar>
+            }
+            else
+            {
+                <FluentDataGrid TGridItem="DateOnly"
+                                Style="width: 100%"
+                                Items="@(_holidaysStore.AsQueryable())"
+                                DisplayMode="@(DataGridDisplayMode.Table)"
+                                RowSize="@(DataGridRowSize.Small)"
+                                GenerateHeader="@(GenerateHeaderOption.None)">
+                    <ChildContent>
+                        <PropertyColumn TGridItem="DateOnly"
+                                        TProp="string"
+                                        Align="Align.Center"
+                                        Property="@(v => v.ToString("O"))"/>
+                        <TemplateColumn TGridItem="DateOnly"
+                                        Align="Align.Center">
+                            <FluentButton Appearance="@Appearance.Stealth"
+                                          IconStart="@(new Icons.Regular.Size24.DocumentDismiss().WithColor(Color.Error))"
+                                          OnClick="@(() => ClearSelected(context))">
+                            </FluentButton>
+                        </TemplateColumn>
+                    </ChildContent>
+                </FluentDataGrid>
+            }
+        </div>
+
+    </FluentStack>
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentStack Orientation="Orientation.Horizontal">
+        <FluentButton Appearance="Appearance.Accent"
+                      OnClick="@SaveAsync">
+            @Dialog.Instance.Parameters.PrimaryAction
+        </FluentButton>
+        @if (Dialog.Instance.Parameters.SecondaryActionEnabled)
+        {
+            <FluentButton Appearance="Appearance.Neutral"
+                          OnClick="@CancelAsync">
+                @Dialog.Instance.Parameters.SecondaryAction
+            </FluentButton>
+        }
+        <FluentSpacer/>
+        <FluentButton Appearance="@Appearance.Stealth"
+                      IconStart="@(new Icons.Regular.Size24.ArrowCounterclockwise())"
+                      OnClick="@RefreshSettingsAsync">
+            Reload
+        </FluentButton>
+    </FluentStack>
+</FluentDialogFooter>
