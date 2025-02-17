@@ -24,7 +24,21 @@
         </FluentBodyContent>
     </FluentStack>
     <FluentFooter>
-        Version: @SettingsManager.Version
+        @if (SettingsManager.Version == null)
+        {
+            <span>Version: fetching</span>
+        }
+        else if (SettingsManager.Version.State == VersionState.Valid)
+        {
+            <span>Version: @(SettingsManager.Version.Value.ToString())+<a
+                    href="https://github.com/frencsi/papyrus-client/commit/@SettingsManager.Version.CommitHash.ToString()"
+                    target="_blank">@SettingsManager.Version.ShortCommitHash.ToString()</a>
+            </span>
+        }
+        else
+        {
+            <span>Version: not found</span>
+        }
         <FluentSpacer/>
         <span>
             <a href="https://github.com/frencsi/papyrus-client" target="_blank">Source code</a>,

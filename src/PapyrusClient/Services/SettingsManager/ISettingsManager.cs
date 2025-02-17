@@ -15,7 +15,7 @@ public interface ISettingsManager : IAsyncDisposable
 
     DesignThemeModes Theme { get; }
 
-    public string? Version { get; }
+    public Version? Version { get; }
 
     event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
