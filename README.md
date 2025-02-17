@@ -17,8 +17,8 @@ cd papyrus-client
 dotnet run --project src\PapyrusClient  
 ```  
 
-## 📖 Sample(s)
-Example Excel file(s) can be found in the `samples` folder.
+## 📖 Samples
+Example Excel files can be found in the [samples](https://github.com/frencsi/papyrus-client/tree/main/samples) folder.
 
 ## 🌟 Roadmap  
 - ✅ *Holiday support* – Allows selecting holidays in the options, which will later be used when processing Excel files.  
