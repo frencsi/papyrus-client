@@ -15,7 +15,7 @@ public partial class SettingsManager(
         CultureStorageKey = "Culture",
         HolidaysStorageKey = "Holidays",
         ThemeStorageKey = "Theme",
-        UnknownVersion = "Unknown",
+        UnknownVersion = "<>",
         VersionFilePath = "/version.txt";
 
     private static readonly IReadOnlyList<CultureInfo> Cultures =
@@ -43,13 +43,15 @@ public partial class SettingsManager(
 
     public IReadOnlySet<DateOnly> Holidays { get; private set; } = ReadOnlySet<DateOnly>.Empty;
 
-    public string Version { get; private set; } = UnknownVersion;
+    public string? Version { get; private set; }
 
     public event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
     public event EventHandler<HolidaysChangedEventArgs>? HolidaysChanged;
 
     public event EventHandler<ThemeChangedEventArgs>? ThemeChanged;
+
+    public event EventHandler<VersionLoadedEventArgs>? VersionLoaded;
 
     protected virtual ValueTask DisposeAsyncCore()
     {
@@ -107,18 +109,9 @@ public partial class SettingsManager(
             await UpdateThemeAsync(theme.Value, false, cancellationToken);
         }
 
-        string version;
-
-        using (var client = httpClientFactory.CreateClient(nameof(SettingsManager)))
-        {
-            version = await client.GetStringAsync(VersionFilePath, cancellationToken);
-        }
-
         Culture = culture;
         Holidays = holidays;
         Theme = theme.Value;
-
-        Version = string.IsNullOrWhiteSpace(version) ? UnknownVersion : version;
 
         CultureInfo.DefaultThreadCurrentCulture = Culture;
         CultureInfo.DefaultThreadCurrentUICulture = Culture;
@@ -126,6 +119,32 @@ public partial class SettingsManager(
         CultureChanged?.Invoke(this, new CultureChangedEventArgs(Culture));
         HolidaysChanged?.Invoke(this, new HolidaysChangedEventArgs(Holidays));
         ThemeChanged?.Invoke(this, new ThemeChangedEventArgs(Theme));
+    }
+
+    public async Task LoadVersionAsync(CancellationToken cancellationToken = default)
+    {
+        if (Version != null)
+        {
+            return;
+        }
+
+        string? version;
+
+        using (var client = httpClientFactory.CreateClient(nameof(SettingsManager)))
+        {
+            try
+            {
+                version = await client.GetStringAsync(VersionFilePath, cancellationToken);
+            }
+            catch (Exception)
+            {
+                version = null;
+            }
+        }
+
+        Version = string.IsNullOrWhiteSpace(version) ? UnknownVersion : version.Trim();
+
+        VersionLoaded?.Invoke(this, new VersionLoadedEventArgs(Version));
     }
 
     public async Task UpdateCultureAsync(CultureInfo culture, CancellationToken cancellationToken = default)
@@ -262,7 +281,7 @@ public partial class SettingsManager(
 
     private async Task<DesignThemeModes?> LoadThemeAsync(CancellationToken cancellationToken = default)
     {
-        ThemeLocalStorageData? data = null;
+        ThemeLocalStorageData? data;
 
         try
         {
