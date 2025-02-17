@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Runtime.InteropServices
+@inherits LayoutComponentBase
+@implements IAsyncDisposable
+@inject ISettingsManager SettingsManager
 
 <FluentLayout>
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
@@ -21,13 +24,53 @@
         </FluentBodyContent>
     </FluentStack>
     <FluentFooter>
-        Version 0.0.1-alpha
+        Version: @SettingsManager.Version
         <FluentSpacer/>
         <span>
             <a href="https://github.com/frencsi/papyrus-client" target="_blank">Source code</a>,
-            <a href="https://dotnet.microsoft.com/" target="_blank">.NET 9</a>,
+            <a href="https://dotnet.microsoft.com/" target="_blank">@RuntimeInformation.FrameworkDescription</a>,
             <a href="https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor" target="_blank">Blazor</a>,
             <a href="https://github.com/microsoft/fluentui-blazor" target="_blank">Fluent UI</a><br/>
         </span>
     </FluentFooter>
 </FluentLayout>
+
+@code {
+
+    private volatile bool _disposed;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        SettingsManager.VersionLoaded += OnVersionLoaded;
+
+        await SettingsManager.LoadVersionAsync();
+    }
+
+    private void OnVersionLoaded(object? sender, VersionLoadedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    protected virtual ValueTask DisposeAsyncCore()
+    {
+        if (_disposed)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        _disposed = true;
+
+        SettingsManager.VersionLoaded -= OnVersionLoaded;
+
+        return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore();
+        GC.SuppressFinalize(this);
+    }
+
+}

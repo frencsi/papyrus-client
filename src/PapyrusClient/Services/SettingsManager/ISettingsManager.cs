@@ -15,13 +15,19 @@ public interface ISettingsManager : IAsyncDisposable
 
     DesignThemeModes Theme { get; }
 
+    public string? Version { get; }
+
     event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
     event EventHandler<HolidaysChangedEventArgs>? HolidaysChanged;
 
     event EventHandler<ThemeChangedEventArgs>? ThemeChanged;
 
+    event EventHandler<VersionLoadedEventArgs>? VersionLoaded;
+
     Task LoadSettingsAsync(CancellationToken cancellationToken = default);
+
+    Task LoadVersionAsync(CancellationToken cancellationToken = default);
 
     Task UpdateCultureAsync(CultureInfo culture, CancellationToken cancellationToken = default);
 
