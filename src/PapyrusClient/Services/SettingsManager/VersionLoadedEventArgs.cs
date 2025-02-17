@@ -1,6 +1,6 @@
 ﻿namespace PapyrusClient.Services.SettingsManager;
 
-public class VersionLoadedEventArgs(string loadedVersion) : EventArgs
+public class VersionLoadedEventArgs(Version loadedVersion) : EventArgs
 {
-    public string LoadedVersion { get; } = loadedVersion;
+    public Version LoadedVersion { get; } = loadedVersion;
 }

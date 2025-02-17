@@ -15,7 +15,6 @@ public partial class SettingsManager(
         CultureStorageKey = "Culture",
         HolidaysStorageKey = "Holidays",
         ThemeStorageKey = "Theme",
-        UnknownVersion = "<>",
         VersionFilePath = "/version.txt";
 
     private static readonly IReadOnlyList<CultureInfo> Cultures =
@@ -43,7 +42,7 @@ public partial class SettingsManager(
 
     public IReadOnlySet<DateOnly> Holidays { get; private set; } = ReadOnlySet<DateOnly>.Empty;
 
-    public string? Version { get; private set; }
+    public Version? Version { get; private set; }
 
     public event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
@@ -128,21 +127,38 @@ public partial class SettingsManager(
             return;
         }
 
-        string? version;
+        var version = Version.Invalid();
 
         using (var client = httpClientFactory.CreateClient(nameof(SettingsManager)))
         {
             try
             {
-                version = await client.GetStringAsync(VersionFilePath, cancellationToken);
+                var data = await client.GetStringAsync(VersionFilePath, cancellationToken);
+
+                if (!string.IsNullOrWhiteSpace(data))
+                {
+                    var memory = data.AsMemory();
+
+                    var separatorIndex = memory.Span.IndexOf('+');
+
+                    if (separatorIndex != -1)
+                    {
+                        var value = memory[..separatorIndex];
+
+                        var commitHash = memory[(separatorIndex + 1)..];
+                        var shortCommitHash = commitHash[..7];
+
+                        version = Version.Valid(value, commitHash, shortCommitHash);
+                    }
+                }
             }
             catch (Exception)
             {
-                version = null;
+                // Ignored
             }
         }
 
-        Version = string.IsNullOrWhiteSpace(version) ? UnknownVersion : version.Trim();
+        Version = version;
 
         VersionLoaded?.Invoke(this, new VersionLoadedEventArgs(Version));
     }
