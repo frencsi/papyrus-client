@@ -49,7 +49,7 @@ jobs:
           # Get the Git commit hash (short version)
           GIT_HASH=$(git rev-parse HEAD)
           # Write the combined version and Git hash to version.txt in the app artifact location
-          echo "$VERSION_$GIT_HASH" > "$APP_LOCATION/$APP_ARTIFACT_LOCATION/version.txt"
+          echo "$VERSION+$GIT_HASH" > "$APP_LOCATION/$APP_ARTIFACT_LOCATION/version.txt"
               
       - name: Build And Deploy
         id: builddeploy
