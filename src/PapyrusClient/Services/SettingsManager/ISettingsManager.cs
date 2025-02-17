@@ -14,6 +14,8 @@ public interface ISettingsManager : IAsyncDisposable
     IReadOnlySet<DateOnly> Holidays { get; }
 
     DesignThemeModes Theme { get; }
+    
+    public string Version { get; }
 
     event EventHandler<CultureChangedEventArgs>? CultureChanged;
 

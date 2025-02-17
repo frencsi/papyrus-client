@@ -1,6 +1,7 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Reflection;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -13,7 +14,8 @@ public partial class SettingsManager(
     private const string
         CultureStorageKey = "Culture",
         HolidaysStorageKey = "Holidays",
-        ThemeStorageKey = "Theme";
+        ThemeStorageKey = "Theme",
+        VersionFilePath = "wwwroot/version.txt";
 
     private static readonly IReadOnlyList<CultureInfo> Cultures =
     [
@@ -39,6 +41,8 @@ public partial class SettingsManager(
     public DesignThemeModes Theme { get; private set; } = Themes[0];
 
     public IReadOnlySet<DateOnly> Holidays { get; private set; } = ReadOnlySet<DateOnly>.Empty;
+
+    public string Version { get; private set; } = "Unknown";
 
     public event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
@@ -102,9 +106,23 @@ public partial class SettingsManager(
             await UpdateThemeAsync(theme.Value, false, cancellationToken);
         }
 
+        string? version = null;
+
+#if DEBUG
+        version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
+#else
+        Console.WriteLine($"Loaded version: {version}");
+        version = await File.ReadAllTextAsync(VersionFilePath, cancellationToken);
+#endif
+
         Culture = culture;
         Holidays = holidays;
         Theme = theme.Value;
+
+        if (!string.IsNullOrWhiteSpace(version))
+        {
+            Version = version;
+        }
 
         CultureInfo.DefaultThreadCurrentCulture = Culture;
         CultureInfo.DefaultThreadCurrentUICulture = Culture;
