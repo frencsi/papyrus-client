@@ -1,7 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Reflection;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -9,13 +8,15 @@ namespace PapyrusClient.Services.SettingsManager;
 
 public partial class SettingsManager(
     IJSRuntime jsRuntime,
-    ILogger<SettingsManager> logger) : ISettingsManager
+    ILogger<SettingsManager> logger,
+    IHttpClientFactory httpClientFactory) : ISettingsManager
 {
     private const string
         CultureStorageKey = "Culture",
         HolidaysStorageKey = "Holidays",
         ThemeStorageKey = "Theme",
-        VersionFilePath = "wwwroot/version.txt";
+        UnknownVersion = "Unknown",
+        VersionFilePath = "/version.txt";
 
     private static readonly IReadOnlyList<CultureInfo> Cultures =
     [
@@ -42,7 +43,7 @@ public partial class SettingsManager(
 
     public IReadOnlySet<DateOnly> Holidays { get; private set; } = ReadOnlySet<DateOnly>.Empty;
 
-    public string Version { get; private set; } = "Unknown";
+    public string Version { get; private set; } = UnknownVersion;
 
     public event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
@@ -106,23 +107,18 @@ public partial class SettingsManager(
             await UpdateThemeAsync(theme.Value, false, cancellationToken);
         }
 
-        string? version = null;
+        string version;
 
-#if DEBUG
-        version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
-#else
-        Console.WriteLine($"Loaded version: {version}");
-        version = await File.ReadAllTextAsync(VersionFilePath, cancellationToken);
-#endif
+        using (var client = httpClientFactory.CreateClient(nameof(SettingsManager)))
+        {
+            version = await client.GetStringAsync(VersionFilePath, cancellationToken);
+        }
 
         Culture = culture;
         Holidays = holidays;
         Theme = theme.Value;
 
-        if (!string.IsNullOrWhiteSpace(version))
-        {
-            Version = version;
-        }
+        Version = string.IsNullOrWhiteSpace(version) ? UnknownVersion : version;
 
         CultureInfo.DefaultThreadCurrentCulture = Culture;
         CultureInfo.DefaultThreadCurrentUICulture = Culture;

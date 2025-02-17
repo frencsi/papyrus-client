@@ -18,7 +18,13 @@ builder.Services
     .AddSingleton<IWorkScheduleReader, WorkScheduleExcelReader>()
     .AddSingleton<IWorkScheduleValidator, WorkScheduleValidator>()
     .AddSingleton<ITimeSheetWriter, TimeSheetExcelWriter>()
-    .AddSingleton<ISettingsManager, SettingsManager>()
+    .AddSingleton<ISettingsManager, SettingsManager>();
+
+builder.Services
+    .AddHttpClient(nameof(SettingsManager),
+        client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+
+builder.Services
     .AddFluentUIComponents();
 
 await builder.BuildAndRunAsync();
