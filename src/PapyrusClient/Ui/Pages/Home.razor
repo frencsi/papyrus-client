@@ -61,11 +61,12 @@
         </ChildContent>
     </FluentInputFile>
 
-    <FluentToolbar Style="width: 100%; position: sticky; top: 0; z-index: 50;">
+    <FluentToolbar Style="min-height: 43px; width: 100%; position: sticky; top: 0; z-index: 15;">
         <FluentButton Appearance="@Appearance.Stealth"
                       IconStart="@(new Icons.Regular.Size24.Settings())"
                       Disabled="@(_state != Status.Idle || _dialog != null)"
-                      OnClick="@OpenSettingsDialogAsync">
+                      OnClick="@OpenSettingsDialogAsync"
+                      Style="margin-left: 9px">
         </FluentButton>
         <FluentSpacer/>
         <FluentButton Appearance="@Appearance.Accent"
@@ -77,7 +78,8 @@
         <FluentButton Appearance="@Appearance.Neutral"
                       IconStart="@(new Icons.Regular.Size24.Delete())"
                       Disabled="@(_state != Status.Idle || _dialog != null)"
-                      OnClick="@RemoveSelectedFiles">
+                      OnClick="@RemoveSelectedFiles"
+                      Style="margin-right: 9px">
             Remove
         </FluentButton>
     </FluentToolbar>
@@ -90,7 +92,7 @@
                             Style="width: 100%;"
                             Items="@WorkScheduleFiles.AsQueryable()"
                             DisplayMode="@DataGridDisplayMode.Grid"
-                            GenerateHeader="@GenerateHeaderOption.Default"
+                            GenerateHeader="@GenerateHeaderOption.Sticky"
                             ShowHover="@true"
                             Virtualize="@true"
                             OverscanCount="4"
