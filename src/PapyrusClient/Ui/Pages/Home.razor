@@ -61,7 +61,7 @@
         </ChildContent>
     </FluentInputFile>
 
-    <FluentToolbar Style="height: 43px; width: 100%; position: sticky; top: 0; z-index: 15;">
+    <FluentToolbar Style="min-height: 43px; width: 100%; position: sticky; top: 0; z-index: 15;">
         <FluentButton Appearance="@Appearance.Stealth"
                       IconStart="@(new Icons.Regular.Size24.Settings())"
                       Disabled="@(_state != Status.Idle || _dialog != null)"
