@@ -6,11 +6,18 @@ namespace PapyrusClient.Ui.Dialogs;
 
 public partial class FileDetailsDialog : ComponentBase
 {
+    private enum ActiveTabType : byte
+    {
+        Status = 0,
+        Options = 1,
+        Details = 2
+    }
+
     [CascadingParameter] public FluentDialog Dialog { get; set; } = null!;
 
     [Parameter] public WorkScheduleFile Content { get; set; } = null!;
 
-    private string? ActiveId { get; set; } = "tab-1";
+    private string ActiveTab { get; set; } = GetActiveTabAsString(ActiveTabType.Status);
 
     private string GetMessage()
     {
@@ -27,5 +34,16 @@ public partial class FileDetailsDialog : ComponentBase
     private async Task CloseAsync()
     {
         await Dialog.CloseAsync();
+    }
+
+    private static string GetActiveTabAsString(ActiveTabType type)
+    {
+        return type switch
+        {
+            ActiveTabType.Status => nameof(ActiveTabType.Status),
+            ActiveTabType.Options => nameof(ActiveTabType.Options),
+            ActiveTabType.Details => nameof(ActiveTabType.Details),
+            _ => "Unknown"
+        };
     }
 }

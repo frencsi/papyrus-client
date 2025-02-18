@@ -15,41 +15,58 @@
                         Color="@(Color.Info)"/>
         </FluentButton>
     </FluentStack>
+
+    <FluentTabs @bind-ActiveTabId="@ActiveTab">
+        <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Status)"
+                   Label="Status"/>
+        <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Options)"
+                   Label="Options"/>
+        <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Details)"
+                   Label="Details"/>
+    </FluentTabs>
 </FluentDialogHeader>
 
 @* Body *@
 <FluentDialogBody>
-
-    <FluentTabs @bind-ActiveTabId="@ActiveId">
-        <FluentTab Id="tab-1"
-                   Label="Status">
-            <FluentDivider Orientation="@Orientation.Horizontal"
-                           Style="margin: 4px 0;"/>
+    <div style="height: 100%; overflow-y: auto; word-break: break-word;">
+        @if (ActiveTab.Equals(nameof(ActiveTabType.Status), StringComparison.OrdinalIgnoreCase))
+        {
             <p>@GetMessage()</p>
-            @if (Content.Status.Details != null)
+
+            if (!string.IsNullOrWhiteSpace(Content.Status.Details))
             {
-                <FluentDivider Orientation="@Orientation.Horizontal"
-                               Style="margin: 4px 0;"/>
-                <p style="white-space: pre-wrap; word-break: break-word; max-height: 235px; height: 100%; overflow-y: auto">
-                    @Content.Status.Details
-                </p>
+                <p>@Content.Status.Details</p>
             }
-        </FluentTab>
-        <FluentTab Id="tab-2"
-                   Label="Options">
-            <FluentDivider Orientation="Orientation.Horizontal"
-                           Style="margin: 4px 0;"/>
-            <p>This tab will be available in a future update.</p>
-        </FluentTab>
-        <FluentTab Id="tab-3"
-                   Label="Metadata">
-            <FluentDivider Orientation="Orientation.Horizontal"
-                           Style="margin: 4px 0;"/>
-            <FluentLabel>ID: @Content.Id</FluentLabel>
-            <FluentLabel>Name: @Content.Name</FluentLabel>
-            <FluentLabel>Size (in bytes): @Content.SizeInyBytes</FluentLabel>
-        </FluentTab>
-    </FluentTabs>
+        }
+        else if (ActiveTab.Equals(nameof(ActiveTabType.Options), StringComparison.OrdinalIgnoreCase))
+        {
+            <FluentMessageBar Title="Tab Not Implemented"
+                              Intent="@MessageIntent.Info"
+                              Type="@MessageType.Notification"
+                              AllowDismiss="@false"
+                              Style="border: 0.0625rem solid var(--accent-fill-rest)">
+                <p>This tab will be available in a future update.</p>
+            </FluentMessageBar>
+        }
+        else if (ActiveTab.Equals(nameof(ActiveTabType.Details), StringComparison.OrdinalIgnoreCase))
+        {
+            <p><strong>ID</strong>: @Content.Id.ToString()</p>
+            <p><strong>File</strong>: @Content.Name</p>
+            <p><strong>Size (in bytes)</strong>: @Content.SizeInyBytes.ToString()</p>
+        }
+        else
+        {
+            <FluentMessageBar Title="Tab Not Found"
+                              Intent="@MessageIntent.Warning"
+                              Type="@MessageType.Notification"
+                              AllowDismiss="@false"
+                              Style="border: 0.0625rem solid var(--warning)">
+                <p>The specified tab, '<strong>@ActiveTab</strong>', could not be found. Please check if the tab name is
+                    correct or choose a valid tab.</p>
+            </FluentMessageBar>
+        }
+
+    </div>
 </FluentDialogBody>
 
 @* Footer *@

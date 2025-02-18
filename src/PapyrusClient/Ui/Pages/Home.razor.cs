@@ -37,6 +37,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
     private int _loadProgressPercent = 0;
 
+    private string _loadFileName = string.Empty;
+
     private IDialogReference? _dialog;
 
     #endregion
@@ -88,6 +90,10 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
         _state = Status.Loading;
 
+        _loadProgressPercent = args.ProgressPercent;
+
+        _loadFileName = args.Name;
+
         var fileStream = args.Stream;
 
         var fileName = args.Name;
@@ -131,6 +137,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
         _state = Status.Idle;
 
         _loadProgressPercent = 0;
+
+        _loadFileName = string.Empty;
     }
 
     private async Task OpenSettingsDialogAsync()
