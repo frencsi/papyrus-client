@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@implements IDialogContentComponent
+﻿@implements IDialogContentComponent
 @inject ISettingsManager SettingsManager
 
 @* Header *@
@@ -24,12 +23,13 @@
     <FluentStack Orientation="Orientation.Vertical"
                  HorizontalAlignment="HorizontalAlignment.Start"
                  VerticalAlignment="VerticalAlignment.Top"
-                 Style="height: 100%;"
+                 Style="width: 100%; height: 100%; scrollbar-gutter: stable; overflow: auto;"
                  VerticalGap="12">
 
-        <div>
+        <div style="width: 95%">
             <FluentSelect
                 TOption="CultureInfo"
+                Width="100%"
                 Immediate="true"
                 Position="SelectPosition.Below"
                 Label="Language (currently not used)"
@@ -39,9 +39,10 @@
                 @bind-SelectedOption:after="@SelectedCultureChangedAsync"/>
         </div>
 
-        <div>
+        <div style="width: 95%">
             <FluentSelect
                 TOption="DesignThemeModes"
+                Width="100%"
                 Immediate="true"
                 Position="SelectPosition.Below"
                 Label="Theme"
@@ -51,7 +52,7 @@
                 @bind-SelectedOption:after="@SelectedThemeChangedAsync"/>
         </div>
 
-        <div style="width: 250px">
+        <div style="width: 95%">
             <FluentStack Orientation="@Orientation.Horizontal"
                          HorizontalAlignment="@HorizontalAlignment.Start"
                          VerticalAlignment="@VerticalAlignment.Center">
@@ -79,11 +80,11 @@
 
             @if (!_holidaysStore.Any())
             {
-                <FluentMessageBar Title="No holidays selected."
+                <FluentMessageBar Title="No Holidays Selected"
                                   Intent="@MessageIntent.Info"
                                   Type="@MessageType.Notification"
                                   AllowDismiss="@false"
-                                  Style="border: 1px solid var(--accent-fill-rest)">
+                                  Style="border: 0.0625rem solid var(--accent-fill-rest)">
                     <p>Use the calendar above to select holidays.</p>
                 </FluentMessageBar>
             }
@@ -92,18 +93,19 @@
                 <FluentDataGrid TGridItem="DateOnly"
                                 Style="width: 100%"
                                 Items="@(_holidaysStore.AsQueryable())"
-                                DisplayMode="@(DataGridDisplayMode.Table)"
-                                RowSize="@(DataGridRowSize.Small)"
+                                DisplayMode="@(DataGridDisplayMode.Grid)"
+                                RowSize="@(DataGridRowSize.Medium)"
                                 GenerateHeader="@(GenerateHeaderOption.None)">
                     <ChildContent>
                         <PropertyColumn TGridItem="DateOnly"
                                         TProp="string"
                                         Align="Align.Center"
-                                        Property="@(v => v.ToString("O"))"/>
+                                        Property="@(date => date.ToString("O"))"/>
                         <TemplateColumn TGridItem="DateOnly"
                                         Align="Align.Center">
                             <FluentButton Appearance="@Appearance.Stealth"
-                                          IconStart="@(new Icons.Regular.Size24.DocumentDismiss().WithColor(Color.Error))"
+                                          Style="width: 100%"
+                                          IconStart="@(new Icons.Regular.Size24.ArrowRight().WithColor(Color.Error))"
                                           OnClick="@(() => ClearSelected(context))">
                             </FluentButton>
                         </TemplateColumn>

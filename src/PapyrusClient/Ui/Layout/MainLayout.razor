@@ -24,27 +24,26 @@
         </FluentBodyContent>
     </FluentStack>
     <FluentFooter>
+        <span style="margin-right: 0.3rem">Version:</span>
         @if (SettingsManager.Version == null)
         {
-            <span>Version: fetching</span>
+            <FluentSkeleton Shimmer="@true" Height="1rem;" Width="4rem;"/>
         }
         else if (SettingsManager.Version.State == VersionState.Valid)
         {
-            <span>Version: @(SettingsManager.Version.Value.ToString())+<a
+            <span>@(SettingsManager.Version.Value.ToString())+<a
                     href="https://github.com/frencsi/papyrus-client/commit/@SettingsManager.Version.CommitHash.ToString()"
                     target="_blank">@SettingsManager.Version.ShortCommitHash.ToString()</a>
             </span>
         }
         else
         {
-            <span>Version: not found</span>
+            <span>not found</span>
         }
         <FluentSpacer/>
         <span>
-            <a href="https://github.com/frencsi/papyrus-client" target="_blank">Code</a>,
-            <a href="https://dotnet.microsoft.com/" target="_blank">@RuntimeInformation.FrameworkDescription</a>,
-            <a href="https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor" target="_blank">Blazor</a>,
-            <a href="https://github.com/microsoft/fluentui-blazor" target="_blank">Fluent UI</a><br/>
+            <a href="https://github.com/frencsi/papyrus-client" target="_blank">Source code</a>,
+            <a href="https://dotnet.microsoft.com/" target="_blank">@RuntimeInformation.FrameworkDescription</a>
         </span>
     </FluentFooter>
 </FluentLayout>
@@ -53,18 +52,20 @@
 
     private volatile bool _disposed;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnInitializedAsync();
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+        {
+            return;
+        }
 
         SettingsManager.VersionLoaded += OnVersionLoaded;
 
+        SettingsManager.ThemeChanged += OnThemeChanged;
+        
         await SettingsManager.LoadVersionAsync();
-    }
-
-    private void OnVersionLoaded(object? sender, VersionLoadedEventArgs e)
-    {
-        StateHasChanged();
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -78,6 +79,8 @@
 
         SettingsManager.VersionLoaded -= OnVersionLoaded;
 
+        SettingsManager.ThemeChanged -= OnThemeChanged;
+
         return ValueTask.CompletedTask;
     }
 
@@ -85,6 +88,16 @@
     {
         await DisposeAsyncCore();
         GC.SuppressFinalize(this);
+    }
+
+    private void OnVersionLoaded(object? sender, VersionLoadedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
+    {
+        StateHasChanged();
     }
 
 }

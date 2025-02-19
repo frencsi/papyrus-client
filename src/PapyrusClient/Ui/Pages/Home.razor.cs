@@ -37,6 +37,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
     private int _loadProgressPercent = 0;
 
+    private string _loadFileName = string.Empty;
+
     private IDialogReference? _dialog;
 
     #endregion
@@ -46,6 +48,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
         base.OnInitialized();
 
         SettingsManager.CultureChanged += OnCultureChanged;
+
+        SettingsManager.ThemeChanged += OnThemeChanged;
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -58,6 +62,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
         _disposed = true;
 
         SettingsManager.CultureChanged -= OnCultureChanged;
+
+        SettingsManager.ThemeChanged -= OnThemeChanged;
 
         WorkScheduleFiles.Clear();
 
@@ -75,6 +81,11 @@ public partial class Home : ComponentBase, IAsyncDisposable
         StateHasChanged();
     }
 
+    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
     private void OnFileCountExceeded(int count)
     {
         ToastService.ShowWarning($"You can only load {MaximumFileCountPerLoad} files at once.");
@@ -87,6 +98,10 @@ public partial class Home : ComponentBase, IAsyncDisposable
         Debug.Assert(args.Stream != null, "Stream should not be null");
 
         _state = Status.Loading;
+
+        _loadProgressPercent = args.ProgressPercent;
+
+        _loadFileName = args.Name;
 
         var fileStream = args.Stream;
 
@@ -131,6 +146,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
         _state = Status.Idle;
 
         _loadProgressPercent = 0;
+
+        _loadFileName = string.Empty;
     }
 
     private async Task OpenSettingsDialogAsync()
