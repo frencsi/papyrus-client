@@ -24,21 +24,20 @@
         </FluentBodyContent>
     </FluentStack>
     <FluentFooter>
-        <span style="margin-right: 0.3rem">Version:</span>
         @if (SettingsManager.Version == null)
         {
-            <FluentSkeleton Shimmer="@true" Height="1rem;" Width="4rem;"/>
+            <span>Version: fetching</span>
         }
         else if (SettingsManager.Version.State == VersionState.Valid)
         {
-            <span>@(SettingsManager.Version.Value.ToString())+<a
+            <span>Version: @(SettingsManager.Version.Value.ToString())+<a
                     href="https://github.com/frencsi/papyrus-client/commit/@SettingsManager.Version.CommitHash.ToString()"
                     target="_blank">@SettingsManager.Version.ShortCommitHash.ToString()</a>
             </span>
         }
         else
         {
-            <span>not found</span>
+            <span>Version: not found</span>
         }
         <FluentSpacer/>
         <span>
@@ -63,11 +62,12 @@
 
         SettingsManager.VersionLoaded += OnVersionLoaded;
 
-        SettingsManager.ThemeChanged += OnThemeChanged;
-
-        await Task.Delay(15000);
-
         await SettingsManager.LoadVersionAsync();
+    }
+
+    private void OnVersionLoaded(object? sender, VersionLoadedEventArgs e)
+    {
+        StateHasChanged();
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -81,8 +81,6 @@
 
         SettingsManager.VersionLoaded -= OnVersionLoaded;
 
-        SettingsManager.ThemeChanged -= OnThemeChanged;
-
         return ValueTask.CompletedTask;
     }
 
@@ -90,16 +88,6 @@
     {
         await DisposeAsyncCore();
         GC.SuppressFinalize(this);
-    }
-
-    private void OnVersionLoaded(object? sender, VersionLoadedEventArgs e)
-    {
-        StateHasChanged();
-    }
-
-    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
-    {
-        StateHasChanged();
     }
 
 }
