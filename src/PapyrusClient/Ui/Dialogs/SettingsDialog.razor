@@ -24,12 +24,13 @@
     <FluentStack Orientation="Orientation.Vertical"
                  HorizontalAlignment="HorizontalAlignment.Start"
                  VerticalAlignment="VerticalAlignment.Top"
-                 Style="width: 90%; height: 100%"
+                 Style="width: 100%; height: 100%; scrollbar-gutter: stable; overflow: auto;"
                  VerticalGap="12">
 
-        <div>
+        <div style="width: 95%">
             <FluentSelect
                 TOption="CultureInfo"
+                Width="100%"
                 Immediate="true"
                 Position="SelectPosition.Below"
                 Label="Language (currently not used)"
@@ -39,9 +40,10 @@
                 @bind-SelectedOption:after="@SelectedCultureChangedAsync"/>
         </div>
 
-        <div>
+        <div style="width: 95%">
             <FluentSelect
                 TOption="DesignThemeModes"
+                Width="100%"
                 Immediate="true"
                 Position="SelectPosition.Below"
                 Label="Theme"
@@ -51,7 +53,7 @@
                 @bind-SelectedOption:after="@SelectedThemeChangedAsync"/>
         </div>
 
-        <div>
+        <div style="width: 95%">
             <FluentStack Orientation="@Orientation.Horizontal"
                          HorizontalAlignment="@HorizontalAlignment.Start"
                          VerticalAlignment="@VerticalAlignment.Center">
@@ -90,6 +92,7 @@
             else
             {
                 <FluentDataGrid TGridItem="DateOnly"
+                                Style="width: 100%"
                                 Items="@(_holidaysStore.AsQueryable())"
                                 DisplayMode="@(DataGridDisplayMode.Grid)"
                                 RowSize="@(DataGridRowSize.Medium)"
@@ -97,11 +100,12 @@
                     <ChildContent>
                         <PropertyColumn TGridItem="DateOnly"
                                         TProp="string"
-                                        Align="Align.Start"
+                                        Align="Align.Center"
                                         Property="@(date => date.ToString("O"))"/>
                         <TemplateColumn TGridItem="DateOnly"
-                                        Align="Align.End">
+                                        Align="Align.Center">
                             <FluentButton Appearance="@Appearance.Stealth"
+                                          Style="width: 100%"
                                           IconStart="@(new Icons.Regular.Size24.ArrowRight().WithColor(Color.Error))"
                                           OnClick="@(() => ClearSelected(context))">
                             </FluentButton>

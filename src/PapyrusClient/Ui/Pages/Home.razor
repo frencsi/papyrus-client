@@ -220,14 +220,24 @@
                 }
                 else
                 {
-                    <FluentMessageBar Title="No Files Loaded"
-                                      Intent="@MessageIntent.Info"
-                                      Type="@MessageType.Notification"
-                                      AllowDismiss="@false"
-                                      Style="max-width: 40rem; border: 0.0625rem solid var(--accent-fill-rest)">
-                        <p>Please drag and drop files, or <label for="work-schedule-file-uploader">browse</label> to
-                            load.</p>
-                    </FluentMessageBar>
+                    <FluentStack Orientation="Orientation.Vertical"
+                                 HorizontalAlignment="HorizontalAlignment.Center"
+                                 VerticalAlignment="VerticalAlignment.Center">
+                        @for (var i = 0; i < 3; i++)
+                        {
+                            <div style="display: flex; width: 100%;">
+                                <FluentSkeleton Style="margin-left: 0.5rem;"
+                                                Height="2rem"
+                                                Width="2.5rem"/>
+                                <FluentSkeleton Style="margin-left: 1rem;"
+                                                Height="2rem"
+                                                Width="2.5rem"/>
+                                <FluentSkeleton Style="margin-left: 1rem; margin-right: 0.5rem;"
+                                                Height="2rem"
+                                                Width="100%"/>
+                            </div>
+                        }
+                    </FluentStack>
                 }
 
                 break;
