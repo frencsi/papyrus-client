@@ -48,6 +48,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
         base.OnInitialized();
 
         SettingsManager.CultureChanged += OnCultureChanged;
+
+        SettingsManager.ThemeChanged += OnThemeChanged;
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -61,6 +63,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
         SettingsManager.CultureChanged -= OnCultureChanged;
 
+        SettingsManager.ThemeChanged -= OnThemeChanged;
+
         WorkScheduleFiles.Clear();
 
         return ValueTask.CompletedTask;
@@ -73,6 +77,11 @@ public partial class Home : ComponentBase, IAsyncDisposable
     }
 
     private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
     {
         StateHasChanged();
     }

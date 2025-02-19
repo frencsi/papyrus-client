@@ -41,10 +41,8 @@
         }
         <FluentSpacer/>
         <span>
-            <a href="https://github.com/frencsi/papyrus-client" target="_blank">Code</a>,
-            <a href="https://dotnet.microsoft.com/" target="_blank">@RuntimeInformation.FrameworkDescription</a>,
-            <a href="https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor" target="_blank">Blazor</a>,
-            <a href="https://github.com/microsoft/fluentui-blazor" target="_blank">Fluent UI</a><br/>
+            <a href="https://github.com/frencsi/papyrus-client" target="_blank">Source code</a>,
+            <a href="https://dotnet.microsoft.com/" target="_blank">@RuntimeInformation.FrameworkDescription</a>
         </span>
     </FluentFooter>
 </FluentLayout>
@@ -53,9 +51,14 @@
 
     private volatile bool _disposed;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await base.OnInitializedAsync();
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+        {
+            return;
+        }
 
         SettingsManager.VersionLoaded += OnVersionLoaded;
 

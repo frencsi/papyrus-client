@@ -28,8 +28,10 @@ public partial class SettingsDialog : ComponentBase, IAsyncDisposable
         base.OnInitializedAsync();
 
         SetParameters();
-        
+
         SettingsManager.CultureChanged += OnCultureChanged;
+
+        SettingsManager.ThemeChanged += OnThemeChanged;
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -42,6 +44,8 @@ public partial class SettingsDialog : ComponentBase, IAsyncDisposable
         _disposed = true;
 
         SettingsManager.CultureChanged -= OnCultureChanged;
+
+        SettingsManager.ThemeChanged -= OnThemeChanged;
 
         return ValueTask.CompletedTask;
     }
@@ -70,6 +74,11 @@ public partial class SettingsDialog : ComponentBase, IAsyncDisposable
     }
 
     private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
     {
         StateHasChanged();
     }

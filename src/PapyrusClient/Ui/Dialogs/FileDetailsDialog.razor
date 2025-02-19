@@ -1,4 +1,5 @@
 ﻿@implements IDialogContentComponent<WorkScheduleFile>
+@inject ISettingsManager SettingsManager
 
 @* Header *@
 <FluentDialogHeader ShowDismiss="false">
@@ -16,7 +17,7 @@
         </FluentButton>
     </FluentStack>
 
-    <FluentTabs @bind-ActiveTabId="@ActiveTab">
+    <FluentTabs @bind-ActiveTabId="@_activeTab">
         <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Status)"
                    Label="Status"/>
         <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Options)"
@@ -29,7 +30,7 @@
 @* Body *@
 <FluentDialogBody>
     <div style="height: 100%; overflow-y: auto; word-break: break-word;">
-        @if (ActiveTab.Equals(nameof(ActiveTabType.Status), StringComparison.OrdinalIgnoreCase))
+        @if (_activeTab.Equals(nameof(ActiveTabType.Status), StringComparison.OrdinalIgnoreCase))
         {
             <p>@GetMessage()</p>
 
@@ -38,7 +39,7 @@
                 <p>@Content.Status.Details</p>
             }
         }
-        else if (ActiveTab.Equals(nameof(ActiveTabType.Options), StringComparison.OrdinalIgnoreCase))
+        else if (_activeTab.Equals(nameof(ActiveTabType.Options), StringComparison.OrdinalIgnoreCase))
         {
             <FluentMessageBar Title="Tab Not Implemented"
                               Intent="@MessageIntent.Info"
@@ -48,7 +49,7 @@
                 <p>This tab will be available in a future update.</p>
             </FluentMessageBar>
         }
-        else if (ActiveTab.Equals(nameof(ActiveTabType.Details), StringComparison.OrdinalIgnoreCase))
+        else if (_activeTab.Equals(nameof(ActiveTabType.Details), StringComparison.OrdinalIgnoreCase))
         {
             <p><strong>ID</strong>: @Content.Id.ToString()</p>
             <p><strong>File</strong>: @Content.Name</p>
@@ -61,7 +62,8 @@
                               Type="@MessageType.Notification"
                               AllowDismiss="@false"
                               Style="border: 0.0625rem solid var(--warning)">
-                <p>The specified tab, '<strong>@ActiveTab</strong>', could not be found. Please check if the tab name is
+                <p>The specified tab, '<strong>@_activeTab</strong>', could not be found. Please check if the tab name
+                    is
                     correct or choose a valid tab.</p>
             </FluentMessageBar>
         }
