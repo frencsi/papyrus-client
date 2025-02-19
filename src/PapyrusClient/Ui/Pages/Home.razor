@@ -17,7 +17,7 @@
     <FluentGridItem xs="12" sm="12" md="9" lg="7" xl="7" xxl="7">
 
         <FluentInputFile Id="work-schedule-file-uploader"
-                         Style="min-height: 12rem;"
+                         Style="min-height: 14rem;"
                          Disabled="@(_state != Status.Idle || _dialog != null)"
                          Multiple="@true"
                          Mode="@InputFileMode.Stream"
@@ -35,7 +35,7 @@
                 <div style="margin: 1rem;">
                     <FluentStack Orientation="Orientation.Vertical"
                                  HorizontalAlignment="HorizontalAlignment.Center"
-                                 VerticalAlignment="VerticalAlignment.Center">
+                                 VerticalAlignment="VerticalAlignment.Top">
                         @switch (_state)
                         {
                             case Status.Idle when _dialog == null:
@@ -84,7 +84,7 @@
                                 break;
                             case Status.Processing:
                             default:
-                                <FluentIcon Value="@(new Icons.Regular.Size48.Dismiss())"/>
+                                <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"/>
 
                                 break;
                         }
