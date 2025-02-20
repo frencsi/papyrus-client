@@ -64,6 +64,7 @@ public partial class SettingsManager(
         CultureChanged = null;
         HolidaysChanged = null;
         ThemeChanged = null;
+        VersionLoaded = null;
 
         return ValueTask.CompletedTask;
     }

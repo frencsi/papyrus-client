@@ -1,5 +1,7 @@
-﻿@implements IDialogContentComponent<WorkScheduleFile>
-@inject ISettingsManager SettingsManager
+﻿@using Microsoft.Extensions.Localization
+@using ResourceKey = PapyrusClient.Resources.Ui.Dialogs.FileDetailsDialog
+@implements IDialogContentComponent<WorkScheduleFile>
+@inject IStringLocalizer<FileDetailsDialog> Localizer
 
 @* Header *@
 <FluentDialogHeader ShowDismiss="false">
@@ -7,7 +9,7 @@
                  HorizontalAlignment="@HorizontalAlignment.Start"
                  VerticalAlignment="@VerticalAlignment.Center">
         <FluentLabel Typo="Typography.Header">
-            @Dialog.Instance.Parameters.Title
+            @Localizer[nameof(ResourceKey.DialogTitle)]
         </FluentLabel>
         <FluentSpacer/>
         <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
@@ -19,62 +21,72 @@
 
     <FluentTabs @bind-ActiveTabId="@_activeTab">
         <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Status)"
-                   Label="Status"/>
+                   Label="@Localizer[nameof(ResourceKey.StatusLabel)]"/>
         <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Options)"
-                   Label="Options"/>
+                   Label="@Localizer[nameof(ResourceKey.OptionsLabel)]"/>
         <FluentTab Id="@GetActiveTabAsString(ActiveTabType.Details)"
-                   Label="Details"/>
+                   Label="@Localizer[nameof(ResourceKey.DetailsLabel)]"/>
     </FluentTabs>
 </FluentDialogHeader>
 
 @* Body *@
 <FluentDialogBody>
-    <div style="height: 100%; overflow-y: auto; word-break: break-word;">
+    <FluentCard style="height: 100%; overflow-y: auto; word-break: break-word; scrollbar-gutter: stable;">
         @if (_activeTab.Equals(nameof(ActiveTabType.Status), StringComparison.OrdinalIgnoreCase))
         {
-            <p>@GetMessage()</p>
+            <p>
+                @(Content.Status switch
+                {
+                    WorkScheduleFile.State.Ok => Localizer[nameof(ResourceKey.FileStateOk)],
+                    WorkScheduleFile.State.ReadError => Localizer[nameof(ResourceKey.FileStateReadError)],
+                    WorkScheduleFile.State.ValidateError => Localizer[nameof(ResourceKey.FileStateValidateError)],
+                    WorkScheduleFile.State.GeneralError => Localizer[nameof(ResourceKey.FileStateGeneralError)],
+                    _ => Localizer[nameof(ResourceKey.FileStateGeneralError)]
+                })
+            </p>
 
-            if (!string.IsNullOrWhiteSpace(Content.Status.Details))
+            if (Content.Exception != null)
             {
-                <p>@Content.Status.Details</p>
+                <FluentDivider Style="margin: 0.5rem 0"/>
+
+                <p style="white-space: pre-wrap">
+                    @Content.Exception.ToString()
+                </p>
             }
         }
         else if (_activeTab.Equals(nameof(ActiveTabType.Options), StringComparison.OrdinalIgnoreCase))
         {
-            <FluentMessageBar Title="Tab Not Implemented"
+            <FluentMessageBar Title="@Localizer[nameof(ResourceKey.MessageBarTabNotImplementedTitle)]"
                               Intent="@MessageIntent.Info"
                               Type="@MessageType.Notification"
                               AllowDismiss="@false"
                               Style="border: 0.0625rem solid var(--accent-fill-rest)">
-                <p>This tab will be available in a future update.</p>
+                <p>@Localizer[nameof(ResourceKey.MessageBarTabNotImplementedBody)]</p>
             </FluentMessageBar>
         }
         else if (_activeTab.Equals(nameof(ActiveTabType.Details), StringComparison.OrdinalIgnoreCase))
         {
-            <p><strong>ID</strong>: @Content.Id.ToString()</p>
-            <p><strong>File</strong>: @Content.Name</p>
-            <p><strong>Size (in bytes)</strong>: @Content.SizeInyBytes.ToString()</p>
+            <p><strong>@Localizer[nameof(ResourceKey.Id)]</strong>: @Content.Id.ToString()</p>
+            <p><strong>@Localizer[nameof(ResourceKey.File)]</strong>: @Content.Name</p>
+            <p><strong>@Localizer[nameof(ResourceKey.SizeInBytes)]</strong>: @Content.SizeInyBytes.ToString()</p>
         }
         else
         {
-            <FluentMessageBar Title="Tab Not Found"
+            <FluentMessageBar Title="@Localizer[nameof(ResourceKey.MessageBarTabNotFoundTitle)]"
                               Intent="@MessageIntent.Warning"
                               Type="@MessageType.Notification"
                               AllowDismiss="@false"
                               Style="border: 0.0625rem solid var(--warning)">
-                <p>The specified tab, '<strong>@_activeTab</strong>', could not be found. Please check if the tab name
-                    is
-                    correct or choose a valid tab.</p>
+                <p>@Localizer.GetString(nameof(ResourceKey.MessageBarTabNotFoundBody), _activeTab)</p>
             </FluentMessageBar>
         }
-
-    </div>
+    </FluentCard>
 </FluentDialogBody>
 
 @* Footer *@
 <FluentDialogFooter>
     <FluentButton Appearance="@Appearance.Accent"
                   OnClick="@CloseAsync">
-        @Dialog.Instance.Parameters.PrimaryAction
+        @Localizer[nameof(ResourceKey.Close)]
     </FluentButton>
 </FluentDialogFooter>

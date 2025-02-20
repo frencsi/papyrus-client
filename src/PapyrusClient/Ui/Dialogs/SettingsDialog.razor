@@ -1,5 +1,8 @@
-﻿@implements IDialogContentComponent
+﻿@using Microsoft.Extensions.Localization
+@using ResourceKey = PapyrusClient.Resources.Ui.Dialogs.SettingsDialog
+@implements IDialogContentComponent
 @inject ISettingsManager SettingsManager
+@inject IStringLocalizer<SettingsDialog> Localizer
 
 @* Header *@
 <FluentDialogHeader ShowDismiss="false">
@@ -7,11 +10,11 @@
                  HorizontalAlignment="@HorizontalAlignment.Start"
                  VerticalAlignment="@VerticalAlignment.Center">
         <FluentLabel Typo="Typography.Header">
-            @Dialog.Instance.Parameters.Title
+            @Localizer[nameof(ResourceKey.DialogTitle)]
         </FluentLabel>
         <FluentSpacer/>
         <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
-                      OnClick="@CancelAsync">
+                      OnClick="@DiscardAsync">
             <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"
                         Color="@(Color.Info)"/>
         </FluentButton>
@@ -32,7 +35,7 @@
                 Width="100%"
                 Immediate="true"
                 Position="SelectPosition.Below"
-                Label="Language (currently not used)"
+                Label="@Localizer[nameof(ResourceKey.SelectLanguageLabel)]"
                 Items="@SettingsManager.SupportedCultures"
                 OptionText="@(culture => culture.NativeName)"
                 @bind-SelectedOption="@_selectedCulture"
@@ -45,9 +48,16 @@
                 Width="100%"
                 Immediate="true"
                 Position="SelectPosition.Below"
-                Label="Theme"
+                Label="@Localizer[nameof(ResourceKey.SelectThemeLabel)]"
                 Items="@SettingsManager.SupportedThemes"
-                OptionText="@(theme => theme.ToString("G"))"
+                OptionValue="@(theme => theme.ToString("D"))"
+                OptionText="@(theme => theme switch
+                            {
+                                DesignThemeModes.System => Localizer[nameof(ResourceKey.SelectThemeSystem)],
+                                DesignThemeModes.Light => Localizer[nameof(ResourceKey.SelectThemeLight)],
+                                DesignThemeModes.Dark => Localizer[nameof(ResourceKey.SelectThemeDark)],
+                                _ => Localizer[nameof(ResourceKey.SelectThemeUnknown)]
+                            })"
                 @bind-SelectedOption="@_selectedTheme"
                 @bind-SelectedOption:after="@SelectedThemeChangedAsync"/>
         </div>
@@ -57,7 +67,7 @@
                          HorizontalAlignment="@HorizontalAlignment.Start"
                          VerticalAlignment="@VerticalAlignment.Center">
                 <FluentInputLabel ForId="holidaysCalendar"
-                                  Label="Holidays"/>
+                                  Label="@Localizer[nameof(ResourceKey.CalendarHolidaysLabel)]"/>
                 <FluentSpacer/>
                 <FluentButton Appearance="@Appearance.Stealth"
                               OnClick="@ResetHolidaysChanges">
@@ -75,17 +85,16 @@
                             @bind-SelectedDates="@_selectedDays"
                             @bind-SelectedDates:after="@SelectedDatesChangedAsync"
                             SelectMode="CalendarSelectMode.Multiple"
-                            Label="Holidays"
                             Culture="@SettingsManager.Culture"/>
 
             @if (!_holidaysStore.Any())
             {
-                <FluentMessageBar Title="No Holidays Selected"
+                <FluentMessageBar Title="@Localizer[nameof(ResourceKey.MessageBarTabNoHolidaysSelectedTitle)]"
                                   Intent="@MessageIntent.Info"
                                   Type="@MessageType.Notification"
                                   AllowDismiss="@false"
                                   Style="border: 0.0625rem solid var(--accent-fill-rest)">
-                    <p>Use the calendar above to select holidays.</p>
+                    <p>@Localizer[nameof(ResourceKey.MessageBarTabNoHolidaysSelectedBody)]</p>
                 </FluentMessageBar>
             }
             else
@@ -122,20 +131,20 @@
     <FluentStack Orientation="Orientation.Horizontal">
         <FluentButton Appearance="Appearance.Accent"
                       OnClick="@SaveAsync">
-            @Dialog.Instance.Parameters.PrimaryAction
+            @Localizer[nameof(ResourceKey.Save)]
         </FluentButton>
         @if (Dialog.Instance.Parameters.SecondaryActionEnabled)
         {
             <FluentButton Appearance="Appearance.Neutral"
-                          OnClick="@CancelAsync">
-                @Dialog.Instance.Parameters.SecondaryAction
+                          OnClick="@DiscardAsync">
+                @Localizer[nameof(ResourceKey.Discard)]
             </FluentButton>
         }
         <FluentSpacer/>
         <FluentButton Appearance="@Appearance.Stealth"
                       IconStart="@(new Icons.Regular.Size24.ArrowCounterclockwise())"
                       OnClick="@RefreshSettingsAsync">
-            Reload
+            @Localizer[nameof(ResourceKey.Reload)]
         </FluentButton>
     </FluentStack>
 </FluentDialogFooter>

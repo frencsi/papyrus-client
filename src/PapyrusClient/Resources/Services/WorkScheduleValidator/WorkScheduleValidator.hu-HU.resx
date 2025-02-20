@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoOptionsSet" xml:space="preserve">
+    <value>Nincs beállítva semmilyen opció ehhez a munkarendhez.</value>
+</data>
+    <data name="ShiftsDateNotInSpecifiedYear" xml:space="preserve">
+    <value>Az egyik vagy több műszak dátuma nem az előírt évben van: '{0}'. 
+
+Nézd meg ezt a dátumot: '{1}'.</value>
+</data>
+    <data name="ShiftsDateNotInSpecifiedMonth" xml:space="preserve">
+    <value>Az egyik vagy több műszak dátuma nem az előírt hónapban van: '{0}'. 
+
+Nézd meg ezt a dátumot: '{1}'.</value>
+</data>
+    <data name="ShiftDurationNegativeOrZero" xml:space="preserve">
+    <value>A műszak időtartama nem lehet negatív vagy nulla. 
+        
+Részletek: {0}.</value>
+</data>
+    <data name="WorTypeGapValidationNotSupported" xml:space="preserve">
+    <value>Most csak az operátor munkatípusnál működik a munkaidő rés-ellenőrzés.</value>
+</data>
+    <data name="PreviousShiftMissingEndContinuationMarker" xml:space="preserve">
+        <value>Hiányzik végzésnél a folytatás jelölő az alábbi alkalmazottnál: '{0}', dátum: '{1}'. 
+ 
+Ez azért kell, mert '{2}' dátumon folytatás jelölővel kezdődik a műszak ugyanannál az alkalmazottnál. 
+
+Nézd át ezeket a dátumokat: '{2}' és '{1}'.</value>
+    </data>
+    <data name="PreviousShiftMultipleEndContinuationMarkerFound" xml:space="preserve">
+    <value>Több folytatás jelölőt találtam végzésre ennél az alkalmazottnál: '{0}', dátum: '{1}'. 
+        
+Nézd át ezeket a dátumokat: '{2}' és '{1}'.</value>
+</data>
+    <data name="ShiftOverlapDetected" xml:space="preserve">
+    <value>Átfedés van a műszakok között: '{0}' dátumán. 
+
+Részletek:
+    - Előző műszak: Alkalmazott '{1}' {2} és {3} között 
+    - Következő műszak: Alkalmazott '{4}' {5} és {6} között. 
+
+Nézd át kérlek az átfedéseket.</value>
+</data>
+    <data name="ShiftGapDetected" xml:space="preserve">
+    <value>Rés van a műszakok között: '{0}' dátumán. 
+
+Részletek: 
+    - Előző műszak: Alkalmazott '{1}' {2} és {3} között 
+    - Következő műszak: Alkalmazott '{4}' {5} és {6} között 
+    - Rés: '{7}'
+
+Győződj meg róla, hogy nincsenek rések a műszakok között.</value>
+</data>
+    <data name="ShiftMissingRequiredDays" xml:space="preserve">
+    <value>Hiányzik a műszak adata a következő napokon: [{0}].</value>
+</data>
+    <data name="ShiftExceedsMaxDurationPerEmployeePerDay" xml:space="preserve">
+    <value>Az alkalmazott '{0}' {1} időt rögzített, ami meghaladja az engedélyezett maximumot: '{2}'. 
+
+Nézd meg ezt a dátumot: '{3}'.</value>
+</data>
+    <data name="ShiftExceedsMaxDurationCombinedPerDay" xml:space="preserve">
+    <value>A teljes műszakidő '{0}' meghaladta a megengedett maximumot: '{1}'. 
+
+Nézd meg ezt a dátumot: '{2}'.</value>
+</data>
+</root>

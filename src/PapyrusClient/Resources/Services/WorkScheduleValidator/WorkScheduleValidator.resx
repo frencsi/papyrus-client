@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="NoOptionsSet" xml:space="preserve">
+        <value>There is no options set for this work schedule.
+
+Please provide the options.</value>
+    </data>
+    <data name="ShiftsDateNotInSpecifiedYear" xml:space="preserve">
+        <value>One or more shift dates are not in the header specified year '{0}'. 
+            
+Please review the following date: '{1}'.</value>
+    </data>
+    <data name="ShiftsDateNotInSpecifiedMonth" xml:space="preserve">
+        <value>One or more shift dates are not in the header specified month '{0}'. 
+
+Please review the following date: '{1}'.</value>
+    </data>
+    <data name="ShiftDurationNegativeOrZero" xml:space="preserve">
+        <value>Shift duration can't be negative or zero. 
+
+Details: {0}.</value>
+    </data>
+    <data name="WorTypeGapValidationNotSupported" xml:space="preserve">
+        <value>Only the operator work type currently supports gap validation.</value>
+    </data>
+    <data name="PreviousShiftMissingEndContinuationMarker" xml:space="preserve">
+        <value>A required 'end' continuation marker is missing for the employee '{0}' on '{1}'. 
+            
+This marker is needed because the shift on '{2}' for the same employee starts with a continuation marker. 
+
+Please review the following dates: '{2}' and '{1}'.</value>
+    </data>
+    <data name="PreviousShiftMultipleEndContinuationMarkerFound" xml:space="preserve">
+        <value>Multiple end continuation markers were found for employee '{0}' on '{1}'. 
+
+Please review the following dates: '{2}' and '{1}'.</value>
+    </data>
+    <data name="ShiftOverlapDetected" xml:space="preserve">
+        <value>There is an overlap in shifts on '{0}'. 
+
+Details: 
+    - Previous Shift: Employee '{1}' from '{2}' to '{3}' 
+    - Next Shift: Employee '{4}' from '{5}' to '{6}' 
+
+Please review the timings for overlapping shifts.</value>
+    </data>
+    <data name="ShiftGapDetected" xml:space="preserve">
+        <value>A gap was detected between shifts on '{0}'.
+
+Details: 
+    - Previous Shift: Employee '{1}' from '{2}' to '{3}' 
+    - Next Shift: Employee '{4}' from '{5}' to '{6}' 
+    - Gap: '{7}'
+
+Please ensure that no gaps exist between shifts.</value>
+    </data>
+    <data name="ShiftMissingRequiredDays" xml:space="preserve">
+        <value>Shift data is missing for the following days: [{0}].</value>
+    </data>
+    <data name="ShiftExceedsMaxDurationPerEmployeePerDay" xml:space="preserve">
+        <value>Employee '{0}' logged '{1}' time, which exceeds the maximum allowed limit of '{2}'. 
+
+Please review the following date: '{3}'.</value>
+    </data>
+    <data name="ShiftExceedsMaxDurationCombinedPerDay" xml:space="preserve">
+        <value>The combined total shift time '{0}' exceeded the allowed maximum of '{1}'.
+
+Please review the following date: '{2}'.</value>
+    </data>
+</root>

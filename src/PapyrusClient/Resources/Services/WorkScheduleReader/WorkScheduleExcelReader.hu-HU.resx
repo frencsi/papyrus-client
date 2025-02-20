@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="MissingFileExtension" xml:space="preserve">
+        <value>Hiányzó fájlkiterjesztés. A fájlnévnek érvényes kiterjesztést kell tartalmaznia (például: {0}) a folytatáshoz</value>
+    </data>
+    <data name="InvalidFileExtension" xml:space="preserve">
+        <value>Érvénytelen fájlkiterjesztés. A fájl kiterjesztése "{0}" nem támogatott. Kérlek, használj érvényes kiterjesztést (például: {1}).</value>
+    </data>
+    <data name="FileIsTooLarge" xml:space="preserve">
+        <value>A fájl túl nagy. A fájl mérete {0} bájt, amely meghaladja a {1} bájtos maximális korlátot.</value>
+    </data>
+    <data name="MissingCompanyName" xml:space="preserve">
+        <value>Hiányzik a cég neve. Kérlek, töltsd ki a hozzá tartozó cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="MissingAddress" xml:space="preserve">
+        <value>Hiányzik a cím. Kérlek, töltsd ki a hozzá tartozó cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="MissingYearAndMonth" xml:space="preserve">
+        <value>Hiányzik az év és a hónap. Kérlek, töltsd ki a hozzá tartozó cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="InvalidYearInYearAndMonth" xml:space="preserve">
+        <value>Érvénytelen év szerepel az adott év és hónapban. Kérlek, ellenőrizd a cellát (Oszlop: {0}, Sor: {1}). Érték: {2}.</value>
+    </data>
+    <data name="InvalidMonthInYearAndMonth" xml:space="preserve">
+        <value>Érvénytelen hónap szerepel az adott év és hónapban. Kérlek, ellenőrizd a cellát (Oszlop: {0}, Sor: {1}). Érték: {2}.</value>
+    </data>
+    <data name="MissingWorkType" xml:space="preserve">
+        <value>Hiányzik a munkatípus. Kérlek, töltsd ki a hozzá tartozó cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="InvalidWorkType" xml:space="preserve">
+        <value>Érvénytelen munkatípus. A(z) '{3}' munkatípus nem támogatott. Kérlek, használj egy érvényes munkatípust (pl. '{4}') és frissítsd a cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="MissingDate" xml:space="preserve">
+        <value>Hiányzik a dátum. Kérlek, töltsd ki a hozzá tartozó cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="InvalidDate" xml:space="preserve">
+        <value>Érvénytelen dátum lett megadva. Kérlek, ellenőrizd a cellát (Oszlop: {0}, Sor: {1}). Érték: {2}.</value>
+    </data>
+    <data name="MissingEmployeeName" xml:space="preserve">
+        <value>Hiányzik az alkalmazott neve. Kérlek, töltsd ki a cellát (Oszlop: {0}, Sor: {1}).</value>
+    </data>
+    <data name="InvalidTime" xml:space="preserve">
+        <value>Érvénytelen idő. Kérlek, használd a helyes 24 órás formátumot, vagy a folytatásjelzőt: '{3}'. Ellenőrizd a cellát (oszlop: {0}, sor: {1}). Érték: {2}.</value>
+    </data>
+</root>
