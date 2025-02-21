@@ -22,7 +22,7 @@ Example Excel files can be found in the [samples](https://github.com/frencsi/pap
 
 ## 🌟 Roadmap  
 - ✅ *Holiday support* – Allows selecting holidays in the options, which will later be used when processing Excel files.  
-- 🚧 *Language support* – Language can be selected in the options. The UI and generated files will reflect this.  
+- ✅ *Language support* – Language can be selected in the options. The UI and generated files will reflect this.  
 - ⌛ *Selectable (optionally custom) validation options* – Enables modification of Excel validation options.  
 - ⌛ *Code quality* – Review and refactor areas where shortcuts were taken.  
 - ⌛ *Code documentation* – Add comments and XML documentation.  

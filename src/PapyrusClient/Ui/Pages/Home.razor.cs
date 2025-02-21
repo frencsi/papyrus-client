@@ -2,17 +2,19 @@
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PapyrusClient.Models;
 using PapyrusClient.Services.SettingsManager;
 using PapyrusClient.Ui.Dialogs;
+using ResourceKey = PapyrusClient.Resources.Ui.Pages.Home;
 
 namespace PapyrusClient.Ui.Pages;
 
 public partial class Home : ComponentBase, IAsyncDisposable
 {
-    private enum Status : byte
+    private enum State : byte
     {
         Idle = 0,
         Loading = 1,
@@ -33,7 +35,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
     private IEnumerable<WorkScheduleFile> _selectedWorkScheduleFiles = Array.Empty<WorkScheduleFile>();
 
-    private Status _state = Status.Idle;
+    private State _state = State.Idle;
 
     private int _loadProgressPercent = 0;
 
@@ -48,8 +50,6 @@ public partial class Home : ComponentBase, IAsyncDisposable
         base.OnInitialized();
 
         SettingsManager.CultureChanged += OnCultureChanged;
-
-        SettingsManager.ThemeChanged += OnThemeChanged;
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -62,8 +62,6 @@ public partial class Home : ComponentBase, IAsyncDisposable
         _disposed = true;
 
         SettingsManager.CultureChanged -= OnCultureChanged;
-
-        SettingsManager.ThemeChanged -= OnThemeChanged;
 
         WorkScheduleFiles.Clear();
 
@@ -81,14 +79,10 @@ public partial class Home : ComponentBase, IAsyncDisposable
         StateHasChanged();
     }
 
-    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
-    {
-        StateHasChanged();
-    }
-
     private void OnFileCountExceeded(int count)
     {
-        ToastService.ShowWarning($"You can only load {MaximumFileCountPerLoad} files at once.");
+        ToastService.ShowWarning(Localizer.GetString(nameof(ResourceKey.InputFileMaximumFilesExceeded),
+            MaximumFileCountPerLoad));
     }
 
     private async Task OnFileLoadedAsync(FluentInputFileEventArgs args)
@@ -97,7 +91,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
         Debug.Assert(args.Stream != null, "Stream should not be null");
 
-        _state = Status.Loading;
+        _state = State.Loading;
 
         _loadProgressPercent = args.ProgressPercent;
 
@@ -108,7 +102,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
         var fileName = args.Name;
         var fileSizeInBytes = args.Size;
         WorkSchedule? workSchedule;
-        WorkScheduleFileStatus fileStatus;
+        Exception? exception;
 
         try
         {
@@ -116,25 +110,32 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
             await WorkScheduleValidator.ValidateAsync(workSchedule);
 
-            fileStatus = WorkScheduleFileStatus.Ok();
+            exception = null;
         }
         catch (Exception ex)
         {
             workSchedule = null;
-            fileStatus = WorkScheduleFileStatus.Error(ex);
+            exception = ex;
         }
         finally
         {
             await fileStream.DisposeAsync();
         }
 
-        var workScheduleFile = new WorkScheduleFile
+        WorkScheduleFile workScheduleFile;
+
+        if (workSchedule == null)
         {
-            Name = fileName,
-            SizeInyBytes = fileSizeInBytes,
-            WorkSchedule = workSchedule,
-            Status = fileStatus
-        };
+            Debug.Assert(exception != null, "Exception should not be null.");
+
+            workScheduleFile = new WorkScheduleFile(fileName, fileSizeInBytes, exception);
+        }
+        else
+        {
+            Debug.Assert(workSchedule != null, "Work schedule should not be null.");
+
+            workScheduleFile = new WorkScheduleFile(fileName, fileSizeInBytes, workSchedule);
+        }
 
         WorkScheduleFiles.Add(workScheduleFile);
     }
@@ -143,7 +144,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
     {
         ObjectDisposedException.ThrowIf(_disposed, typeof(Home));
 
-        _state = Status.Idle;
+        _state = State.Idle;
 
         _loadProgressPercent = 0;
 
@@ -154,7 +155,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
     {
         ObjectDisposedException.ThrowIf(_disposed, typeof(Home));
 
-        if (_dialog != null || _state != Status.Idle)
+        if (_dialog != null || _state != State.Idle)
         {
             return;
         }
@@ -162,10 +163,8 @@ public partial class Home : ComponentBase, IAsyncDisposable
         _dialog = await DialogService.ShowPanelAsync<SettingsDialog>(new DialogParameters
         {
             Alignment = HorizontalAlignment.Right,
-            Title = "Settings",
-            PrimaryAction = "Save",
-            SecondaryAction = "Discard",
             PreventDismissOnOverlayClick = true,
+            PreventScroll = true,
             OnDialogOpened = EventCallback.Factory.Create<DialogInstance>(this, StateHasChanged)
         });
 
@@ -178,14 +177,14 @@ public partial class Home : ComponentBase, IAsyncDisposable
     {
         ObjectDisposedException.ThrowIf(_disposed, typeof(Home));
 
-        if (_dialog != null || _state != Status.Idle)
+        if (_dialog != null || _state != State.Idle)
         {
             return;
         }
 
         if (!_selectedWorkScheduleFiles.Any())
         {
-            ToastService.ShowInfo("Please select at least one file.");
+            ToastService.ShowInfo(Localizer[nameof(ResourceKey.NoFilesSelected)]);
             return;
         }
 
@@ -199,7 +198,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
 
     private async Task OpenFileDetailsDialogAsync(WorkScheduleFile context)
     {
-        if (_dialog != null || _state != Status.Idle)
+        if (_dialog != null || _state != State.Idle)
         {
             return;
         }
@@ -207,7 +206,6 @@ public partial class Home : ComponentBase, IAsyncDisposable
         _dialog = await DialogService.ShowDialogAsync<FileDetailsDialog>(context, new DialogParameters
         {
             Height = "400px",
-            Title = "File details",
             PreventDismissOnOverlayClick = true,
             PreventScroll = true,
             Alignment = HorizontalAlignment.Start,
@@ -223,12 +221,12 @@ public partial class Home : ComponentBase, IAsyncDisposable
     {
         ObjectDisposedException.ThrowIf(_disposed, typeof(Home));
 
-        if (_dialog != null || _state != Status.Idle)
+        if (_dialog != null || _state != State.Idle)
         {
             return;
         }
 
-        _state = Status.Processing;
+        _state = State.Processing;
 
         string? zipFilePath = null;
 
@@ -236,13 +234,13 @@ public partial class Home : ComponentBase, IAsyncDisposable
         {
             if (!_selectedWorkScheduleFiles.Any())
             {
-                ToastService.ShowInfo("Please select at least one file.");
+                ToastService.ShowInfo(Localizer[nameof(ResourceKey.NoFilesSelected)]);
                 return;
             }
 
-            if (_selectedWorkScheduleFiles.Any(file => file.Status.State != WorkScheduleFileState.Ok))
+            if (_selectedWorkScheduleFiles.Any(file => file.Status != WorkScheduleFile.State.Ok))
             {
-                ToastService.ShowWarning("Only files with valid data can be processed.");
+                ToastService.ShowWarning(Localizer[nameof(ResourceKey.InvalidFilesSelected)]);
                 return;
             }
 
@@ -257,7 +255,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
                 foreach (var file in _selectedWorkScheduleFiles)
                 {
                     Debug.Assert(file.WorkSchedule != null, "Work schedule should not be null.");
-                    Debug.Assert(file.Status.State == WorkScheduleFileState.Ok, "Work schedule file should be valid.");
+                    Debug.Assert(file.Status == WorkScheduleFile.State.Ok, "Work schedule file should be valid.");
 
                     foreach (var timeSheet in file.WorkSchedule.ToTimeSheets())
                     {
@@ -298,11 +296,11 @@ public partial class Home : ComponentBase, IAsyncDisposable
             using var streamRef = new DotNetStreamReference(stream: zipFileStream, true);
 
             await Js.InvokeVoidAsync("downloadFileFromStream",
-                $"timeSheets_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.zip", streamRef);
+                $"papyrus_{DateTimeOffset.UtcNow.ToUnixTimeSeconds()}.zip", streamRef);
         }
         catch (Exception ex)
         {
-            ToastService.ShowError("An error occured during processing. Please see the console for more details.");
+            ToastService.ShowError(Localizer[nameof(ResourceKey.FilesProcessingError)]);
             Logger.LogError(ex, "An error occured during processing.");
         }
         finally
@@ -312,7 +310,7 @@ public partial class Home : ComponentBase, IAsyncDisposable
                 File.Delete(zipFilePath);
             }
 
-            _state = Status.Idle;
+            _state = State.Idle;
         }
     }
 }

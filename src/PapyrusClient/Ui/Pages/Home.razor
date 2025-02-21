@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Microsoft.Extensions.Localization
+@using ResourceKey = PapyrusClient.Resources.Ui.Pages.Home
 @inject ILogger<Home> Logger
 @inject IJSRuntime Js
 @inject IToastService ToastService
@@ -7,6 +9,7 @@
 @inject IWorkScheduleReader WorkScheduleReader
 @inject IWorkScheduleValidator WorkScheduleValidator
 @inject ITimeSheetWriter TimeSheetWriter
+@inject IStringLocalizer<Home> Localizer
 
 <PageTitle>Papyrus</PageTitle>
 
@@ -16,9 +19,9 @@
 
     <FluentGridItem xs="12" sm="12" md="9" lg="7" xl="7" xxl="7">
 
-        <FluentInputFile Id="work-schedule-file-uploader"
+        <FluentInputFile Id="file-loader"
                          Style="min-height: 14rem;"
-                         Disabled="@(_state != Status.Idle || _dialog != null)"
+                         Disabled="@(_state != State.Idle || _dialog != null)"
                          Multiple="@true"
                          Mode="@InputFileMode.Stream"
                          MaximumFileCount="@MaximumFileCountPerLoad"
@@ -38,38 +41,26 @@
                                  VerticalAlignment="VerticalAlignment.Top">
                         @switch (_state)
                         {
-                            case Status.Idle when _dialog == null:
+                            case State.Idle when _dialog == null:
                             {
-                                <label for="work-schedule-file-uploader">
+                                <label for="file-loader">
                                     <FluentIcon Value="@(new Icons.Regular.Size24.ArrowUpload())"/>
                                 </label>
 
                                 <div>
-                                    Drag Excel files here to load, or
-                                    <label
-                                        for="work-schedule-file-uploader">browse</label>
-                                    for
-                                    them.
+                                    @Localizer[nameof(ResourceKey.InputFilePart1)]
+                                    <label for="file-loader">@Localizer[nameof(ResourceKey.InputFilePart2)]</label>
+                                    @Localizer[nameof(ResourceKey.InputFilePart3)]
                                     <br/>
-                                    <em>Up to @MaximumFileCountPerLoad files are allowed per load.</em>
+                                    <em>@Localizer.GetString(nameof(ResourceKey.InputFileMaximumFilesAllowedPerLoad), MaximumFileCountPerLoad)</em>
                                 </div>
 
-                                <div>
-                                    <br/>
-                                    Supported file formats:
-                                    [
-                                    <span> </span>
-                                    @foreach (var extension in WorkScheduleReader.SupportedFileExtensions)
-                                    {
-                                        <a href="#">@extension</a>
-                                        <span> </span>
-                                    }
-                                    ]
-                                    <br/>
+                                <div style="margin-top: 1rem;">
+                                    @Localizer.GetString(nameof(ResourceKey.InputFileSupportedFileFormats), string.Join(", ", WorkScheduleReader.SupportedFileExtensions))
                                 </div>
                                 break;
                             }
-                            case Status.Loading:
+                            case State.Loading:
                                 <FluentIcon Value="@(new Icons.Regular.Size24.Hourglass())"/>
 
                                 <div style="width: 7rem;">
@@ -82,7 +73,7 @@
                                     @_loadFileName
                                 </div>
                                 break;
-                            case Status.Processing:
+                            case State.Processing:
                             default:
                                 <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"/>
 
@@ -102,21 +93,21 @@
             <FluentButton Style="min-width: 4rem;"
                           Appearance="@Appearance.Stealth"
                           IconStart="@(new Icons.Regular.Size24.Settings())"
-                          Disabled="@(_state != Status.Idle || _dialog != null)"
+                          Disabled="@(_state != State.Idle || _dialog != null)"
                           OnClick="@OpenSettingsDialogAsync">
             </FluentButton>
             <FluentSpacer/>
             <FluentButton Appearance="@Appearance.Accent"
                           IconStart="@(new Icons.Regular.Size24.ArrowDown())"
-                          Disabled="@(_state != Status.Idle || _dialog != null)"
+                          Disabled="@(_state != State.Idle || _dialog != null)"
                           OnClick="@ProcessSelectedFilesAsync">
-                Process
+                @Localizer[nameof(ResourceKey.Process)]
             </FluentButton>
             <FluentButton Appearance="@Appearance.Neutral"
                           IconStart="@(new Icons.Regular.Size24.Delete())"
-                          Disabled="@(_state != Status.Idle || _dialog != null)"
+                          Disabled="@(_state != State.Idle || _dialog != null)"
                           OnClick="@RemoveSelectedFiles">
-                Remove
+                @Localizer[nameof(ResourceKey.Remove)]
             </FluentButton>
         </FluentToolbar>
 
@@ -129,20 +120,20 @@
             <FluentButton Style="min-width: 4rem;"
                           Appearance="@Appearance.Stealth"
                           IconStart="@(new Icons.Regular.Size24.Settings())"
-                          Disabled="@(_state != Status.Idle || _dialog != null)"
+                          Disabled="@(_state != State.Idle || _dialog != null)"
                           OnClick="@OpenSettingsDialogAsync">
             </FluentButton>
             <FluentSpacer/>
             <FluentButton Style="min-width: 4rem;"
                           Appearance="@Appearance.Accent"
                           IconStart="@(new Icons.Regular.Size24.ArrowDown())"
-                          Disabled="@(_state != Status.Idle || _dialog != null)"
+                          Disabled="@(_state != State.Idle || _dialog != null)"
                           OnClick="@ProcessSelectedFilesAsync">
             </FluentButton>
             <FluentButton Style="min-width: 4rem;"
                           Appearance="@Appearance.Neutral"
                           IconStart="@(new Icons.Regular.Size24.Delete())"
-                          Disabled="@(_state != Status.Idle || _dialog != null)"
+                          Disabled="@(_state != State.Idle || _dialog != null)"
                           OnClick="@RemoveSelectedFiles">
             </FluentButton>
         </FluentToolbar>
@@ -154,7 +145,7 @@
 
         @switch (_state)
         {
-            case Status.Idle:
+            case State.Idle:
                 @if (WorkScheduleFiles.Count != 0)
                 {
                     <FluentDataGrid TGridItem="WorkScheduleFile"
@@ -182,24 +173,24 @@
                                             Align="@Align.Center"
                                             IsDefaultSortColumn="@true"
                                             Sortable="@true"
-                                            SortBy="@(GridSort<WorkScheduleFile>.ByAscending(file => file.Status.State))"
+                                            SortBy="@(GridSort<WorkScheduleFile>.ByAscending(file => file.Status))"
                                             InitialSortDirection="@SortDirection.Ascending">
                                 <ChildContent>
                                     <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
                                                   StopPropagation="@true"
                                                   OnClick="@(() => OpenFileDetailsDialogAsync(context))">
-                                        @switch (context.Status.State)
+                                        @switch (context.Status)
                                         {
-                                            case WorkScheduleFileState.Ok:
+                                            case WorkScheduleFile.State.Ok:
                                                 <FluentIcon
                                                     Value="@(new Icons.Regular.Size24.Checkmark().WithColor(Color.Success))"/>
                                                 break;
-                                            case WorkScheduleFileState.ReadError:
-                                            case WorkScheduleFileState.ValidateError:
+                                            case WorkScheduleFile.State.ReadError:
+                                            case WorkScheduleFile.State.ValidateError:
                                                 <FluentIcon
                                                     Value="@(new Icons.Regular.Size24.Warning().WithColor(Color.Warning))"/>
                                                 break;
-                                            case WorkScheduleFileState.GeneralError:
+                                            case WorkScheduleFile.State.GeneralError:
                                             default:
                                                 <FluentIcon
                                                     Value="@(new Icons.Regular.Size24.Bug().WithColor(Color.Error))"/>
@@ -210,7 +201,7 @@
                             </TemplateColumn>
                             <PropertyColumn TGridItem="WorkScheduleFile"
                                             TProp="string"
-                                            Title="File"
+                                            Title="@Localizer[nameof(ResourceKey.DataGridFileTitle)]"
                                             Align="@Align.Start"
                                             Property="@(file => file.Name)"
                                             Sortable="@true"
@@ -245,18 +236,33 @@
 
                 break;
 
-            case Status.Loading or Status.Processing:
-                <FluentMessageBar Title="@(_state == Status.Loading ? "Loading Files(s)" : "Processing File(s)")"
-                                  Intent="@MessageIntent.Info"
-                                  Type="@MessageType.Notification"
-                                  AllowDismiss="@false"
-                                  Style="max-width: 40rem; border: 0.0625rem solid var(--accent-fill-rest)">
-                    <p>The browser window may freeze temporarily during this process.</p>
+            default:
+                <FluentMessageBar
+                    Title="@(_state switch
+                           {
+                               State.Loading => Localizer[nameof(ResourceKey.MessageBarLoadingFilesTitle)],
+                               State.Processing => Localizer[nameof(ResourceKey.MessageBarProcessingFilesTitle)],
+                               _ => Localizer[nameof(ResourceKey.MessageBarUnhandledStateTitle)]
+                           })"
+                    Intent="@(_state switch
+                            {
+                                State.Loading => MessageIntent.Info,
+                                State.Processing => MessageIntent.Info,
+                                _ => MessageIntent.Warning
+                            })"
+                    Type="@MessageType.Notification"
+                    AllowDismiss="@false"
+                    Style="max-width: 40rem; border: 0.0625rem solid var(--accent-fill-rest)">
+                    <p>
+                        @(_state switch
+                        {
+                            State.Loading => Localizer[nameof(ResourceKey.MessageBarLoadingFilesBody)],
+                            State.Processing => Localizer[nameof(ResourceKey.MessageBarProcessingFilesBody)],
+                            _ => Localizer[nameof(ResourceKey.MessageBarUnhandledStateBody)]
+                        })
+                    </p>
                 </FluentMessageBar>
                 break;
-
-            default:
-                    throw new ArgumentOutOfRangeException(nameof(_state), _state, $"Unhandled state: '{_state}' in '{nameof(Home)}' page");
         }
 
     </FluentGridItem>

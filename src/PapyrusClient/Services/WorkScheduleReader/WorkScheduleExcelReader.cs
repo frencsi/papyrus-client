@@ -1,10 +1,12 @@
 ﻿using System.Collections.Frozen;
+using Microsoft.Extensions.Localization;
 using PapyrusClient.Models;
 using Sylvan.Data.Excel;
+using ResourceKey = PapyrusClient.Resources.Services.WorkScheduleReader.WorkScheduleExcelReader;
 
 namespace PapyrusClient.Services.WorkScheduleReader;
 
-public class WorkScheduleExcelReader : IWorkScheduleReader
+public class WorkScheduleExcelReader(IStringLocalizer<WorkScheduleExcelReader> localizer) : IWorkScheduleReader
 {
     private static readonly TimeSpan
         StartContinuationMarkerValue = TimeSpan.Zero,
@@ -99,10 +101,10 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(fileExtension))
         {
-            throw new WorkScheduleReaderException
-            {
-                Details = "Missing file extension."
-            };
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingFileExtension),
+                resourceArgs: [string.Join(", ", SupportedFileExtensions)]);
         }
 
         foreach (var (extension, type) in WorkbookTypes)
@@ -113,35 +115,21 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
             }
         }
 
-        throw new WorkScheduleReaderException
-        {
-            Details = "Invalid file extension."
-        };
+        throw new WorkScheduleExcelReaderException(
+            localizer: localizer,
+            resourceKey: nameof(ResourceKey.InvalidFileExtension),
+            resourceArgs: [fileExtension, string.Join(", ", SupportedFileExtensions)]);
     }
 
     private void CheckFileSize(Stream fileSource)
     {
         if (fileSource.Length > MaxFileSizeInBytes)
         {
-            throw new WorkScheduleReaderException
-            {
-                Details = $"File is too large. Maximum allowed size is {MaxFileSizeInBytes} bytes."
-            };
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.FileIsTooLarge),
+                resourceArgs: [fileSource.Length.ToString(), MaxFileSizeInBytes.ToString()]);
         }
-    }
-
-    private WorkScheduleReaderException CreateParseException(string reason, string value, int column, int row)
-    {
-        return new WorkScheduleReaderException
-        {
-            Details = $"""
-                       {reason}
-
-                       Details:
-                       - Position (column, row): '{column}' - '{row}'
-                       - Value: '{value}'
-                       """
-        };
     }
 
     private string ParseCompany(ExcelDataReader reader, int column)
@@ -150,11 +138,10 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw CreateParseException(
-                reason: "Missing company name.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingCompanyName),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString()]);
         }
 
         return string.Intern(value);
@@ -166,11 +153,10 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw CreateParseException(
-                reason: "Missing address.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingAddress),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString()]);
         }
 
         return string.Intern(value);
@@ -182,11 +168,10 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw CreateParseException(
-                reason: "Missing year and month.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingYearAndMonth),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString()]);
         }
 
         var span = value.AsSpan();
@@ -226,20 +211,18 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (year == null)
         {
-            throw CreateParseException(
-                reason: "Invalid year format in year and month.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.InvalidYearInYearAndMonth),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString(), value]);
         }
 
         if (month == null)
         {
-            throw CreateParseException(
-                reason: "Invalid month format in year and month.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.InvalidMonthInYearAndMonth),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString(), value]);
         }
 
         return (year.Value, month.Value);
@@ -251,20 +234,19 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw CreateParseException(
-                reason: "Missing work type.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingWorkType),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString()]);
         }
 
         if (!WorkTypes.TryGetValue(value, out var type))
         {
-            throw CreateParseException(
-                reason: "Invalid work type.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.InvalidWorkType),
+                resourceArgs:
+                [(column + 1).ToString(), reader.RowNumber.ToString(), value, string.Join(", ", WorkTypes.Keys)]);
         }
 
         return type;
@@ -276,20 +258,18 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw CreateParseException(
-                reason: "Missing date.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingDate),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString()]);
         }
 
         if (!DateOnly.TryParse(value, out var dateOnly))
         {
-            throw CreateParseException(
-                reason: "Invalid date.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.InvalidDate),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString(), value]);
         }
 
         return dateOnly;
@@ -301,11 +281,10 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw CreateParseException(
-                reason: "Missing employee name.",
-                value: value,
-                column: column,
-                row: reader.RowNumber);
+            throw new WorkScheduleExcelReaderException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.MissingEmployeeName),
+                resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString()]);
         }
 
         return string.Intern(value);
@@ -326,11 +305,9 @@ public class WorkScheduleExcelReader : IWorkScheduleReader
             return new WorkShift.Time(Value: dateTime.TimeOfDay, HasContinuationMarker: false);
         }
 
-        throw CreateParseException(
-            reason:
-            $"Invalid time cell. Valid format 'HH:mm' (24H) or continuation marker '{WorkOptions.ContinuationMarker}' is needed.",
-            value: value,
-            column: column,
-            row: reader.RowNumber);
+        throw new WorkScheduleExcelReaderException(
+            localizer: localizer,
+            resourceKey: nameof(ResourceKey.InvalidTime),
+            resourceArgs: [(column + 1).ToString(), reader.RowNumber.ToString(), value]);
     }
 }

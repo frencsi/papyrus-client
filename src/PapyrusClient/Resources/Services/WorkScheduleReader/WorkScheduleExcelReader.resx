@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="MissingFileExtension" xml:space="preserve">
+        <value>Missing file extension. Please ensure the file includes a valid extension (e.g., {0}) before proceeding.</value>
+    </data>
+    <data name="InvalidFileExtension" xml:space="preserve">
+        <value>Invalid file extension. The file's extension "{0}" is not supported. Please use a valid extension (e.g., {1}).</value>
+    </data>
+    <data name="FileIsTooLarge" xml:space="preserve">
+        <value>File is too large. The file size is {0} bytes and exceeds the maximum limit of {1} bytes.</value>
+    </data>
+    <data name="MissingCompanyName" xml:space="preserve">
+        <value>Missing company name. Please fill it in the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="MissingAddress" xml:space="preserve">
+        <value>Missing address. Please fill it in the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="MissingYearAndMonth" xml:space="preserve">
+        <value>Missing year and month. Please fill it in the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="InvalidYearInYearAndMonth" xml:space="preserve">
+        <value>Invalid year in the provided year and month. Please check the cell (Column: {0}, Row: {1}). Value: {2}.</value>
+    </data>
+    <data name="InvalidMonthInYearAndMonth" xml:space="preserve">
+        <value>Invalid month in the provided year and month. Please check the cell (Column: {0}, Row: {1}). Value: {2}.</value>
+    </data>
+    <data name="MissingWorkType" xml:space="preserve">
+        <value>Missing work type. Please fill it in the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="InvalidWorkType" xml:space="preserve">
+        <value>Invalid work type provided. The work type '{3}' is not supported. Please use a valid work type (e.g., '{4}') and update the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="MissingDate" xml:space="preserve">
+        <value>Missing date. Please fill it in the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="InvalidDate" xml:space="preserve">
+        <value>Invalid date provided. Please check the cell (Column: {0}, Row: {1}). Value: {2}.</value>
+    </data>
+    <data name="MissingEmployeeName" xml:space="preserve">
+        <value>Missing employee name. Please fill it in the cell (Column: {0}, Row: {1}).</value>
+    </data>
+    <data name="InvalidTime" xml:space="preserve">
+        <value>Invalid time provided. Please use the correct 24-hour format or the continuation marker '{3}'. Check the cell (Column: {0}, Row: {1}). Value: {2}.</value>
+    </data>
+</root>

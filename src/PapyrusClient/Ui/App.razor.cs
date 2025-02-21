@@ -12,11 +12,8 @@ public partial class App : ComponentBase, IAsyncDisposable
         base.OnInitialized();
 
         SettingsManager.ThemeChanged += OnThemeChanged;
-    }
 
-    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
-    {
-        StateHasChanged();
+        SettingsManager.CultureChanged += OnCultureChanged;
     }
 
     protected virtual ValueTask DisposeAsyncCore()
@@ -30,6 +27,8 @@ public partial class App : ComponentBase, IAsyncDisposable
 
         SettingsManager.ThemeChanged -= OnThemeChanged;
 
+        SettingsManager.CultureChanged -= OnCultureChanged;
+
         return ValueTask.CompletedTask;
     }
 
@@ -37,5 +36,18 @@ public partial class App : ComponentBase, IAsyncDisposable
     {
         await DisposeAsyncCore();
         GC.SuppressFinalize(this);
+    }
+
+    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
+    {
+        // TODO: Toast notifications are not dynamically localized, revisit later.
+        ToastService.ClearAll();
+
+        StateHasChanged();
     }
 }

@@ -1,14 +1,11 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
-using PapyrusClient.Services.SettingsManager;
 
 namespace PapyrusClient.Ui.Dialogs;
 
-public partial class SettingsDialog : ComponentBase, IAsyncDisposable
+public partial class SettingsDialog : ComponentBase
 {
-    private volatile bool _disposed;
-
     private SortedSet<DateOnly> _holidaysStore = null!;
 
     private CultureInfo _initialCulture = null!;
@@ -25,35 +22,9 @@ public partial class SettingsDialog : ComponentBase, IAsyncDisposable
 
     protected override void OnInitialized()
     {
-        base.OnInitializedAsync();
+        base.OnInitialized();
 
         SetParameters();
-
-        SettingsManager.CultureChanged += OnCultureChanged;
-
-        SettingsManager.ThemeChanged += OnThemeChanged;
-    }
-
-    protected virtual ValueTask DisposeAsyncCore()
-    {
-        if (_disposed)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        _disposed = true;
-
-        SettingsManager.CultureChanged -= OnCultureChanged;
-
-        SettingsManager.ThemeChanged -= OnThemeChanged;
-
-        return ValueTask.CompletedTask;
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await DisposeAsyncCore();
-        GC.SuppressFinalize(this);
     }
 
     private void SetParameters()
@@ -73,15 +44,6 @@ public partial class SettingsDialog : ComponentBase, IAsyncDisposable
             .ToList();
     }
 
-    private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
-    {
-        StateHasChanged();
-    }
-
-    private void OnThemeChanged(object? sender, ThemeChangedEventArgs e)
-    {
-        StateHasChanged();
-    }
 
     private void SelectedDatesChangedAsync()
     {
@@ -146,7 +108,7 @@ public partial class SettingsDialog : ComponentBase, IAsyncDisposable
         await Dialog.CloseAsync();
     }
 
-    private async Task CancelAsync()
+    private async Task DiscardAsync()
     {
         if (_initialCulture.Name != _selectedCulture.Name)
         {

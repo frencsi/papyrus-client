@@ -1,14 +1,16 @@
 ﻿using System.Buffers;
 using System.Collections.Frozen;
 using System.Drawing;
+using Microsoft.Extensions.Localization;
 using PapyrusClient.Models;
 using SpreadCheetah;
 using SpreadCheetah.Styling;
 using SpreadCheetah.Worksheets;
+using ResourceKey = PapyrusClient.Resources.Services.TimeSheetWriter.TimeSheetExcelWriter;
 
 namespace PapyrusClient.Services.TimeSheetWriter;
 
-public class TimeSheetExcelWriter : ITimeSheetWriter
+public class TimeSheetExcelWriter(IStringLocalizer<TimeSheetExcelWriter> localizer) : ITimeSheetWriter
 {
     private readonly record struct BodyData(
         TimeSpan MonthlyWorkingDuration,
@@ -18,18 +20,15 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
     private const string
         FileExtension = ".xlsx",
-        AttendanceSheet = "Jelenléti ív",
-        TbdMarker = "TBD",
-        HolidayMarker = "MSZ.",
         DayOfWeekFormat = "dddd",
         MonthFormat = "MMMM",
         TimeSpanFormat = @"hh\:mm";
 
-    private static readonly FrozenDictionary<WorkType, string> WorkType =
+    private static readonly FrozenDictionary<WorkType, string> WorkTypeResourceKeyMap =
         new Dictionary<WorkType, string>
         {
-            { Models.WorkType.Unknown, "ISM" },
-            { Models.WorkType.Operator, "Operátor" }
+            { WorkType.Unknown, nameof(ResourceKey.WorkTypeUnknown) },
+            { WorkType.Operator, nameof(ResourceKey.WorkTypeOperator) }
         }.ToFrozenDictionary();
 
     private static readonly Color BorderColor = Color.Black;
@@ -477,17 +476,17 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
     #endregion
 
-    private static readonly IReadOnlyList<(string Value, double Width)> Columns =
+    private static readonly IReadOnlyList<(string ResourceKey, double Width)> Columns =
     [
-        ("NAP", 12.00),
-        ("DÁT.", 5.50),
-        ("ÉRK.", 6.00),
-        ("TÁV.", 6.00),
-        ("N.", 7.00),
-        ("D.", 7.00),
-        ("É.", 7.00),
-        ("ÖSSZ.", 10.00),
-        ("MEGJ.", 9.00)
+        (nameof(ResourceKey.DayColumn), 12.00),
+        (nameof(ResourceKey.DateColumn), 9.00),
+        (nameof(ResourceKey.ArriveColumn), 9.00),
+        (nameof(ResourceKey.LeaveColumn), 9.00),
+        (nameof(ResourceKey.DayPeriodColumn), 9.00),
+        (nameof(ResourceKey.AfternoonPeriodColumn), 9.00),
+        (nameof(ResourceKey.NightPeriodColumn), 9.00),
+        (nameof(ResourceKey.SummaryColumn), 11.00),
+        (nameof(ResourceKey.NoteColumn), 10.00)
     ];
 
     public Task<string> CreateFileNameAsync(TimeSheet timeSheet,
@@ -496,7 +495,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
         cancellationToken.ThrowIfCancellationRequested();
 
         var fileName =
-            $"{AttendanceSheet} {WorkType[timeSheet.Type]} {timeSheet.YearMonth.Year}{timeSheet.YearMonth.Month} {timeSheet.Employee}{FileExtension}";
+            $"{localizer[nameof(ResourceKey.FileNamePart)]} {localizer[WorkTypeResourceKeyMap[timeSheet.Type]]} {timeSheet.YearMonth.Year}{timeSheet.YearMonth.Month} {timeSheet.Employee}{FileExtension}";
 
         return Task.FromResult(fileName);
     }
@@ -528,7 +527,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
         }
     }
 
-    private static async Task CreateHeaderAsync(Spreadsheet spreadsheet, TimeSheet timeSheet, Memory<Cell> buffer,
+    private async Task CreateHeaderAsync(Spreadsheet spreadsheet, TimeSheet timeSheet, Memory<Cell> buffer,
         CancellationToken cancellationToken = default)
     {
         var topCellHeaderStyleId = spreadsheet.AddStyle(TopCellHeaderStyle);
@@ -568,7 +567,10 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell($"{AttendanceSheet} - {WorkType[timeSheet.Type]}", middleCellHeaderStyleId);
+        buffer.Span[0] =
+            new Cell(
+                $"{localizer[nameof(ResourceKey.FileNamePart)]} - {localizer[WorkTypeResourceKeyMap[timeSheet.Type]]}",
+                middleCellHeaderStyleId);
         spreadsheet.MergeCells($"A{spreadsheet.NextRowNumber}:I{spreadsheet.NextRowNumber}");
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
@@ -591,13 +593,13 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         for (var i = 0; i < buffer.Length; i++)
         {
-            buffer.Span[i] = new Cell(Columns[i].Value, headerColumnStyleId);
+            buffer.Span[i] = new Cell(localizer[Columns[i].ResourceKey], headerColumnStyleId);
         }
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
     }
 
-    private static async Task<BodyData> CreateBodyAsync(Spreadsheet spreadsheet, TimeSheet timeSheet,
+    private async Task<BodyData> CreateBodyAsync(Spreadsheet spreadsheet, TimeSheet timeSheet,
         IReadOnlySet<DateOnly> holidays, Memory<Cell> buffer, CancellationToken cancellationToken = default)
     {
         var monthlyWorkingDuration = TimeSpan.Zero;
@@ -609,6 +611,9 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
         var dayCellBodyStyleId = spreadsheet.AddStyle(DayCellBodyStyle);
         var middleCellBodyStyleId = spreadsheet.AddStyle(MiddleCellBodyStyle);
         var endCellBodyStyleId = spreadsheet.AddStyle(EndCellBodyStyle);
+
+        var tbdMarker = localizer[nameof(ResourceKey.TbdMarker)];
+        var holidayMarker = localizer[nameof(ResourceKey.HolidayMarker)];
 
         foreach (var periodDate in timeSheet.GetYearMonthDates())
         {
@@ -654,15 +659,15 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
                         middleCellBodyStyleId);
                 }
 
-                buffer.Span[4] = new Cell(TbdMarker, middleCellBodyStyleId);
-                buffer.Span[5] = new Cell(TbdMarker, middleCellBodyStyleId);
-                buffer.Span[6] = new Cell(TbdMarker, middleCellBodyStyleId);
+                buffer.Span[4] = new Cell(tbdMarker, middleCellBodyStyleId);
+                buffer.Span[5] = new Cell(tbdMarker, middleCellBodyStyleId);
+                buffer.Span[6] = new Cell(tbdMarker, middleCellBodyStyleId);
 
                 buffer.Span[7] = new Cell(shiftInPeriodDate.Duration.TotalHours, middleCellBodyStyleId);
 
                 if (holidays.Contains(periodDate))
                 {
-                    buffer.Span[8] = new Cell(HolidayMarker, endCellBodyStyleId);
+                    buffer.Span[8] = new Cell(holidayMarker, endCellBodyStyleId);
 
                     workedInHolidayDuration += shiftInPeriodDate.Duration;
                 }
@@ -706,7 +711,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
             OvertimeDuration: overTimeDuration);
     }
 
-    private static async Task CreateFooterAsync(Spreadsheet spreadsheet, TimeSheet timeSheet, Memory<Cell> buffer,
+    private async Task CreateFooterAsync(Spreadsheet spreadsheet, TimeSheet timeSheet, Memory<Cell> buffer,
         BodyData bodyData, CancellationToken cancellationToken = default)
     {
         var topCellFooterStyleId = spreadsheet.AddStyle(TopCellFooterStyle);
@@ -720,14 +725,16 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
         var bottomLeftCellFooterStyleId = spreadsheet.AddStyle(BottomLeftCellFooterStyle);
         var bottomRightCellFooterStyleId = spreadsheet.AddStyle(BottomRightCellFooterStyle);
 
-        buffer.Span[0] = new Cell("Összesen:", topCellFooterStyleId);
+        var tbdMarker = localizer[nameof(ResourceKey.TbdMarker)];
+
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterSummary)], topCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), topCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), topCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), topCellFooterStyleId);
 
-        buffer.Span[4] = new Cell(TbdMarker, topCellFooterStyleId);
-        buffer.Span[5] = new Cell(TbdMarker, topCellFooterStyleId);
-        buffer.Span[6] = new Cell(TbdMarker, topCellFooterStyleId);
+        buffer.Span[4] = new Cell(tbdMarker, topCellFooterStyleId);
+        buffer.Span[5] = new Cell(tbdMarker, topCellFooterStyleId);
+        buffer.Span[6] = new Cell(tbdMarker, topCellFooterStyleId);
         buffer.Span[7] = new Cell(bodyData.TotalWorkedDuration.TotalHours, topCellFooterStyleId);
         buffer.Span[8] = new Cell(new DataCell(), topCellFooterStyleId);
 
@@ -735,7 +742,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell("Megjegyzés:", topCellFooterStyleId);
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterNote)], topCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), topCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), topCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), topCellFooterStyleId);
@@ -750,7 +757,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell("havi óra:", middleLeftCellFooterStyleId);
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterMonthlyHours)], middleLeftCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
@@ -766,7 +773,8 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell("ledolgozott óra:", middleLeftSeparatorCellFooterStyleId);
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterWorkedHours)],
+            middleLeftSeparatorCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), middleLeftSeparatorCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), middleLeftSeparatorCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), middleLeftSeparatorCellFooterStyleId);
@@ -782,7 +790,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell("munkaszüneti nap óra:", middleLeftCellFooterStyleId);
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterWorkedHolidayHours)], middleLeftCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
@@ -798,7 +806,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell("fizetett szabadság óra:", middleLeftCellFooterStyleId);
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterPaidLeaveHours)], middleLeftCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
@@ -814,7 +822,7 @@ public class TimeSheetExcelWriter : ITimeSheetWriter
 
         await spreadsheet.AddRowAsync(buffer[..9], cancellationToken);
 
-        buffer.Span[0] = new Cell("túlóra:", middleLeftCellFooterStyleId);
+        buffer.Span[0] = new Cell(localizer[nameof(ResourceKey.FooterOvertimeHours)], middleLeftCellFooterStyleId);
         buffer.Span[1] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[2] = new Cell(new DataCell(), middleLeftCellFooterStyleId);
         buffer.Span[3] = new Cell(new DataCell(), middleLeftCellFooterStyleId);

@@ -1,20 +1,24 @@
-﻿namespace PapyrusClient.Services.WorkScheduleValidator;
+﻿using Microsoft.Extensions.Localization;
+using PapyrusClient.Utilities;
 
-public class WorkScheduleValidatorException : Exception
+namespace PapyrusClient.Services.WorkScheduleValidator;
+
+public class WorkScheduleValidatorException : LocalizableException
 {
-    public WorkScheduleValidatorException()
+    public WorkScheduleValidatorException(IStringLocalizer<WorkScheduleValidator> localizer, string resourceKey)
+        : base(localizer, resourceKey)
     {
     }
 
-    public WorkScheduleValidatorException(string message)
-        : base(message)
+    public WorkScheduleValidatorException(IStringLocalizer<WorkScheduleValidator> localizer, string resourceKey,
+        params string[] resourceArgs)
+        : base(localizer, resourceKey, resourceArgs)
     {
     }
 
-    public WorkScheduleValidatorException(string message, Exception inner)
-        : base(message, inner)
+    public WorkScheduleValidatorException(IStringLocalizer<WorkScheduleValidator> localizer, string resourceKey,
+        Exception inner, params string[] resourceArgs)
+        : base(localizer, resourceKey, inner, resourceArgs)
     {
     }
-
-    public required string Details { get; init; }
 }
