@@ -1,11 +1,19 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
+using PapyrusClient.Services.SettingsManager;
 
 namespace PapyrusClient.Ui.Dialogs;
 
-public partial class SettingsDialog : ComponentBase
+public partial class SettingsDialog : ComponentBase, IAsyncDisposable
 {
+    private volatile bool _disposed;
+
+    /// <summary>
+    /// Forces a re-render of the FluentSelect component when the culture changes. Used in the @key directive.
+    /// </summary>
+    private Guid _themeSelectKey = Guid.NewGuid();
+
     private SortedSet<DateOnly> _holidaysStore = null!;
 
     private CultureInfo _initialCulture = null!;
@@ -25,10 +33,39 @@ public partial class SettingsDialog : ComponentBase
         base.OnInitialized();
 
         SetParameters();
+
+        SettingsManager.CultureChanged += OnCultureChanged;
+    }
+
+    protected virtual ValueTask DisposeAsyncCore()
+    {
+        if (_disposed)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        _disposed = true;
+
+        SettingsManager.CultureChanged -= OnCultureChanged;
+
+        return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore();
+        GC.SuppressFinalize(this);
+    }
+
+    private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
+    {
+        _themeSelectKey = Guid.NewGuid();
     }
 
     private void SetParameters()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         _holidaysStore = new SortedSet<DateOnly>(SettingsManager.Holidays);
 
         _initialCulture = SettingsManager.Culture;
@@ -47,6 +84,8 @@ public partial class SettingsDialog : ComponentBase
 
     private void SelectedDatesChangedAsync()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         _holidaysStore.Clear();
 
         foreach (var date in _selectedDays
@@ -58,16 +97,22 @@ public partial class SettingsDialog : ComponentBase
 
     private async Task SelectedCultureChangedAsync()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         await SettingsManager.UpdateCultureAsync(_selectedCulture);
     }
 
     private async Task SelectedThemeChangedAsync()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         await SettingsManager.UpdateThemeAsync(_selectedTheme);
     }
 
     private void ResetHolidaysChanges()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         _holidaysStore = new SortedSet<DateOnly>(SettingsManager.Holidays);
 
         _selectedDays = _holidaysStore
@@ -77,6 +122,8 @@ public partial class SettingsDialog : ComponentBase
 
     private void ClearAllHolidays()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         _holidaysStore.Clear();
 
         _selectedDays = Array.Empty<DateTime>();
@@ -84,6 +131,8 @@ public partial class SettingsDialog : ComponentBase
 
     private void ClearSelected(DateOnly date)
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         _holidaysStore.Remove(date);
 
         _selectedDays = _holidaysStore
@@ -93,6 +142,8 @@ public partial class SettingsDialog : ComponentBase
 
     private async Task RefreshSettingsAsync()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         await SettingsManager.LoadSettingsAsync();
 
         SetParameters();
@@ -100,6 +151,8 @@ public partial class SettingsDialog : ComponentBase
 
     private async Task SaveAsync()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         if (!_holidaysStore.SetEquals(SettingsManager.Holidays))
         {
             await SettingsManager.UpdateHolidaysAsync(_holidaysStore);
@@ -110,6 +163,8 @@ public partial class SettingsDialog : ComponentBase
 
     private async Task DiscardAsync()
     {
+        ObjectDisposedException.ThrowIf(_disposed, typeof(SettingsDialog));
+
         if (_initialCulture.Name != _selectedCulture.Name)
         {
             await SettingsManager.UpdateCultureAsync(_initialCulture);
