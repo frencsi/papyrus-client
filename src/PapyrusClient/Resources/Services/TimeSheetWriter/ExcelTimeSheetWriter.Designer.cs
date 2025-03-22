@@ -195,7 +195,7 @@ namespace PapyrusClient.Resources.Services.TimeSheetWriter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Time sheet.
+        ///   Looks up a localized string similar to Timesheet.
         /// </summary>
         internal static string TIMESHEET {
             get {
