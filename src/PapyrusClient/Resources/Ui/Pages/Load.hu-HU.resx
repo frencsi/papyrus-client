@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="BUTTON_TEXT_DASHBOARD" xml:space="preserve">
+        <value>Irányítópult</value>
+    </data>
+    <data name="INPUTFILE_LABEL_PART1" xml:space="preserve">
+        <value>Húzd ide az Excel-fájlokat a betöltéshez, vagy</value>
+    </data>
+    <data name="INPUTFILE_LABEL_PART2" xml:space="preserve">
+        <value>válaszd ki</value>
+    </data>
+    <data name="INPUTFILE_LABEL_PART3" xml:space="preserve">
+        <value>őket.</value>
+    </data>
+    <data name="INPUTFILE_LABEL_MAX_LOAD_PER_BATCH" xml:space="preserve">
+        <value>Legfeljebb {0} fájl tölthető be egyszerre.</value>
+    </data>
+    <data name="INPUTFILE_LABEL_SUPPORTED_FORMATS" xml:space="preserve">
+        <value>Támogatott fájlformátumok: {0}.</value>
+    </data>
+    <data name="MESSAGEBAR_BODY_LOADED_SCHEDULES_WITH_ISSUES" xml:space="preserve">
+        <value>{0} fájl betöltve, {1} fájl problémával.
+</value>
+    </data>
+    <data name="MESSAGEBAR_BODY_LOADED_SCHEDULES_NO_ISSUES" xml:space="preserve">
+        <value>{0} fájl betöltve, probléma nélkül.</value>
+    </data>
+    <data name="MESSAGEBAR_BODY_MAX_LOAD_PER_BATCH_REACHED" xml:space="preserve">
+        <value>Egyszerre legfeljebb {0} fájlt tölthetsz be.</value>
+    </data>
+</root>

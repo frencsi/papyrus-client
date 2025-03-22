@@ -60,166 +60,93 @@ namespace PapyrusClient.Resources.Ui.Pages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fájl.
+        ///   Looks up a localized string similar to Irányítópult.
         /// </summary>
-        internal static string DataGridFileTitle {
+        internal static string BUTTON_TEXT_DASHBOARD {
             get {
-                return ResourceManager.GetString("DataGridFileTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hiba történt a fájlok feldolgozás során. További részletekért kérlek, nyisd meg a konzolt.
-        ///.
-        /// </summary>
-        internal static string FilesProcessingError {
-            get {
-                return ResourceManager.GetString("FilesProcessingError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Legfeljebb {0} fájl tölthető be egyszerre..
-        /// </summary>
-        internal static string InputFileMaximumFilesAllowedPerLoad {
-            get {
-                return ResourceManager.GetString("InputFileMaximumFilesAllowedPerLoad", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Egyszerre csak {0} fájlt tölthetsz be..
-        /// </summary>
-        internal static string InputFileMaximumFilesExceeded {
-            get {
-                return ResourceManager.GetString("InputFileMaximumFilesExceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Húzd ide az Excel-fájlokat a feltöltéshez, vagy.
-        /// </summary>
-        internal static string InputFilePart1 {
-            get {
-                return ResourceManager.GetString("InputFilePart1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to válaszd ki.
-        /// </summary>
-        internal static string InputFilePart2 {
-            get {
-                return ResourceManager.GetString("InputFilePart2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to őket..
-        /// </summary>
-        internal static string InputFilePart3 {
-            get {
-                return ResourceManager.GetString("InputFilePart3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Támogatott fájlformátumok: {0}..
-        /// </summary>
-        internal static string InputFileSupportedFileFormats {
-            get {
-                return ResourceManager.GetString("InputFileSupportedFileFormats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Csak az érvényes adatokkal rendelkező fájlok dolgozhatók fel..
-        /// </summary>
-        internal static string InvalidFilesSelected {
-            get {
-                return ResourceManager.GetString("InvalidFilesSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A böngészőablak ideiglenesen lefagyhat a folyamat során..
-        /// </summary>
-        internal static string MessageBarLoadingFilesBody {
-            get {
-                return ResourceManager.GetString("MessageBarLoadingFilesBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fájlok Betöltése.
-        /// </summary>
-        internal static string MessageBarLoadingFilesTitle {
-            get {
-                return ResourceManager.GetString("MessageBarLoadingFilesTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A böngészőablak ideiglenesen lefagyhat a folyamat során..
-        /// </summary>
-        internal static string MessageBarProcessingFilesBody {
-            get {
-                return ResourceManager.GetString("MessageBarProcessingFilesBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fájlok Feldolgozása.
-        /// </summary>
-        internal static string MessageBarProcessingFilesTitle {
-            get {
-                return ResourceManager.GetString("MessageBarProcessingFilesTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Nem kezelt állapot: &apos;{0}&apos; a(z) &apos;{1}&apos; oldalon..
-        /// </summary>
-        internal static string MessageBarUnhandledStateBody {
-            get {
-                return ResourceManager.GetString("MessageBarUnhandledStateBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Nem Kezelt Státusz.
-        /// </summary>
-        internal static string MessageBarUnhandledStateTitle {
-            get {
-                return ResourceManager.GetString("MessageBarUnhandledStateTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Kérlek, válassz ki legalább egy fájlt.
-        ///.
-        /// </summary>
-        internal static string NoFilesSelected {
-            get {
-                return ResourceManager.GetString("NoFilesSelected", resourceCulture);
+                return ResourceManager.GetString("BUTTON_TEXT_DASHBOARD", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Feldolgozás.
         /// </summary>
-        internal static string Process {
+        internal static string BUTTON_TEXT_PROCESS {
             get {
-                return ResourceManager.GetString("Process", resourceCulture);
+                return ResourceManager.GetString("BUTTON_TEXT_PROCESS", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Törlés.
         /// </summary>
-        internal static string Remove {
+        internal static string BUTTON_TEXT_REMOVE {
             get {
-                return ResourceManager.GetString("Remove", resourceCulture);
+                return ResourceManager.GetString("BUTTON_TEXT_REMOVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Munkaidő-beosztás.
+        /// </summary>
+        internal static string DATAGRID_COLUMN_TITLE_SCHEDULES {
+            get {
+                return ResourceManager.GetString("DATAGRID_COLUMN_TITLE_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A böngészőablak átmenetileg nem válaszolhat a művelet során..
+        /// </summary>
+        internal static string MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES {
+            get {
+                return ResourceManager.GetString("MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kijelölt fájlok feldolgozása
+        ///.
+        /// </summary>
+        internal static string MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES {
+            get {
+                return ResourceManager.GetString("MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hiba történt a munkaidő-beosztások feldolgozása közben, kérlek nézd meg a konzolt a részletekért!.
+        /// </summary>
+        internal static string TOAST_TEXT_ERROR_DURING_PROCESSING_SCHEDULES {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_ERROR_DURING_PROCESSING_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Csak olyan munkaidő-beosztást tudsz feldolgozni, amelyeknél nincs semmi probléma..
+        /// </summary>
+        internal static string TOAST_TEXT_INVALID_SCHEDULES_SELECTED_TO_PROCESS {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_INVALID_SCHEDULES_SELECTED_TO_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kérlek, válassz ki legalább eg munkaidő-beosztást!.
+        /// </summary>
+        internal static string TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_PROCESS {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kérlek, válassz ki legalább egy munkaidő-beosztást!.
+        /// </summary>
+        internal static string TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_REMOVE {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_REMOVE", resourceCulture);
             }
         }
     }

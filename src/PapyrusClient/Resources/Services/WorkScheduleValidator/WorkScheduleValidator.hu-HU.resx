@@ -18,69 +18,84 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="NoOptionsSet" xml:space="preserve">
-    <value>Nincs beállítva semmilyen opció ehhez a munkarendhez.</value>
-</data>
-    <data name="ShiftsDateNotInSpecifiedYear" xml:space="preserve">
-    <value>Az egyik vagy több műszak dátuma nem az előírt évben van: '{0}'. 
+    <data name="RULE_NOT_SET" xml:space="preserve">
+        <value>Nincs szabály beállítva a munkaidő-beosztáshoz, ezért az érvényesítés nem folytatható. 
 
-Nézd meg ezt a dátumot: '{1}'.</value>
-</data>
-    <data name="ShiftsDateNotInSpecifiedMonth" xml:space="preserve">
-    <value>Az egyik vagy több műszak dátuma nem az előírt hónapban van: '{0}'. 
-
-Nézd meg ezt a dátumot: '{1}'.</value>
-</data>
-    <data name="ShiftDurationNegativeOrZero" xml:space="preserve">
-    <value>A műszak időtartama nem lehet negatív vagy nulla. 
-        
-Részletek: {0}.</value>
-</data>
-    <data name="WorTypeGapValidationNotSupported" xml:space="preserve">
-    <value>Most csak az operátor munkatípusnál működik a munkaidő rés-ellenőrzés.</value>
-</data>
-    <data name="PreviousShiftMissingEndContinuationMarker" xml:space="preserve">
-        <value>Hiányzik végzésnél a folytatás jelölő az alábbi alkalmazottnál: '{0}', dátum: '{1}'. 
- 
-Ez azért kell, mert '{2}' dátumon folytatás jelölővel kezdődik a műszak ugyanannál az alkalmazottnál. 
-
-Nézd át ezeket a dátumokat: '{2}' és '{1}'.</value>
+Kérlek, rendelj hozzá szabályt.
+</value>
     </data>
-    <data name="PreviousShiftMultipleEndContinuationMarkerFound" xml:space="preserve">
-    <value>Több folytatás jelölőt találtam végzésre ennél az alkalmazottnál: '{0}', dátum: '{1}'. 
-        
-Nézd át ezeket a dátumokat: '{2}' és '{1}'.</value>
-</data>
-    <data name="ShiftOverlapDetected" xml:space="preserve">
-    <value>Átfedés van a műszakok között: '{0}' dátumán. 
+    <data name="CANT_VALIDATE_BECAUSE_READ_ERROR" xml:space="preserve">
+        <value>Nem lehet érvényesíteni a munkaidő-beosztást, mert korábban olvasási hiba történt. 
 
-Részletek:
-    - Előző műszak: Alkalmazott '{1}' {2} és {3} között 
-    - Következő műszak: Alkalmazott '{4}' {5} és {6} között. 
+Kérlek, először oldd meg az olvasási hibát.
+</value>
+    </data>
+    <data name="SHIFTS_DATE_YEAR_NOT_MATCH_SCHEDULE_YEAR" xml:space="preserve">
+        <value>A műszak(ok) dátumának éve nem egyezik a munkidő-beosztás évével. 
 
-Nézd át kérlek az átfedéseket.</value>
-</data>
-    <data name="ShiftGapDetected" xml:space="preserve">
-    <value>Rés van a műszakok között: '{0}' dátumán. 
+A műszak(ok) éve: '{0}'. 
+A munkidő-beosztás éve: '{1}'. 
 
-Részletek: 
-    - Előző műszak: Alkalmazott '{1}' {2} és {3} között 
-    - Következő műszak: Alkalmazott '{4}' {5} és {6} között 
-    - Rés: '{7}'
+Kérlek, ellenőrizd a következő műszak(ok) dátumát: '{2}'.</value>
+    </data>
+    <data name="SHIFTS_DATE_MONTH_NOT_MATCH_SCHEDULE_MONTH" xml:space="preserve">
+        <value>A műszak(ok) dátumának hónapja nem egyezik a munkidő-beosztás hónapjával. 
+            
+A műszak(ok) hónapja: '{0}'. 
+A munkidő-beosztás hónapja: '{1}'. 
 
-Győződj meg róla, hogy nincsenek rések a műszakok között.</value>
-</data>
-    <data name="ShiftMissingRequiredDays" xml:space="preserve">
-    <value>Hiányzik a műszak adata a következő napokon: [{0}].</value>
-</data>
-    <data name="ShiftExceedsMaxDurationPerEmployeePerDay" xml:space="preserve">
-    <value>Az alkalmazott '{0}' {1} időt rögzített, ami meghaladja az engedélyezett maximumot: '{2}'. 
+Kérlek, ellenőrizd a következő műszak(ok) dátumát: '{2}'.</value>
+    </data>
+    <data name="SHIFT_DURATION_IS_NEGATIVE_OR_ZERO" xml:space="preserve">
+        <value>A műszak hossza nem lehet negatív vagy nulla. 
+
+Részletek: {0}.</value>
+    </data>
+    <data name="SHIFT_CONTINUITY_VALIDATION_NOT_SUPPORTED" xml:space="preserve">
+        <value>Jelenleg csak az operátor munkarend típus támogatja a műszakfolytonosság ellenőrzését.
+</value>
+    </data>
+    <data name="PREVIOUS_SHIFT_MISSING_END_CONTINUATION_MARKER" xml:space="preserve">
+        <value>Hiányzik végzésnél a folytatás jelölő az alábbi alkalmazottnál: '{0}', dátum: '{1}'. 
+    
+Azért kell, mert '{2}' dátumon folytatás jelölővel kezdődik a műszak ugyanannál az alkalmazottnál. 
+
+Kérlek, nézd át ezeket a dátumokat: '{2}' és '{1}'.</value>
+    </data>
+    <data name="PREVIOUS_SHIFT_MULTIPLE_END_CONTINUATION_MARKER_FOUND" xml:space="preserve">
+        <value>Több folytatás jelölőt találtam végzésre ennél az alkalmazottnál: '{0}', dátum: '{1}'. 
+
+Kérlek, nézd át ezeket a dátumokat: '{2}' és '{1}'.</value>
+    </data>
+    <data name="GAP_DETECTED_BETWEEN_SHIFTS" xml:space="preserve">
+        <value>Rést találtam a műszakok között a következő napon: '{0}'. 
+
+- Előző műszak: '{1}' dolgozó, '{2}'-tól '{3}'-ig. 
+- Következő műszak: '{4}' dolgozó, '{5}'-től '{6}'-ig.
+- A rés hossza: '{7}'. 
+            
+Kérlek, nézd át a műszakokat.
+</value>
+    </data>
+    <data name="OVERLAP_DETECTED_BETWEEN_SHIFTS" xml:space="preserve">
+        <value>Átfedés van a műszakok között '{0}'-n. 
+
+Előző műszak: '{1}' dolgozó, '{2}'-tól '{3}'-ig. 
+Következő műszak: '{4}' dolgozó, '{5}'-től '{6}'-ig. 
+
+Kérlek, nézd át a műszakok időpontját.</value>
+    </data>
+    <data name="EMPLOYEE_SHIFT_DURATION_IS_GREATER_THAN_RULE" xml:space="preserve">
+        <value>Az alkalmazott '{0}' {1} időt rögzített, ami meghaladja az engedélyezett maximumot: '{2}'. 
 
 Nézd meg ezt a dátumot: '{3}'.</value>
-</data>
-    <data name="ShiftExceedsMaxDurationCombinedPerDay" xml:space="preserve">
-    <value>A teljes műszakidő '{0}' meghaladta a megengedett maximumot: '{1}'. 
+    </data>
+    <data name="COMBINED_SHIFTS_DURATION_IS_GREATER_THAN_RULE" xml:space="preserve">
+        <value>A teljes összeadott műszakidő '{0}' meghaladta a megengedett maximumot: '{1}'. 
 
-Nézd meg ezt a dátumot: '{2}'.</value>
-</data>
+Kérlek, nézd meg ezen a dátumon a műszakokat: '{2}'.</value>
+    </data>
+    <data name="MISSING_REQUIRED_DATES" xml:space="preserve">
+        <value>Hiányoznak műszakok a következő napokon: [{0}].</value>
+    </data>
 </root>

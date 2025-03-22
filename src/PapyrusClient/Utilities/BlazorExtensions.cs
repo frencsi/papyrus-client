@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using PapyrusClient.Services.SettingsManager;
 
 namespace PapyrusClient.Utilities;
 
@@ -10,9 +9,11 @@ public static class BlazorExtensions
     {
         var host = builder.Build();
 
-        var settingsManager = host.Services.GetRequiredService<ISettingsManager>();
+        var clientManager = host.Services.GetRequiredService<IClientManager>();
+        await clientManager.InitializeAsync(reload: false);
 
-        await settingsManager.LoadSettingsAsync();
+        var workScheduleStore = host.Services.GetRequiredService<IWorkScheduleStore>();
+        await workScheduleStore.InitializeAsync();
 
         await host.RunAsync();
     }

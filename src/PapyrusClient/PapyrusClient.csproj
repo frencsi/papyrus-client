@@ -4,6 +4,7 @@
     <Version>0.0.2</Version>
 
     <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -11,38 +12,25 @@
     <RunAOTCompilation>true</RunAOTCompilation>
     <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
 
-    <DefaultUICulture>hu-HU</DefaultUICulture>
+    <DefaultUICulture>en-US</DefaultUICulture>
     <SupportedCultures>en-US;hu-HU</SupportedCultures>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.2" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.2" />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.5" />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.5" />
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
+    <PackageReference Include="Humanizer.Core" Version="3.0.0-beta.54" />
+    <PackageReference Include="Humanizer.Core.hu" Version="3.0.0-beta.54" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.3" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.3" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.7" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.7" />
     <PackageReference Include="SpreadCheetah" Version="1.20.0" />
     <PackageReference Include="Sylvan.Data.Excel" Version="0.4.26-b0001" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Services\WorkScheduleReader\WorkScheduleExcelReader.hu-HU.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>WorkScheduleExcelReader.hu-HU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Services\WorkScheduleReader\WorkScheduleExcelReader.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>WorkScheduleExcelReader.en-US.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Ui\Layout\MainLayout.hu-HU.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainLayout.hu-HU.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Ui\Layout\MainLayout.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainLayout.en-US.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Ui\Pages\Home.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Home.Designer.cs</LastGenOutput>
@@ -51,21 +39,29 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Home.hu-HU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Ui\Dialogs\SettingsDialog.resx">
+    <EmbeddedResource Update="Resources\Ui\Pages\Load.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SettingsDialog.Designer.cs</LastGenOutput>
+      <LastGenOutput>Load.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Ui\Dialogs\SettingsDialog.hu-HU.resx">
+    <EmbeddedResource Update="Resources\Ui\Pages\Load.hu-HU.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SettingsDialog.hu-HU.Designer.cs</LastGenOutput>
+      <LastGenOutput>Load.hu-HU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Ui\Dialogs\FileDetailsDialog.resx">
+    <EmbeddedResource Update="Resources\Ui\Panels\DashboardPanel.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FileDetailsDialog.Designer.cs</LastGenOutput>
+      <LastGenOutput>DashboardPanel.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Ui\Dialogs\FileDetailsDialog.hu-HU.resx">
+    <EmbeddedResource Update="Resources\Ui\Panels\DashboardPanel.hu-HU.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FileDetailsDialog.hu-HU.Designer.cs</LastGenOutput>
+      <LastGenOutput>DashboardPanel.hu-HU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Services\WorkScheduleReader\ExcelWorkScheduleReader.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExcelWorkScheduleReader.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Services\WorkScheduleReader\ExcelWorkScheduleReader.hu-HU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExcelWorkScheduleReader.hu-HU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Services\WorkScheduleValidator\WorkScheduleValidator.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -75,37 +71,25 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WorkScheduleValidator.hu-HU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Services\TimeSheetWriter\TimeSheetExcelWriter.resx">
+    <EmbeddedResource Update="Resources\Services\TimeSheetWriter\ExcelTimeSheetWriter.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TimeSheetExcelWriter.Designer.cs</LastGenOutput>
+      <LastGenOutput>ExcelTimeSheetWriter.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Services\TimeSheetWriter\TimeSheetExcelWriter.hu-HU.resx">
+    <EmbeddedResource Update="Resources\Services\TimeSheetWriter\ExcelTimeSheetWriter.hu-HU.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TimeSheetExcelWriter.hu-HU.Designer.cs</LastGenOutput>
+      <LastGenOutput>ExcelTimeSheetWriter.hu-HU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Ui\Dialogs\WorkScheduleViewerDialog.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkScheduleViewerDialog.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Ui\Dialogs\WorkScheduleViewerDialog.hu-HU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WorkScheduleViewerDialog.hu-HU.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Services\WorkScheduleReader\WorkScheduleExcelReader.hu-HU.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WorkScheduleExcelReader.hu-HU.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Services\WorkScheduleReader\WorkScheduleExcelReader.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>WorkScheduleExcelReader.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Ui\Layout\MainLayout.hu-HU.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MainLayout.hu-HU.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Ui\Layout\MainLayout.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MainLayout.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\Ui\Pages\Home.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -116,25 +100,35 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Home.hu-HU.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Ui\Dialogs\SettingsDialog.Designer.cs">
+    <Compile Update="Resources\Ui\Pages\Load.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>SettingsDialog.resx</DependentUpon>
+      <DependentUpon>Load.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Ui\Dialogs\SettingsDialog.hu-HU.Designer.cs">
+    <Compile Update="Resources\Ui\Pages\Load.hu-HU.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>SettingsDialog.hu-HU.resx</DependentUpon>
+      <DependentUpon>Load.hu-HU.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Ui\Dialogs\FileDetailsDialog.Designer.cs">
+    <Compile Update="Resources\Ui\Panels\DashboardPanel.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>FileDetailsDialog.resx</DependentUpon>
+      <DependentUpon>DashboardPanel.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Ui\Dialogs\FileDetailsDialog.hu-HU.Designer.cs">
+    <Compile Update="Resources\Ui\Panels\DashboardPanel.hu-HU.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>FileDetailsDialog.hu-HU.resx</DependentUpon>
+      <DependentUpon>DashboardPanel.hu-HU.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Services\WorkScheduleReader\ExcelWorkScheduleReader.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExcelWorkScheduleReader.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Services\WorkScheduleReader\ExcelWorkScheduleReader.hu-HU.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ExcelWorkScheduleReader.hu-HU.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\Services\WorkScheduleValidator\WorkScheduleValidator.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -146,15 +140,25 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>WorkScheduleValidator.hu-HU.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Services\TimeSheetWriter\TimeSheetExcelWriter.Designer.cs">
+    <Compile Update="Resources\Services\TimeSheetWriter\ExcelTimeSheetWriter.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>TimeSheetExcelWriter.resx</DependentUpon>
+      <DependentUpon>ExcelTimeSheetWriter.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Services\TimeSheetWriter\TimeSheetExcelWriter.hu-HU.Designer.cs">
+    <Compile Update="Resources\Services\TimeSheetWriter\ExcelTimeSheetWriter.hu-HU.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>TimeSheetExcelWriter.hu-HU.resx</DependentUpon>
+      <DependentUpon>ExcelTimeSheetWriter.hu-HU.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Ui\Dialogs\WorkScheduleViewerDialog.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkScheduleViewerDialog.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Ui\Dialogs\WorkScheduleViewerDialog.hu-HU.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WorkScheduleViewerDialog.hu-HU.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 

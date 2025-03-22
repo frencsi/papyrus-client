@@ -1,0 +1,93 @@
+﻿@using ResourceKey = PapyrusClient.Resources.Ui.Dialogs.WorkScheduleViewerDialog;
+@inject IStringLocalizer<WorkScheduleViewerDialog> Localizer;
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="false">
+    <FluentStack Orientation="@Orientation.Horizontal"
+                 HorizontalAlignment="@HorizontalAlignment.Start"
+                 VerticalAlignment="@VerticalAlignment.Center">
+        <FluentLabel Typo="Typography.Header">
+            @Localizer[nameof(ResourceKey.DIALOG_TITLE)]
+        </FluentLabel>
+        <FluentSpacer/>
+        <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
+                      OnClick="@CloseAsync">
+            <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"
+                        Color="@(Color.Info)"/>
+        </FluentButton>
+    </FluentStack>
+
+    <FluentTabs @bind-ActiveTabId="@_activeTab">
+        <FluentTab Id="status"
+                   Label="@Localizer[nameof(ResourceKey.TAB_STATUS)]"/>
+        <FluentTab Id="rules"
+                   Label="@Localizer[nameof(ResourceKey.TAB_RULES)]"/>
+        <FluentTab Id="details"
+                   Label="@Localizer[nameof(ResourceKey.TAB_DETAILS)]"/>
+    </FluentTabs>
+</FluentDialogHeader>
+
+@* Body *@
+<FluentDialogBody>
+
+    <FluentCard style="height: 100%; overflow-y: auto; word-break: break-word; scrollbar-gutter: stable;">
+        @if (_activeTab.Equals("status", StringComparison.OrdinalIgnoreCase))
+        {
+            <p>
+                @(Content.State switch
+                {
+                    WorkScheduleState.Ok => Localizer[nameof(ResourceKey.STATUS_OK)],
+                    WorkScheduleState.ReadError => Localizer[nameof(ResourceKey.STATUS_READ_ERROR)],
+                    WorkScheduleState.ValidateError => Localizer[nameof(ResourceKey.STATUS_VALIDATE_ERROR)],
+                    WorkScheduleState.GeneralError => Localizer[nameof(ResourceKey.STATUS_GENERAL_ERROR)],
+                    _ => Localizer[nameof(ResourceKey.STATUS_GENERAL_ERROR)]
+                })
+            </p>
+
+            if (Content.Exception != null)
+            {
+                <FluentDivider Style="margin: 0.5rem 0"/>
+
+                <p style="white-space: pre-wrap">
+                    @Content.Exception.ToString()
+                </p>
+            }
+        }
+        else if (_activeTab.Equals("rules", StringComparison.OrdinalIgnoreCase))
+        {
+            <FluentMessageBar Title="@Localizer[nameof(ResourceKey.MESSAGEBAR_TITLE_NOT_IMPLEMENTED)]"
+                              Intent="@MessageIntent.Info"
+                              Type="@MessageType.Notification"
+                              AllowDismiss="@false"
+                              Style="border: 0.0625rem solid var(--accent-fill-rest)">
+                <p>@Localizer[nameof(ResourceKey.MESSAGEBAR_BODY_NOT_IMPLEMENTED)]</p>
+            </FluentMessageBar>
+        }
+        else if (_activeTab.Equals("details", StringComparison.OrdinalIgnoreCase))
+        {
+            <p><strong>@Localizer[nameof(ResourceKey.DETAILS_ID)]</strong>: @Content.Id.ToString()</p>
+            <p><strong>@Localizer[nameof(ResourceKey.DETAILS_NAME)]</strong>: @Content.Metadata.Name</p>
+            <p><strong>@Localizer[nameof(ResourceKey.DETAILS_SOURCE)]</strong>:
+                @(Content.Metadata.Source switch
+                {
+                    WorkScheduleSource.File => Localizer[nameof(ResourceKey.DETAILS_SOURCE_FILE)],
+                    WorkScheduleSource.Unknown => Localizer[nameof(ResourceKey.DETAILS_SOURCE_UNKNOWN)],
+                    _ => Localizer[nameof(ResourceKey.DETAILS_SOURCE_UNKNOWN)]
+                })
+            </p>
+        }
+        else
+        {
+            <FluentMessageBar Title="@Localizer[nameof(ResourceKey.MESSAGEBAR_TITLE_NOT_FOUND)]"
+                              Intent="@MessageIntent.Warning"
+                              Type="@MessageType.Notification"
+                              AllowDismiss="@false"
+                              Style="border: 0.0625rem solid var(--warning)">
+                <p>@Localizer[nameof(ResourceKey.MESSAGEBAR_BODY_NOT_FOUND)]</p>
+            </FluentMessageBar>
+        }
+    </FluentCard>
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter Visible="@false"/>

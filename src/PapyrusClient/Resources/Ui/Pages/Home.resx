@@ -3,7 +3,7 @@
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-
+            
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -18,58 +18,34 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="MessageBarLoadingFilesTitle" xml:space="preserve">
-        <value>Loading Files</value>
+    <data name="BUTTON_TEXT_DASHBOARD" xml:space="preserve">
+        <value>Dashboard</value>
     </data>
-    <data name="MessageBarProcessingFilesTitle" xml:space="preserve">
-        <value>Processing Files</value>
-    </data>
-    <data name="MessageBarLoadingFilesBody" xml:space="preserve">
-        <value>The browser window may freeze temporarily during this process.</value>
-    </data>
-    <data name="MessageBarProcessingFilesBody" xml:space="preserve">
-        <value>The browser window may freeze temporarily during this process.</value>
-    </data>
-    <data name="DataGridFileTitle" xml:space="preserve">
-        <value>File</value>
-    </data>
-    <data name="InputFilePart1" xml:space="preserve">
-        <value>Drag Excel files here to load, or</value>
-    </data>
-    <data name="InputFilePart2" xml:space="preserve">
-        <value>browse</value>
-    </data>
-    <data name="InputFilePart3" xml:space="preserve">
-        <value>for them.</value>
-    </data>
-    <data name="InputFileMaximumFilesAllowedPerLoad" xml:space="preserve">
-        <value>Up to {0} files are allowed per load.</value>
-    </data>
-    <data name="InputFileSupportedFileFormats" xml:space="preserve">
-        <value>Supported file formats: {0}.</value>
-    </data>
-    <data name="InputFileMaximumFilesExceeded" xml:space="preserve">
-        <value>You can only load {0} files at once.</value>
-    </data>
-    <data name="NoFilesSelected" xml:space="preserve">
-        <value>Please select at least one file.</value>
-    </data>
-    <data name="InvalidFilesSelected" xml:space="preserve">
-        <value>Only files with valid data can be processed.</value>
-    </data>
-    <data name="FilesProcessingError" xml:space="preserve">
-        <value>An error occured during processing. Please see the console for more details.</value>
-    </data>
-    <data name="Process" xml:space="preserve">
+    <data name="BUTTON_TEXT_PROCESS" xml:space="preserve">
         <value>Process</value>
     </data>
-    <data name="Remove" xml:space="preserve">
+    <data name="BUTTON_TEXT_REMOVE" xml:space="preserve">
         <value>Remove</value>
     </data>
-    <data name="MessageBarUnhandledStateTitle" xml:space="preserve">
-        <value>Unhandled State</value>
+    <data name="MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES" xml:space="preserve">
+        <value>Processing selected files</value>
     </data>
-    <data name="MessageBarUnhandledStateBody" xml:space="preserve">
-        <value>Unhandled state: '{0}' in '{1}' page.</value>
+    <data name="MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES" xml:space="preserve">
+        <value>The browser window may become momentarily unresponsive during the operation.</value>
+    </data>
+    <data name="DATAGRID_COLUMN_TITLE_SCHEDULES" xml:space="preserve">
+        <value>Work schedule</value>
+    </data>
+    <data name="TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_PROCESS" xml:space="preserve">
+        <value>Please select at least one work schedule.</value>
+    </data>
+    <data name="TOAST_TEXT_INVALID_SCHEDULES_SELECTED_TO_PROCESS" xml:space="preserve">
+        <value>You can only process work schedules with no issues.</value>
+    </data>
+    <data name="TOAST_TEXT_ERROR_DURING_PROCESSING_SCHEDULES" xml:space="preserve">
+        <value>Error occurred while processing work schedules, please see the console for details.</value>
+    </data>
+    <data name="TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_REMOVE" xml:space="preserve">
+        <value>Please select at least one work schedule.</value>
     </data>
 </root>

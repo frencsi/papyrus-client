@@ -1,0 +1,201 @@
+﻿@using ResourceKey = PapyrusClient.Resources.Ui.Panels.DashboardPanel;
+
+@* Header *@
+<FluentDialogHeader ShowDismiss="false">
+    <FluentStack Orientation="@Orientation.Horizontal"
+                 HorizontalAlignment="@HorizontalAlignment.Start"
+                 VerticalAlignment="@VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Apps())"
+                    Color="@Color.Accent"/>
+        <FluentLabel Alignment="@HorizontalAlignment.Center"
+                     Typo="@Typography.Header">
+            @Localizer[nameof(ResourceKey.DIALOG_TITLE)]
+        </FluentLabel>
+        <FluentSpacer/>
+        <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
+                      OnClick="@ClosePanelAsync">
+            <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"
+                        Color="@Color.Info"/>
+        </FluentButton>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Body *@
+<FluentDialogBody>
+    <FluentStack Orientation="@Orientation.Vertical"
+                 HorizontalAlignment="@HorizontalAlignment.Start"
+                 VerticalAlignment="@VerticalAlignment.Top"
+                 Style="padding: 0 15px 0 0; margin: 0; width: 100%; height: 100%; scrollbar-gutter: stable; overflow: auto;"
+                 VerticalGap="12">
+
+        <div style="width: 100%;">
+            <FluentInputLabel ForId="nav-menu">
+                @Localizer[nameof(ResourceKey.NAVMENU_LABEL)]
+            </FluentInputLabel>
+            <FluentNavMenu Id="nav-menu"
+                           Collapsible="@false"
+                           Expanded="@true">
+                <FluentNavLink
+                    Href="/"
+                    Icon="@(new Icons.Regular.Size24.Home())"
+                    Match="@NavLinkMatch.All">
+                    @Localizer[nameof(ResourceKey.NAVLINK_HOME)]
+                </FluentNavLink>
+                <FluentNavLink
+                    Href="/load"
+                    Icon="@(new Icons.Regular.Size24.ArrowUpload())"
+                    Match="@NavLinkMatch.All">
+                    @Localizer[nameof(ResourceKey.NAVLINK_LOAD)]
+                </FluentNavLink>
+            </FluentNavMenu>
+        </div>
+
+        <div style="width: 100%;">
+            <FluentDivider/>
+        </div>
+
+        <div style="width: 100%;">
+            <FluentSelect
+                @key="@_selectedCultureId"
+                TOption="CultureInfo"
+                Width="100%"
+                Immediate="true"
+                Position="SelectPosition.Below"
+                Label="@Localizer[nameof(ResourceKey.SELECT_LABEL_LANGUAGE)]"
+                Items="@ClientManager.SupportedCultures"
+                OptionText="@(culture => culture.NativeName)"
+                @bind-SelectedOption="@_selectedCulture"
+                @bind-SelectedOption:after="@SelectedCultureChangedAsync"/>
+        </div>
+
+        <div style="width: 100%">
+            <FluentRadioGroup @key="@_selectedThemeId"
+                              TValue="DesignThemeModes"
+                              Label="@Localizer[nameof(ResourceKey.RADIOGROUP_LABEL_THEME)]"
+                              Orientation="@Orientation.Vertical"
+                              @bind-Value="@_selectedTheme"
+                              @bind-Value:after="@SelectedThemeChangedAsync">
+                @foreach (var supportedTheme in ClientManager.SupportedThemes)
+                {
+                    <FluentRadio TValue="DesignThemeModes"
+                                 Value="@supportedTheme">
+                        @(supportedTheme switch
+                        {
+                            DesignThemeModes.Light => Localizer[nameof(ResourceKey.RADIO_LABEL_THEME_LIGHT)],
+                            DesignThemeModes.Dark => Localizer[nameof(ResourceKey.RADIO_LABEL_THEME_DARK)],
+                            DesignThemeModes.System => Localizer[nameof(ResourceKey.RADIO_LABEL_THEME_SYSTEM)],
+                            _ => Localizer[nameof(ResourceKey.RADIO_LABEL_THEME_UNKNOWN)]
+                        })
+                    </FluentRadio>
+                }
+            </FluentRadioGroup>
+        </div>
+
+        <div style="width: 100%;">
+            <FluentDivider/>
+        </div>
+
+        <div style="width: 100%">
+            <FluentStack Orientation="@Orientation.Horizontal"
+                         HorizontalAlignment="@HorizontalAlignment.Start"
+                         VerticalAlignment="@VerticalAlignment.Center">
+                <FluentInputLabel ForId="holidaysCalendar"
+                                  Label="@Localizer[nameof(ResourceKey.CALENDAR_LABEL_HOLIDAYS)]"/>
+                <FluentSpacer/>
+                <FluentButton Appearance="@Appearance.Stealth"
+                              OnClick="@ResetHolidays">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.ArrowBounce())"
+                                Color="@(Color.Accent)"/>
+                </FluentButton>
+                <FluentButton Appearance="@Appearance.Stealth"
+                              OnClick="@RemoveHolidays">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.Delete())"
+                                Color="@(Color.Accent)"/>
+                </FluentButton>
+            </FluentStack>
+
+            <FluentCalendar Id="holidaysCalendar"
+                            @bind-SelectedDates="@_selectedHolidays"
+                            @bind-SelectedDates:after="@SelectedHolidaysChanged"
+                            SelectMode="CalendarSelectMode.Multiple"
+                            Culture="@ClientManager.Culture"/>
+
+            @if (!_holidaysStore.Any())
+            {
+                <FluentMessageBar Title="@Localizer[nameof(ResourceKey.MESSAGEBAR_TITLE_NO_HOLIDAYS_SELECTED)]"
+                                  Intent="@MessageIntent.Info"
+                                  Type="@MessageType.Notification"
+                                  AllowDismiss="@false"
+                                  Style="border: 0.0625rem solid var(--accent-fill-rest)">
+                    <p>@Localizer[nameof(ResourceKey.MESSAGEBAR_BODY_NO_HOLIDAYS_SELECTED)]</p>
+                </FluentMessageBar>
+            }
+            else
+            {
+                <FluentDataGrid TGridItem="DateOnly"
+                                Style="width: 100%"
+                                Items="@(_holidaysStore.AsQueryable())"
+                                DisplayMode="@(DataGridDisplayMode.Grid)"
+                                RowSize="@(DataGridRowSize.Medium)"
+                                GenerateHeader="@(GenerateHeaderOption.None)">
+                    <ChildContent>
+                        <PropertyColumn TGridItem="DateOnly"
+                                        TProp="string"
+                                        Align="Align.Center"
+                                        Property="@(date => date.ToString("O"))"/>
+                        <TemplateColumn TGridItem="DateOnly"
+                                        Align="Align.Center">
+                            <FluentButton Appearance="@Appearance.Stealth"
+                                          Style="width: 100%"
+                                          IconStart="@(new Icons.Regular.Size24.ArrowRight().WithColor(Color.Error))"
+                                          OnClick="@(() => RemoveHoliday(context))">
+                            </FluentButton>
+                        </TemplateColumn>
+                    </ChildContent>
+                </FluentDataGrid>
+            }
+        </div>
+
+    </FluentStack>
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentStack Orientation="@Orientation.Horizontal"
+                 VerticalAlignment="@VerticalAlignment.Center">
+
+        <div style="display: flex; align-items: center;">
+            <FluentIcon Style="margin-right: 0.3rem;"
+                        Value="@(new Icons.Regular.Size24.Merge())"/>
+            @switch (ClientManager.Version.State)
+            {
+                case ClientVersionState.Valid:
+                    <small>
+                        @ClientManager.Version.Release+
+                        <a
+                            href="https://github.com/frencsi/papyrus-client/commit/@ClientManager.Version.CommitHash"
+                            target="_blank">
+                            @ClientManager.Version.ShortCommitHash
+                        </a>
+                    </small>
+                    break;
+                case ClientVersionState.Unknown:
+                    <FluentSkeleton Shimmer="@true" Height="1rem;" Width="4rem;"/>
+                    break;
+                case ClientVersionState.Invalid:
+                default:
+                    <small>@Localizer[nameof(ResourceKey.DIALOG_FOOTER_VERSION_INVALID)]</small>
+                    break;
+            }
+        </div>
+        <FluentSpacer/>
+        <a style="display: flex; align-items: center;"
+           href="https://github.com/frencsi/papyrus-client">
+            <FluentIcon Value="@(new Icons.Regular.Size24.Code())"/>
+        </a>
+        <a style="display: flex; align-items: center;"
+           href="https://dotnet.microsoft.com/">
+            <FluentIcon Value="@(new Icons.Regular.Size24.Engine())"/>
+        </a>
+    </FluentStack>
+</FluentDialogFooter>

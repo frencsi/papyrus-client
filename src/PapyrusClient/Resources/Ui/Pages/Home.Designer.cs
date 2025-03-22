@@ -60,164 +60,92 @@ namespace PapyrusClient.Resources.Ui.Pages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File.
+        ///   Looks up a localized string similar to Dashboard.
         /// </summary>
-        internal static string DataGridFileTitle {
+        internal static string BUTTON_TEXT_DASHBOARD {
             get {
-                return ResourceManager.GetString("DataGridFileTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to An error occured during processing. Please see the console for more details..
-        /// </summary>
-        internal static string FilesProcessingError {
-            get {
-                return ResourceManager.GetString("FilesProcessingError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Up to {0} files are allowed per load..
-        /// </summary>
-        internal static string InputFileMaximumFilesAllowedPerLoad {
-            get {
-                return ResourceManager.GetString("InputFileMaximumFilesAllowedPerLoad", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can only load {0} files at once..
-        /// </summary>
-        internal static string InputFileMaximumFilesExceeded {
-            get {
-                return ResourceManager.GetString("InputFileMaximumFilesExceeded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drag Excel files here to load, or.
-        /// </summary>
-        internal static string InputFilePart1 {
-            get {
-                return ResourceManager.GetString("InputFilePart1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to browse.
-        /// </summary>
-        internal static string InputFilePart2 {
-            get {
-                return ResourceManager.GetString("InputFilePart2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to for them..
-        /// </summary>
-        internal static string InputFilePart3 {
-            get {
-                return ResourceManager.GetString("InputFilePart3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Supported file formats: {0}..
-        /// </summary>
-        internal static string InputFileSupportedFileFormats {
-            get {
-                return ResourceManager.GetString("InputFileSupportedFileFormats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Only files with valid data can be processed..
-        /// </summary>
-        internal static string InvalidFilesSelected {
-            get {
-                return ResourceManager.GetString("InvalidFilesSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The browser window may freeze temporarily during this process..
-        /// </summary>
-        internal static string MessageBarLoadingFilesBody {
-            get {
-                return ResourceManager.GetString("MessageBarLoadingFilesBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Loading Files.
-        /// </summary>
-        internal static string MessageBarLoadingFilesTitle {
-            get {
-                return ResourceManager.GetString("MessageBarLoadingFilesTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The browser window may freeze temporarily during this process..
-        /// </summary>
-        internal static string MessageBarProcessingFilesBody {
-            get {
-                return ResourceManager.GetString("MessageBarProcessingFilesBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Processing Files.
-        /// </summary>
-        internal static string MessageBarProcessingFilesTitle {
-            get {
-                return ResourceManager.GetString("MessageBarProcessingFilesTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unhandled state: &apos;{0}&apos; in &apos;{1}&apos; page..
-        /// </summary>
-        internal static string MessageBarUnhandledStateBody {
-            get {
-                return ResourceManager.GetString("MessageBarUnhandledStateBody", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unhandled State.
-        /// </summary>
-        internal static string MessageBarUnhandledStateTitle {
-            get {
-                return ResourceManager.GetString("MessageBarUnhandledStateTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please select at least one file..
-        /// </summary>
-        internal static string NoFilesSelected {
-            get {
-                return ResourceManager.GetString("NoFilesSelected", resourceCulture);
+                return ResourceManager.GetString("BUTTON_TEXT_DASHBOARD", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Process.
         /// </summary>
-        internal static string Process {
+        internal static string BUTTON_TEXT_PROCESS {
             get {
-                return ResourceManager.GetString("Process", resourceCulture);
+                return ResourceManager.GetString("BUTTON_TEXT_PROCESS", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
-        internal static string Remove {
+        internal static string BUTTON_TEXT_REMOVE {
             get {
-                return ResourceManager.GetString("Remove", resourceCulture);
+                return ResourceManager.GetString("BUTTON_TEXT_REMOVE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Work schedule.
+        /// </summary>
+        internal static string DATAGRID_COLUMN_TITLE_SCHEDULES {
+            get {
+                return ResourceManager.GetString("DATAGRID_COLUMN_TITLE_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The browser window may become momentarily unresponsive during the operation..
+        /// </summary>
+        internal static string MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES {
+            get {
+                return ResourceManager.GetString("MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing selected files.
+        /// </summary>
+        internal static string MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES {
+            get {
+                return ResourceManager.GetString("MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred while processing work schedules, please see the console for details..
+        /// </summary>
+        internal static string TOAST_TEXT_ERROR_DURING_PROCESSING_SCHEDULES {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_ERROR_DURING_PROCESSING_SCHEDULES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only process work schedules with no issues..
+        /// </summary>
+        internal static string TOAST_TEXT_INVALID_SCHEDULES_SELECTED_TO_PROCESS {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_INVALID_SCHEDULES_SELECTED_TO_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one work schedule..
+        /// </summary>
+        internal static string TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_PROCESS {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_PROCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one work schedule..
+        /// </summary>
+        internal static string TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_REMOVE {
+            get {
+                return ResourceManager.GetString("TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_REMOVE", resourceCulture);
             }
         }
     }

@@ -3,7 +3,7 @@
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-
+            
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -18,60 +18,35 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="MessageBarLoadingFilesTitle" xml:space="preserve">
-        <value>Fájlok Betöltése</value>
+    <data name="BUTTON_TEXT_DASHBOARD" xml:space="preserve">
+        <value>Irányítópult</value>
     </data>
-    <data name="MessageBarProcessingFilesTitle" xml:space="preserve">
-        <value>Fájlok Feldolgozása</value>
-    </data>
-    <data name="MessageBarLoadingFilesBody" xml:space="preserve">
-        <value>A böngészőablak ideiglenesen lefagyhat a folyamat során.</value>
-    </data>
-    <data name="MessageBarProcessingFilesBody" xml:space="preserve">
-        <value>A böngészőablak ideiglenesen lefagyhat a folyamat során.</value>
-    </data>
-    <data name="DataGridFileTitle" xml:space="preserve">
-        <value>Fájl</value>
-    </data>
-    <data name="InputFilePart1" xml:space="preserve">
-        <value>Húzd ide az Excel-fájlokat a feltöltéshez, vagy</value>
-    </data>
-    <data name="InputFilePart2" xml:space="preserve">
-        <value>válaszd ki</value>
-    </data>
-    <data name="InputFilePart3" xml:space="preserve">
-        <value>őket.</value>
-    </data>
-    <data name="InputFileMaximumFilesAllowedPerLoad" xml:space="preserve">
-        <value>Legfeljebb {0} fájl tölthető be egyszerre.</value>
-    </data>
-    <data name="InputFileSupportedFileFormats" xml:space="preserve">
-        <value>Támogatott fájlformátumok: {0}.</value>
-    </data>
-    <data name="InputFileMaximumFilesExceeded" xml:space="preserve">
-        <value>Egyszerre csak {0} fájlt tölthetsz be.</value>
-    </data>
-    <data name="NoFilesSelected" xml:space="preserve">
-        <value>Kérlek, válassz ki legalább egy fájlt.
-</value>
-    </data>
-    <data name="InvalidFilesSelected" xml:space="preserve">
-        <value>Csak az érvényes adatokkal rendelkező fájlok dolgozhatók fel.</value>
-    </data>
-    <data name="FilesProcessingError" xml:space="preserve">
-        <value>Hiba történt a fájlok feldolgozás során. További részletekért kérlek, nyisd meg a konzolt.
-</value>
-    </data>
-    <data name="Process" xml:space="preserve">
+    <data name="BUTTON_TEXT_PROCESS" xml:space="preserve">
         <value>Feldolgozás</value>
     </data>
-    <data name="Remove" xml:space="preserve">
+    <data name="BUTTON_TEXT_REMOVE" xml:space="preserve">
         <value>Törlés</value>
     </data>
-    <data name="MessageBarUnhandledStateTitle" xml:space="preserve">
-        <value>Nem Kezelt Státusz</value>
+    <data name="MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES" xml:space="preserve">
+        <value>Kijelölt fájlok feldolgozása
+</value>
     </data>
-    <data name="MessageBarUnhandledStateBody" xml:space="preserve">
-        <value>Nem kezelt állapot: '{0}' a(z) '{1}' oldalon.</value>
+    <data name="MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES" xml:space="preserve">
+        <value>A böngészőablak átmenetileg nem válaszolhat a művelet során.</value>
+    </data>
+    <data name="DATAGRID_COLUMN_TITLE_SCHEDULES" xml:space="preserve">
+        <value>Munkaidő-beosztás</value>
+    </data>
+    <data name="TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_PROCESS" xml:space="preserve">
+        <value>Kérlek, válassz ki legalább eg munkaidő-beosztást!</value>
+    </data>
+    <data name="TOAST_TEXT_INVALID_SCHEDULES_SELECTED_TO_PROCESS" xml:space="preserve">
+        <value>Csak olyan munkaidő-beosztást tudsz feldolgozni, amelyeknél nincs semmi probléma.</value>
+    </data>
+    <data name="TOAST_TEXT_ERROR_DURING_PROCESSING_SCHEDULES" xml:space="preserve">
+        <value>Hiba történt a munkaidő-beosztások feldolgozása közben, kérlek nézd meg a konzolt a részletekért!</value>
+    </data>
+    <data name="TOAST_TEXT_NO_SCHEDULES_SELECTED_TO_REMOVE" xml:space="preserve">
+        <value>Kérlek, válassz ki legalább egy munkaidő-beosztást!</value>
     </data>
 </root>

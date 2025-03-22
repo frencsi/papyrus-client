@@ -60,59 +60,24 @@ namespace PapyrusClient.Resources.Services.WorkScheduleValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no options set for this work schedule.
+        ///   Looks up a localized string similar to The work schedule cannot be validated because there was a reading error beforehand. 
         ///
-        ///Please provide the options..
+        ///Please resolve the reading error first..
         /// </summary>
-        internal static string NoOptionsSet {
+        internal static string CANT_VALIDATE_BECAUSE_READ_ERROR {
             get {
-                return ResourceManager.GetString("NoOptionsSet", resourceCulture);
+                return ResourceManager.GetString("CANT_VALIDATE_BECAUSE_READ_ERROR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A required &apos;end&apos; continuation marker is missing for the employee &apos;{0}&apos; on &apos;{1}&apos;. 
-        ///            
-        ///This marker is needed because the shift on &apos;{2}&apos; for the same employee starts with a continuation marker. 
+        ///   Looks up a localized string similar to The combined total shift time &apos;{0}&apos; exceeded the allowed maximum of &apos;{1}&apos;. 
         ///
-        ///Please review the following dates: &apos;{2}&apos; and &apos;{1}&apos;..
+        ///Please review the shifts on the following date: &apos;{2}&apos;..
         /// </summary>
-        internal static string PreviousShiftMissingEndContinuationMarker {
+        internal static string COMBINED_SHIFTS_DURATION_IS_GREATER_THAN_RULE {
             get {
-                return ResourceManager.GetString("PreviousShiftMissingEndContinuationMarker", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Multiple end continuation markers were found for employee &apos;{0}&apos; on &apos;{1}&apos;. 
-        ///
-        ///Please review the following dates: &apos;{2}&apos; and &apos;{1}&apos;..
-        /// </summary>
-        internal static string PreviousShiftMultipleEndContinuationMarkerFound {
-            get {
-                return ResourceManager.GetString("PreviousShiftMultipleEndContinuationMarkerFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shift duration can&apos;t be negative or zero. 
-        ///
-        ///Details: {0}..
-        /// </summary>
-        internal static string ShiftDurationNegativeOrZero {
-            get {
-                return ResourceManager.GetString("ShiftDurationNegativeOrZero", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The combined total shift time &apos;{0}&apos; exceeded the allowed maximum of &apos;{1}&apos;.
-        ///
-        ///Please review the following date: &apos;{2}&apos;..
-        /// </summary>
-        internal static string ShiftExceedsMaxDurationCombinedPerDay {
-            get {
-                return ResourceManager.GetString("ShiftExceedsMaxDurationCombinedPerDay", resourceCulture);
+                return ResourceManager.GetString("COMBINED_SHIFTS_DURATION_IS_GREATER_THAN_RULE", resourceCulture);
             }
         }
         
@@ -121,34 +86,34 @@ namespace PapyrusClient.Resources.Services.WorkScheduleValidator {
         ///
         ///Please review the following date: &apos;{3}&apos;..
         /// </summary>
-        internal static string ShiftExceedsMaxDurationPerEmployeePerDay {
+        internal static string EMPLOYEE_SHIFT_DURATION_IS_GREATER_THAN_RULE {
             get {
-                return ResourceManager.GetString("ShiftExceedsMaxDurationPerEmployeePerDay", resourceCulture);
+                return ResourceManager.GetString("EMPLOYEE_SHIFT_DURATION_IS_GREATER_THAN_RULE", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A gap was detected between shifts on &apos;{0}&apos;.
+        ///   Looks up a localized string similar to A gap was detected between shifts on &apos;{0}&apos;. 
         ///
-        ///Details: 
-        ///    - Previous Shift: Employee &apos;{1}&apos; from &apos;{2}&apos; to &apos;{3}&apos; 
-        ///    - Next Shift: Employee &apos;{4}&apos; from &apos;{5}&apos; to &apos;{6}&apos; 
-        ///    - Gap: &apos;{7}&apos;
+        ///Details:
+        ///- Previous Shift: Employee &apos;{1}&apos; from &apos;{2}&apos; to &apos;{3}&apos; 
+        ///- Next Shift: Employee &apos;{4}&apos; from &apos;{5}&apos; to &apos;{6}&apos; 
+        ///- Gap: &apos;{7}&apos; 
         ///
         ///Please ensure that no gaps exist between shifts..
         /// </summary>
-        internal static string ShiftGapDetected {
+        internal static string GAP_DETECTED_BETWEEN_SHIFTS {
             get {
-                return ResourceManager.GetString("ShiftGapDetected", resourceCulture);
+                return ResourceManager.GetString("GAP_DETECTED_BETWEEN_SHIFTS", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Shift data is missing for the following days: [{0}]..
         /// </summary>
-        internal static string ShiftMissingRequiredDays {
+        internal static string MISSING_REQUIRED_DATES {
             get {
-                return ResourceManager.GetString("ShiftMissingRequiredDays", resourceCulture);
+                return ResourceManager.GetString("MISSING_REQUIRED_DATES", resourceCulture);
             }
         }
         
@@ -156,45 +121,97 @@ namespace PapyrusClient.Resources.Services.WorkScheduleValidator {
         ///   Looks up a localized string similar to There is an overlap in shifts on &apos;{0}&apos;. 
         ///
         ///Details: 
-        ///    - Previous Shift: Employee &apos;{1}&apos; from &apos;{2}&apos; to &apos;{3}&apos; 
-        ///    - Next Shift: Employee &apos;{4}&apos; from &apos;{5}&apos; to &apos;{6}&apos; 
+        ///- Previous Shift: Employee &apos;{1}&apos; from &apos;{2}&apos; to &apos;{3}&apos; 
+        ///- Next Shift: Employee &apos;{4}&apos; from &apos;{5}&apos; to &apos;{6}&apos; 
         ///
         ///Please review the timings for overlapping shifts..
         /// </summary>
-        internal static string ShiftOverlapDetected {
+        internal static string OVERLAP_DETECTED_BETWEEN_SHIFTS {
             get {
-                return ResourceManager.GetString("ShiftOverlapDetected", resourceCulture);
+                return ResourceManager.GetString("OVERLAP_DETECTED_BETWEEN_SHIFTS", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more shift dates are not in the header specified month &apos;{0}&apos;. 
-        ///
-        ///Please review the following date: &apos;{1}&apos;..
-        /// </summary>
-        internal static string ShiftsDateNotInSpecifiedMonth {
-            get {
-                return ResourceManager.GetString("ShiftsDateNotInSpecifiedMonth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to One or more shift dates are not in the header specified year &apos;{0}&apos;. 
+        ///   Looks up a localized string similar to A required &apos;end&apos; continuation marker is missing for the employee &apos;{0}&apos; on &apos;{1}&apos;. 
         ///            
-        ///Please review the following date: &apos;{1}&apos;..
+        ///This marker is needed because the shift on &apos;{2}&apos; for the same employee starts with a continuation marker. 
+        ///            
+        ///Please review the following dates: &apos;{2}&apos; and &apos;{1}&apos;..
         /// </summary>
-        internal static string ShiftsDateNotInSpecifiedYear {
+        internal static string PREVIOUS_SHIFT_MISSING_END_CONTINUATION_MARKER {
             get {
-                return ResourceManager.GetString("ShiftsDateNotInSpecifiedYear", resourceCulture);
+                return ResourceManager.GetString("PREVIOUS_SHIFT_MISSING_END_CONTINUATION_MARKER", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only the operator work type currently supports gap validation..
+        ///   Looks up a localized string similar to Multiple end continuation markers were found for employee &apos;{0}&apos; on &apos;{1}&apos;. 
+        ///
+        ///Please review the following dates: &apos;{2}&apos; and &apos;{1}&apos;..
         /// </summary>
-        internal static string WorTypeGapValidationNotSupported {
+        internal static string PREVIOUS_SHIFT_MULTIPLE_END_CONTINUATION_MARKER_FOUND {
             get {
-                return ResourceManager.GetString("WorTypeGapValidationNotSupported", resourceCulture);
+                return ResourceManager.GetString("PREVIOUS_SHIFT_MULTIPLE_END_CONTINUATION_MARKER_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No rule is set for the work schedule, so validation can&apos;t proceed.
+        ///
+        ///Please provide a rule..
+        /// </summary>
+        internal static string RULE_NOT_SET {
+            get {
+                return ResourceManager.GetString("RULE_NOT_SET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the operator work schedule type currently supports shift continuity validation..
+        /// </summary>
+        internal static string SHIFT_CONTINUITY_VALIDATION_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("SHIFT_CONTINUITY_VALIDATION_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift duration can&apos;t be negative or zero. 
+        ///
+        ///Details: &apos;{0}&apos;..
+        /// </summary>
+        internal static string SHIFT_DURATION_IS_NEGATIVE_OR_ZERO {
+            get {
+                return ResourceManager.GetString("SHIFT_DURATION_IS_NEGATIVE_OR_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The month of the shift(s) date does not match the month of the work schedule. 
+        ///
+        ///Month of the shift(s) date: &apos;{0}&apos;. 
+        ///Month of the work schedule: &apos;{1}&apos;. 
+        ///
+        ///Please check the following shift(s) date: &apos;{2}&apos;..
+        /// </summary>
+        internal static string SHIFTS_DATE_MONTH_NOT_MATCH_SCHEDULE_MONTH {
+            get {
+                return ResourceManager.GetString("SHIFTS_DATE_MONTH_NOT_MATCH_SCHEDULE_MONTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The year of the shift(s) date does not match the year of the work schedule. 
+        ///
+        ///Year of the shift(s) date: &apos;{0}&apos;. 
+        ///Year of the work schedule: &apos;{1}&apos;. 
+        ///            
+        ///Please check the following shift(s) date: &apos;{2}&apos;..
+        /// </summary>
+        internal static string SHIFTS_DATE_YEAR_NOT_MATCH_SCHEDULE_YEAR {
+            get {
+                return ResourceManager.GetString("SHIFTS_DATE_YEAR_NOT_MATCH_SCHEDULE_YEAR", resourceCulture);
             }
         }
     }

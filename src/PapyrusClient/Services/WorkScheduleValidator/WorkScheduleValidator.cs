@@ -1,44 +1,46 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.Extensions.Localization;
-using PapyrusClient.Models;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using ResourceKey = PapyrusClient.Resources.Services.WorkScheduleValidator.WorkScheduleValidator;
 
 namespace PapyrusClient.Services.WorkScheduleValidator;
 
 public class WorkScheduleValidator(IStringLocalizer<WorkScheduleValidator> localizer) : IWorkScheduleValidator
 {
-    private const string
-        DateFormat = "O",
-        TimeSpanFormat = "g";
-
     public Task ValidateAsync(WorkSchedule workSchedule, CancellationToken cancellationToken = default)
     {
-        if (workSchedule.Options == null)
+        if (workSchedule.Rule == null)
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.NoOptionsSet));
+                resourceKey: nameof(ResourceKey.RULE_NOT_SET));
         }
 
-        var yearMonthDates = new SortedSet<DateOnly>(workSchedule.GetYearMonthDates());
+        if (workSchedule.State == WorkScheduleState.ReadError)
+        {
+            throw new WorkScheduleValidatorException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.CANT_VALIDATE_BECAUSE_READ_ERROR));
+        }
 
-        var employeesShiftDurationInDate = new Dictionary<string, TimeSpan>(32, StringComparer.OrdinalIgnoreCase);
+        var yearMonthDates = new SortedSet<DateOnly>(collection: workSchedule.YearMonth.GetDates());
+
+        var employeeShiftTimes = new Dictionary<Employee, TimeSpan>(
+            capacity: 32,
+            comparer: EmployeeComparer.NameOrdinalIgnoreCase);
 
         IGrouping<DateOnly, WorkShift>? shiftsInPreviousDate = null;
 
         foreach (var shiftsInDate in workSchedule.Shifts
                      .GroupBy(shift => shift.Date)
-                     .OrderBy(group => group.Key))
+                     .OrderBy(grouping => grouping.Key))
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            ValidateShiftsDateIsInMonth(shiftsInDate.Key, workSchedule);
+            EnsureShiftDateMatchesWorkSchedule(workSchedule, shiftsInDate.Key);
 
             yearMonthDates.Remove(shiftsInDate.Key);
 
-            employeesShiftDurationInDate.Clear();
-
-            WorkShift? previousShift = null;
+            WorkShift? shiftInPreviousDay = null;
 
             foreach (var shiftInDate in shiftsInDate
                          .OrderBy(shift => shift.Start.Value)
@@ -46,78 +48,96 @@ public class WorkScheduleValidator(IStringLocalizer<WorkScheduleValidator> local
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ValidatePositiveShiftDuration(shiftInDate);
+                EnsureShiftHasValidDuration(shiftInDate);
 
                 if (shiftsInPreviousDate != null)
                 {
-                    ValidateShiftContinuity(shiftInDate, shiftsInPreviousDate, workSchedule, workSchedule.Options);
+                    ValidateShiftContinuity(workSchedule, shiftsInPreviousDate, shiftInDate);
                 }
 
-                ValidateShiftGap(shiftInDate, previousShift, workSchedule.Options);
+                ValidateShiftGap(workSchedule, shiftInPreviousDay, shiftInDate);
 
-                ValidateShiftOverlap(shiftInDate, previousShift, workSchedule.Options);
+                ValidateShiftOverlap(workSchedule, shiftInPreviousDay, shiftInDate);
 
-                ref var timeSpan = ref CollectionsMarshal
-                    .GetValueRefOrAddDefault(employeesShiftDurationInDate, shiftInDate.Employee, out _);
+                AddEmployeeShiftTimes(employeeShiftTimes, shiftInDate);
 
-                timeSpan += shiftInDate.Duration;
-
-                previousShift = shiftInDate;
+                shiftInPreviousDay = shiftInDate;
             }
 
-            ValidateShiftDurationsInDate(shiftsInDate.Key, employeesShiftDurationInDate, workSchedule.Options);
+            ValidateEmployeeShiftTimes(workSchedule, shiftsInDate.Key, employeeShiftTimes);
+
+            ResetEmployeeShiftTimes(employeeShiftTimes);
 
             shiftsInPreviousDate = shiftsInDate;
         }
 
-        ValidateRequireShiftsEveryDay(yearMonthDates, workSchedule.Options);
+        ValidateRequireShiftsEveryDay(workSchedule, yearMonthDates);
 
         return Task.CompletedTask;
     }
 
-    private void ValidateShiftsDateIsInMonth(DateOnly shiftsDate, WorkSchedule workSchedule)
+    private void EnsureShiftDateMatchesWorkSchedule(WorkSchedule workSchedule, DateOnly date)
     {
-        if (workSchedule.YearMonth.Year != shiftsDate.Year)
+        if (workSchedule.YearMonth.Year != date.Year)
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.ShiftsDateNotInSpecifiedYear),
-                resourceArgs: [workSchedule.YearMonth.Year.ToString(), shiftsDate.ToString(DateFormat)]);
+                resourceKey: nameof(ResourceKey.SHIFTS_DATE_YEAR_NOT_MATCH_SCHEDULE_YEAR),
+                resourceArgs:
+                [
+                    workSchedule.YearMonth.Year.ToString(),
+                    date.Year.ToString(),
+                    date.ToString("O")
+                ]);
         }
 
-        if (workSchedule.YearMonth.Month != shiftsDate.Month)
+        if (workSchedule.YearMonth.Month != date.Month)
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.ShiftsDateNotInSpecifiedMonth),
-                resourceArgs: [workSchedule.YearMonth.Year.ToString(), shiftsDate.ToString(DateFormat)]);
+                resourceKey: nameof(ResourceKey.SHIFTS_DATE_MONTH_NOT_MATCH_SCHEDULE_MONTH),
+                resourceArgs:
+                [
+                    workSchedule.YearMonth.Year.ToString(),
+                    date.Year.ToString(),
+                    date.ToString("O")
+                ]);
         }
     }
 
-    private void ValidatePositiveShiftDuration(WorkShift shift)
+    private void EnsureShiftHasValidDuration(WorkShift shift)
     {
-        if (shift.Duration <= TimeSpan.Zero)
+        if (shift.ExactDuration() <= TimeSpan.Zero)
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.ShiftDurationNegativeOrZero),
-                resourceArgs: [shift.ToString()]);
+                resourceKey: nameof(ResourceKey.SHIFT_DURATION_IS_NEGATIVE_OR_ZERO),
+                resourceArgs:
+                [
+                    shift.ToString()
+                ]);
         }
     }
 
-    private void ValidateShiftContinuity(WorkShift shift, IGrouping<DateOnly, WorkShift> shiftsInPreviousDate,
-        WorkSchedule workSchedule, WorkOptions options)
+    private void ValidateShiftContinuity(WorkSchedule workSchedule, IGrouping<DateOnly, WorkShift> shiftsInPreviousDate,
+        WorkShift shift)
     {
-        if (!options.ValidateShiftContinuity)
+        Debug.Assert(workSchedule.Rule != null, "Work schedule rule should not be null");
+
+        if (!workSchedule.Rule.ValidateShiftContinuity)
         {
             return;
         }
 
-        if (workSchedule.Type != WorkType.Operator)
+        if (workSchedule.Type != WorkScheduleType.Operator)
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.WorTypeGapValidationNotSupported));
+                resourceKey: nameof(ResourceKey.SHIFT_CONTINUITY_VALIDATION_NOT_SUPPORTED),
+                resourceArgs:
+                [
+                    shift.ToString()
+                ]);
         }
 
         if (!shift.Start.HasContinuationMarker)
@@ -131,26 +151,39 @@ public class WorkScheduleValidator(IStringLocalizer<WorkScheduleValidator> local
             .Count(x =>
                 x.Date == previousDate &&
                 x.End.HasContinuationMarker &&
-                x.Employee.Equals(shift.Employee, StringComparison.OrdinalIgnoreCase));
+                EmployeeComparer.NameOrdinalIgnoreCase.Equals(x.Employee, shift.Employee));
 
         switch (count)
         {
             case 0:
                 throw new WorkScheduleValidatorException(
                     localizer: localizer,
-                    resourceKey: nameof(ResourceKey.PreviousShiftMissingEndContinuationMarker),
-                    resourceArgs: [shift.Employee, previousDate.ToString(DateFormat), shift.Date.ToString(DateFormat)]);
+                    resourceKey: nameof(ResourceKey.PREVIOUS_SHIFT_MISSING_END_CONTINUATION_MARKER),
+                    resourceArgs:
+                    [
+                        shift.Employee.Name,
+                        previousDate.ToString("O"),
+                        shift.Date.ToString("O")
+                    ]);
+
             case > 1:
                 throw new WorkScheduleValidatorException(
                     localizer: localizer,
-                    resourceKey: nameof(ResourceKey.PreviousShiftMultipleEndContinuationMarkerFound),
-                    resourceArgs: [shift.Employee, previousDate.ToString(DateFormat), shift.Date.ToString(DateFormat)]);
+                    resourceKey: nameof(ResourceKey.PREVIOUS_SHIFT_MULTIPLE_END_CONTINUATION_MARKER_FOUND),
+                    resourceArgs:
+                    [
+                        shift.Employee.Name,
+                        previousDate.ToString("O"),
+                        shift.Date.ToString("O")
+                    ]);
         }
     }
 
-    private void ValidateShiftGap(WorkShift shift, WorkShift? previousShift, WorkOptions options)
+    private void ValidateShiftGap(WorkSchedule workSchedule, WorkShift? previousShift, WorkShift shift)
     {
-        if (options.AllowGapBetweenShifts)
+        Debug.Assert(workSchedule.Rule != null, "Work schedule rule should not be null");
+
+        if (workSchedule.Rule.AllowGapBetweenShifts)
         {
             return;
         }
@@ -163,25 +196,27 @@ public class WorkScheduleValidator(IStringLocalizer<WorkScheduleValidator> local
             {
                 throw new WorkScheduleValidatorException(
                     localizer: localizer,
-                    resourceKey: nameof(ResourceKey.ShiftGapDetected),
+                    resourceKey: nameof(ResourceKey.GAP_DETECTED_BETWEEN_SHIFTS),
                     resourceArgs:
                     [
-                        shift.Date.ToString(DateFormat),
-                        previousShift.Employee,
-                        previousShift.Start.Value.ToString(TimeSpanFormat),
-                        previousShift.End.Value.ToString(TimeSpanFormat),
-                        shift.Employee,
-                        shift.Start.Value.ToString(TimeSpanFormat),
-                        shift.End.Value.ToString(TimeSpanFormat),
-                        gap.ToString(TimeSpanFormat)
+                        shift.Date.ToString("O"),
+                        previousShift.Employee.Name,
+                        previousShift.Start.Value.ToString("g"),
+                        previousShift.End.Value.ToString("g"),
+                        shift.Employee.Name,
+                        shift.Start.Value.ToString("g"),
+                        shift.End.Value.ToString("g"),
+                        gap.ToString("g")
                     ]);
             }
         }
     }
 
-    private void ValidateShiftOverlap(WorkShift shift, WorkShift? previousShift, WorkOptions options)
+    private void ValidateShiftOverlap(WorkSchedule workSchedule, WorkShift? previousShift, WorkShift shift)
     {
-        if (options.AllowOverlapBetweenShifts)
+        Debug.Assert(workSchedule.Rule != null, "Work schedule rule should not be null");
+
+        if (workSchedule.Rule.AllowOverlapBetweenShifts)
         {
             return;
         }
@@ -191,70 +226,88 @@ public class WorkScheduleValidator(IStringLocalizer<WorkScheduleValidator> local
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.ShiftOverlapDetected),
+                resourceKey: nameof(ResourceKey.OVERLAP_DETECTED_BETWEEN_SHIFTS),
                 resourceArgs:
                 [
-                    shift.Date.ToString(DateFormat),
-                    previousShift.Employee,
-                    previousShift.Start.Value.ToString(TimeSpanFormat),
-                    previousShift.End.Value.ToString(TimeSpanFormat),
-                    shift.Employee,
-                    shift.Start.Value.ToString(TimeSpanFormat),
-                    shift.End.Value.ToString(TimeSpanFormat)
+                    shift.Date.ToString("O"),
+                    previousShift.Employee.Name,
+                    previousShift.Start.Value.ToString("g"),
+                    previousShift.End.Value.ToString("g"),
+                    shift.Employee.Name,
+                    shift.Start.Value.ToString("g"),
+                    shift.End.Value.ToString("g")
                 ]);
         }
     }
 
-    private void ValidateRequireShiftsEveryDay(SortedSet<DateOnly> periodDates, WorkOptions options)
+    private void ValidateEmployeeShiftTimes(WorkSchedule workSchedule, DateOnly date,
+        Dictionary<Employee, TimeSpan> employeeShiftTimes)
     {
-        if (!options.RequireShiftsEveryDay)
+        Debug.Assert(workSchedule.Rule != null, "Work schedule rule should not be null");
+
+        var combined = TimeSpan.Zero;
+
+        foreach (var employeeShiftTime in employeeShiftTimes)
+        {
+            if (employeeShiftTime.Value > workSchedule.Rule.MaxShiftDurationEmployeePerDay)
+            {
+                throw new WorkScheduleValidatorException(
+                    localizer: localizer,
+                    resourceKey: nameof(ResourceKey.EMPLOYEE_SHIFT_DURATION_IS_GREATER_THAN_RULE),
+                    resourceArgs:
+                    [
+                        employeeShiftTime.Key.Name,
+                        employeeShiftTime.Value.ToString("g"),
+                        workSchedule.Rule.MaxShiftDurationEmployeePerDay.ToString("g"),
+                        date.ToString("O")
+                    ]);
+            }
+
+            combined += employeeShiftTime.Value;
+        }
+
+        if (combined > workSchedule.Rule.MaxShiftDurationCombinedPerDay)
+        {
+            throw new WorkScheduleValidatorException(
+                localizer: localizer,
+                resourceKey: nameof(ResourceKey.COMBINED_SHIFTS_DURATION_IS_GREATER_THAN_RULE),
+                resourceArgs:
+                [
+                    combined.ToString("g"),
+                    workSchedule.Rule.MaxShiftDurationCombinedPerDay.Value.ToString("g"),
+                    date.ToString("O")
+                ]);
+        }
+    }
+
+    private void ValidateRequireShiftsEveryDay(WorkSchedule workSchedule, SortedSet<DateOnly> days)
+    {
+        Debug.Assert(workSchedule.Rule != null, "Work schedule rule should not be null");
+
+        if (!workSchedule.Rule.RequireShiftsEveryDay)
         {
             return;
         }
 
-        if (periodDates.Count != 0)
+        if (days.Count != 0)
         {
             throw new WorkScheduleValidatorException(
                 localizer: localizer,
-                resourceKey: nameof(ResourceKey.ShiftMissingRequiredDays),
-                resourceArgs: [string.Join(", ", periodDates.Select(date => date.ToString(DateFormat)))]);
+                resourceKey: nameof(ResourceKey.MISSING_REQUIRED_DATES),
+                resourceArgs: [string.Join(", ", days.Select(date => date.ToString("O")))]);
         }
     }
 
-    private void ValidateShiftDurationsInDate(DateOnly date,
-        Dictionary<string, TimeSpan> employeesShiftDuration, WorkOptions options)
+    private static void AddEmployeeShiftTimes(Dictionary<Employee, TimeSpan> employeeShiftTimes,
+        WorkShift shift)
     {
-        var combinedTotalShiftDuration = TimeSpan.Zero;
+        ref var timeSpan = ref CollectionsMarshal.GetValueRefOrAddDefault(employeeShiftTimes, shift.Employee, out _);
 
-        foreach (var employeeShiftDuration in employeesShiftDuration)
-        {
-            if (options.MaxShiftDurationEmployeePerDay != null &&
-                employeeShiftDuration.Value > options.MaxShiftDurationEmployeePerDay)
-            {
-                throw new WorkScheduleValidatorException(
-                    localizer: localizer,
-                    resourceKey: nameof(ResourceKey.ShiftExceedsMaxDurationPerEmployeePerDay),
-                    resourceArgs:
-                    [
-                        employeeShiftDuration.Key, employeeShiftDuration.Value.ToString(TimeSpanFormat),
-                        options.MaxShiftDurationEmployeePerDay.Value.ToString(TimeSpanFormat), date.ToString(DateFormat)
-                    ]);
-            }
+        timeSpan += shift.ExactDuration();
+    }
 
-            combinedTotalShiftDuration += employeeShiftDuration.Value;
-        }
-
-        if (options.MaxShiftDurationCombinedPerDay != null &&
-            combinedTotalShiftDuration > options.MaxShiftDurationCombinedPerDay)
-        {
-            throw new WorkScheduleValidatorException(
-                localizer: localizer,
-                resourceKey: nameof(ResourceKey.ShiftExceedsMaxDurationCombinedPerDay),
-                resourceArgs:
-                [
-                    combinedTotalShiftDuration.ToString(TimeSpanFormat),
-                    options.MaxShiftDurationCombinedPerDay.Value.ToString(TimeSpanFormat), date.ToString(DateFormat)
-                ]);
-        }
+    private static void ResetEmployeeShiftTimes(Dictionary<Employee, TimeSpan> employeeShiftTimes)
+    {
+        employeeShiftTimes.Clear();
     }
 }

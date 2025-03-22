@@ -1,48 +1,24 @@
 ﻿namespace PapyrusClient.Models;
 
 public record WorkSchedule(
-    string Company,
-    string Location,
-    (int Year, int Month) YearMonth,
-    WorkType Type,
-    IReadOnlyList<WorkShift> Shifts)
+    Company Company,
+    Location Location,
+    YearMonth YearMonth,
+    WorkScheduleType Type,
+    IReadOnlyList<WorkShift> Shifts,
+    WorkScheduleMetadata Metadata,
+    WorkScheduleValidationRule? Rule,
+    Exception? Exception)
 {
-    public WorkOptions? Options { get; init; }
+    private static int _nextId = 0;
 
-    public DateOnly FirstDateOfYearMonth => new(
-        year: YearMonth.Year,
-        month: YearMonth.Month,
-        day: 1);
+    public int Id { get; } = Interlocked.Increment(ref _nextId);
 
-    public DateOnly LastDateOfYearMonth => new(
-        year: YearMonth.Year,
-        month: YearMonth.Month,
-        day: DateTime.DaysInMonth(YearMonth.Year, YearMonth.Month));
-
-    public IEnumerable<DateOnly> GetYearMonthDates()
+    public WorkScheduleState State => Exception switch
     {
-        return Enumerable
-            .Range(FirstDateOfYearMonth.Day, LastDateOfYearMonth.Day)
-            .Select(day => new DateOnly(
-                year: YearMonth.Year,
-                month: YearMonth.Month,
-                day: day));
-    }
-
-    public IEnumerable<TimeSheet> ToTimeSheets()
-    {
-        return Shifts
-            .GroupBy(shift => shift.Employee)
-            .Select(employeeShifts =>
-                new TimeSheet(
-                    Employee: employeeShifts.Key,
-                    Company: Company,
-                    Location: Location,
-                    YearMonth: YearMonth,
-                    Type: Type,
-                    Shifts: employeeShifts)
-                {
-                    Options = Options
-                });
-    }
+        null => WorkScheduleState.Ok,
+        WorkScheduleReaderException => WorkScheduleState.ReadError,
+        WorkScheduleValidatorException => WorkScheduleState.ValidateError,
+        _ => WorkScheduleState.GeneralError
+    };
 }

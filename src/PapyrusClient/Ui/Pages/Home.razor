@@ -1,270 +1,166 @@
-﻿@page "/"
-@using Microsoft.Extensions.Localization
-@using ResourceKey = PapyrusClient.Resources.Ui.Pages.Home
-@inject ILogger<Home> Logger
-@inject IJSRuntime Js
-@inject IToastService ToastService
-@inject IDialogService DialogService
-@inject ISettingsManager SettingsManager
-@inject IWorkScheduleReader WorkScheduleReader
-@inject IWorkScheduleValidator WorkScheduleValidator
-@inject ITimeSheetWriter TimeSheetWriter
+﻿@using ResourceKey = PapyrusClient.Resources.Ui.Pages.Home
 @inject IStringLocalizer<Home> Localizer
+@page "/"
 
-<PageTitle>Papyrus</PageTitle>
+<PageTitle>Home</PageTitle>
 
 <FluentGrid AdaptiveRendering="@true"
-            Spacing="2"
             Justify="@JustifyContent.Center">
 
-    <FluentGridItem xs="12" sm="12" md="9" lg="7" xl="7" xxl="7">
-
-        <FluentInputFile Id="file-loader"
-                         Style="min-height: 14rem;"
-                         Disabled="@(_state != State.Idle || _dialog != null)"
-                         Multiple="@true"
-                         Mode="@InputFileMode.Stream"
-                         MaximumFileCount="@MaximumFileCountPerLoad"
-                         MaximumFileSize="@int.MaxValue"
-                         Accept="@string.Join(", ", WorkScheduleReader.SupportedFileExtensions)"
-                         OnFileCountExceeded="@OnFileCountExceeded"
-                         OnFileUploaded="@OnFileLoadedAsync"
-                         OnCompleted="@OnFileLoadCompleted">
-            <!-- Using ChildContent as a progress bar since ProgressTemplate is not responsive -->
-            <ProgressTemplate>
-                <span></span>
-            </ProgressTemplate>
-            <ChildContent>
-                <div style="margin: 1rem;">
-                    <FluentStack Orientation="Orientation.Vertical"
-                                 HorizontalAlignment="HorizontalAlignment.Center"
-                                 VerticalAlignment="VerticalAlignment.Top">
-                        @switch (_state)
-                        {
-                            case State.Idle when _dialog == null:
-                            {
-                                <label for="file-loader">
-                                    <FluentIcon Value="@(new Icons.Regular.Size24.ArrowUpload())"/>
-                                </label>
-
-                                <div>
-                                    @Localizer[nameof(ResourceKey.InputFilePart1)]
-                                    <label for="file-loader">@Localizer[nameof(ResourceKey.InputFilePart2)]</label>
-                                    @Localizer[nameof(ResourceKey.InputFilePart3)]
-                                    <br/>
-                                    <em>@Localizer.GetString(nameof(ResourceKey.InputFileMaximumFilesAllowedPerLoad), MaximumFileCountPerLoad)</em>
-                                </div>
-
-                                <div style="margin-top: 1rem;">
-                                    @Localizer.GetString(nameof(ResourceKey.InputFileSupportedFileFormats), string.Join(", ", WorkScheduleReader.SupportedFileExtensions))
-                                </div>
-                                break;
-                            }
-                            case State.Loading:
-                                <FluentIcon Value="@(new Icons.Regular.Size24.Hourglass())"/>
-
-                                <div style="width: 7rem;">
-                                    <FluentProgress Min="0"
-                                                    Max="100"
-                                                    Value="@_loadProgressPercent"/>
-                                </div>
-
-                                <div style="font-size: 0.7rem;">
-                                    @_loadFileName
-                                </div>
-                                break;
-                            case State.Processing:
-                            default:
-                                <FluentIcon Value="@(new Icons.Regular.Size24.Dismiss())"/>
-
-                                break;
-                        }
-                    </FluentStack>
-                </div>
-            </ChildContent>
-        </FluentInputFile>
-
-    </FluentGridItem>
-
+    <!-- Icons and Texts -->
     <FluentGridItem sm="12" md="9" lg="7" xl="7" xxl="7"
                     HiddenWhen="@GridItemHidden.XsAndDown">
-
-        <FluentToolbar Style="width: 100%; height: 3rem;">
-            <FluentButton Style="min-width: 4rem;"
-                          Appearance="@Appearance.Stealth"
-                          IconStart="@(new Icons.Regular.Size24.Settings())"
-                          Disabled="@(_state != State.Idle || _dialog != null)"
-                          OnClick="@OpenSettingsDialogAsync">
+        <FluentToolbar Style="width: 100%;">
+            <FluentButton
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.Apps())"
+                OnClick="@OpenDashboardPanelAsync">
+                @Localizer[nameof(ResourceKey.BUTTON_TEXT_DASHBOARD)]
             </FluentButton>
             <FluentSpacer/>
-            <FluentButton Appearance="@Appearance.Accent"
-                          IconStart="@(new Icons.Regular.Size24.ArrowDown())"
-                          Disabled="@(_state != State.Idle || _dialog != null)"
-                          OnClick="@ProcessSelectedFilesAsync">
-                @Localizer[nameof(ResourceKey.Process)]
+            <FluentButton
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.ArrowDownload())"
+                OnClick="@ProcessSelectedAsync">
+                @Localizer[nameof(ResourceKey.BUTTON_TEXT_PROCESS)]
             </FluentButton>
-            <FluentButton Appearance="@Appearance.Neutral"
-                          IconStart="@(new Icons.Regular.Size24.Delete())"
-                          Disabled="@(_state != State.Idle || _dialog != null)"
-                          OnClick="@RemoveSelectedFiles">
-                @Localizer[nameof(ResourceKey.Remove)]
+            <FluentButton
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.DeleteDismiss())"
+                OnClick="@RemoveSelectedAsync">
+                @Localizer[nameof(ResourceKey.BUTTON_TEXT_REMOVE)]
             </FluentButton>
         </FluentToolbar>
-
     </FluentGridItem>
 
+    <!-- Icons only -->
     <FluentGridItem xs="12"
                     HiddenWhen="@GridItemHidden.SmAndUp">
-
-        <FluentToolbar Style="width: 100%; height: 3rem;">
-            <FluentButton Style="min-width: 4rem;"
-                          Appearance="@Appearance.Stealth"
-                          IconStart="@(new Icons.Regular.Size24.Settings())"
-                          Disabled="@(_state != State.Idle || _dialog != null)"
-                          OnClick="@OpenSettingsDialogAsync">
-            </FluentButton>
+        <FluentToolbar Style="width: 100%;">
+            <FluentButton
+                Style="width: 4rem;"
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.Apps())"
+                OnClick="@OpenDashboardPanelAsync"/>
             <FluentSpacer/>
-            <FluentButton Style="min-width: 4rem;"
-                          Appearance="@Appearance.Accent"
-                          IconStart="@(new Icons.Regular.Size24.ArrowDown())"
-                          Disabled="@(_state != State.Idle || _dialog != null)"
-                          OnClick="@ProcessSelectedFilesAsync">
-            </FluentButton>
-            <FluentButton Style="min-width: 4rem;"
-                          Appearance="@Appearance.Neutral"
-                          IconStart="@(new Icons.Regular.Size24.Delete())"
-                          Disabled="@(_state != State.Idle || _dialog != null)"
-                          OnClick="@RemoveSelectedFiles">
-            </FluentButton>
+            <FluentButton
+                Style="width: 4rem;"
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.ArrowDownload())"
+                OnClick="@ProcessSelectedAsync"/>
+            <FluentButton
+                Style="width: 4rem;"
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.DeleteDismiss())"
+                OnClick="@RemoveSelectedAsync"/>
         </FluentToolbar>
-
     </FluentGridItem>
 
     <FluentGridItem xs="12" sm="12" md="9" lg="7" xl="7" xxl="7"
-                    Justify="JustifyContent.Center">
-
-        @switch (_state)
+                    Justify="@JustifyContent.Center">
+        @if (_processing)
         {
-            case State.Idle:
-                @if (WorkScheduleFiles.Count != 0)
-                {
-                    <FluentDataGrid TGridItem="WorkScheduleFile"
-                                    ItemKey="@(file => file.Id)"
-                                    Items="@WorkScheduleFiles.AsQueryable()"
-                                    DisplayMode="@DataGridDisplayMode.Grid"
-                                    GenerateHeader="@GenerateHeaderOption.Default"
-                                    HeaderCellAsButtonWithMenu="@true"
-                                    ShowHover="@true"
-                                    Virtualize="@true"
-                                    OverscanCount="4"
-                                    ItemSize="45">
-                        <ChildContent>
-                            <!-- Added padding-top: 10px to center the checkbox -->
-                            <SelectColumn TGridItem="WorkScheduleFile"
-                                          Style="padding-top: 10px;"
-                                          @bind-SelectedItems="@_selectedWorkScheduleFiles"
-                                          Align="@Align.Center"
-                                          SelectMode="@DataGridSelectMode.Multiple"
-                                          SelectFromEntireRow="@true"
-                                          Selectable="@(_ => true)">
-                            </SelectColumn>
-                            <TemplateColumn TGridItem="WorkScheduleFile"
-                                            Width="3rem"
-                                            Align="@Align.Center"
-                                            IsDefaultSortColumn="@true"
-                                            Sortable="@true"
-                                            SortBy="@(GridSort<WorkScheduleFile>.ByAscending(file => file.Status))"
-                                            InitialSortDirection="@SortDirection.Ascending">
-                                <ChildContent>
-                                    <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
-                                                  StopPropagation="@true"
-                                                  OnClick="@(() => OpenFileDetailsDialogAsync(context))">
-                                        @switch (context.Status)
-                                        {
-                                            case WorkScheduleFile.State.Ok:
-                                                <FluentIcon
-                                                    Value="@(new Icons.Regular.Size24.Checkmark().WithColor(Color.Success))"/>
-                                                break;
-                                            case WorkScheduleFile.State.ReadError:
-                                            case WorkScheduleFile.State.ValidateError:
-                                                <FluentIcon
-                                                    Value="@(new Icons.Regular.Size24.Warning().WithColor(Color.Warning))"/>
-                                                break;
-                                            case WorkScheduleFile.State.GeneralError:
-                                            default:
-                                                <FluentIcon
-                                                    Value="@(new Icons.Regular.Size24.Bug().WithColor(Color.Error))"/>
-                                                break;
-                                        }
-                                    </FluentButton>
-                                </ChildContent>
-                            </TemplateColumn>
-                            <PropertyColumn TGridItem="WorkScheduleFile"
-                                            TProp="string"
-                                            Title="@Localizer[nameof(ResourceKey.DataGridFileTitle)]"
-                                            Align="@Align.Start"
-                                            Property="@(file => file.Name)"
-                                            Sortable="@true"
-                                            SortBy="@(GridSort<WorkScheduleFile>.ByAscending(file => file.Name))"/>
-                        </ChildContent>
-                    </FluentDataGrid>
-                }
-                else
-                {
-                    <FluentStack Orientation="Orientation.Vertical"
-                                 HorizontalAlignment="HorizontalAlignment.Center"
-                                 VerticalAlignment="VerticalAlignment.Center">
-                        @for (var i = 0; i < 3; i++)
-                        {
-                            <div style="display: flex; width: 100%;">
-                                <FluentSkeleton Style="margin-left: 0.5rem;"
-                                                Shimmer="@true"
-                                                Height="2rem"
-                                                Width="2.5rem"/>
-                                <FluentSkeleton Style="margin-left: 1rem;"
-                                                Shimmer="@true"
-                                                Height="2rem"
-                                                Width="2.5rem"/>
-                                <FluentSkeleton Style="margin-left: 1rem; margin-right: 0.5rem;"
-                                                Shimmer="@true"
-                                                Height="2rem"
-                                                Width="100%"/>
-                            </div>
-                        }
-                    </FluentStack>
-                }
-
-                break;
-
-            default:
-                <FluentMessageBar
-                    Title="@(_state switch
-                           {
-                               State.Loading => Localizer[nameof(ResourceKey.MessageBarLoadingFilesTitle)],
-                               State.Processing => Localizer[nameof(ResourceKey.MessageBarProcessingFilesTitle)],
-                               _ => Localizer[nameof(ResourceKey.MessageBarUnhandledStateTitle)]
-                           })"
-                    Intent="@(_state switch
-                            {
-                                State.Loading => MessageIntent.Info,
-                                State.Processing => MessageIntent.Info,
-                                _ => MessageIntent.Warning
-                            })"
-                    Type="@MessageType.Notification"
-                    AllowDismiss="@false"
-                    Style="max-width: 40rem; border: 0.0625rem solid var(--accent-fill-rest)">
-                    <p>
-                        @(_state switch
-                        {
-                            State.Loading => Localizer[nameof(ResourceKey.MessageBarLoadingFilesBody)],
-                            State.Processing => Localizer[nameof(ResourceKey.MessageBarProcessingFilesBody)],
-                            _ => Localizer[nameof(ResourceKey.MessageBarUnhandledStateBody)]
-                        })
-                    </p>
-                </FluentMessageBar>
-                break;
+            <FluentMessageBar
+                Title="@Localizer[nameof(ResourceKey.MESSAGEBAR_TITLE_PROCESSING_SELECTED_SCHEDULES)]"
+                Intent="@MessageIntent.Info"
+                Type="@MessageType.Notification"
+                AllowDismiss="@false"
+                Style="margin-top: 3rem; max-width: 50rem; border: 1px solid var(--accent-fill-rest)">
+                <p>
+                    @Localizer[nameof(ResourceKey.MESSAGEBAR_BODY_PROCESSING_SELECTED_SCHEDULES)]
+                </p>
+            </FluentMessageBar>
         }
-
+        else
+        {
+            if (WorkScheduleStore.Count == 0)
+            {
+                <FluentStack Orientation="@Orientation.Vertical"
+                             HorizontalAlignment="@HorizontalAlignment.Center"
+                             VerticalAlignment="@VerticalAlignment.Center">
+                    @for (var i = 0; i < 3; i++)
+                    {
+                        <div style="display: flex; width: 100%;">
+                            <FluentSkeleton Style="margin-left: 0.5rem;"
+                                            Shimmer="@true"
+                                            Height="2rem"
+                                            Width="2.5rem"/>
+                            <FluentSkeleton Style="margin-left: 1rem;"
+                                            Shimmer="@true"
+                                            Height="2rem"
+                                            Width="2.5rem"/>
+                            <FluentSkeleton Style="margin-left: 1rem; margin-right: 0.5rem;"
+                                            Shimmer="@true"
+                                            Height="2rem"
+                                            Width="100%"/>
+                        </div>
+                    }
+                </FluentStack>
+            }
+            else
+            {
+                <FluentDataGrid TGridItem="WorkSchedule"
+                                ItemKey="@(schedule => schedule.Id)"
+                                Items="@WorkScheduleStore.WorkSchedules"
+                                DisplayMode="@DataGridDisplayMode.Grid"
+                                GenerateHeader="@GenerateHeaderOption.Default"
+                                HeaderCellAsButtonWithMenu="@true"
+                                ShowHover="@true"
+                                Virtualize="@true"
+                                OverscanCount="4"
+                                ItemSize="45">
+                    <ChildContent>
+                        <!-- Added padding-top: 10px to center the checkbox -->
+                        <SelectColumn TGridItem="WorkSchedule"
+                                      Style="padding-top: 10px;"
+                                      @bind-SelectedItems="@_selectedWorkSchedules"
+                                      Align="@Align.Center"
+                                      SelectMode="@DataGridSelectMode.Multiple"
+                                      SelectFromEntireRow="@true"
+                                      Selectable="@(_ => true)">
+                        </SelectColumn>
+                        <TemplateColumn TGridItem="WorkSchedule"
+                                        Width="3rem"
+                                        Align="@Align.Center"
+                                        IsDefaultSortColumn="@true"
+                                        Sortable="@true"
+                                        SortBy="@(GridSort<WorkSchedule>.ByAscending(schedule => schedule.State))"
+                                        InitialSortDirection="@SortDirection.Ascending">
+                            <ChildContent>
+                                <FluentButton BackgroundColor="rgba(0, 0, 0, 0)"
+                                              StopPropagation="@true"
+                                              OnClick="@(() => OpenWorkScheduleViewerDialogAsync(context))">
+                                    @switch (context.State)
+                                    {
+                                        case WorkScheduleState.Ok:
+                                            <FluentIcon
+                                                Value="@(new Icons.Regular.Size24.Checkmark().WithColor(Color.Success))"/>
+                                            break;
+                                        case WorkScheduleState.ReadError:
+                                        case WorkScheduleState.ValidateError:
+                                            <FluentIcon
+                                                Value="@(new Icons.Regular.Size24.Warning().WithColor(Color.Warning))"/>
+                                            break;
+                                        case WorkScheduleState.GeneralError:
+                                        default:
+                                            <FluentIcon
+                                                Value="@(new Icons.Regular.Size24.Bug().WithColor(Color.Error))"/>
+                                            break;
+                                    }
+                                </FluentButton>
+                            </ChildContent>
+                        </TemplateColumn>
+                        <PropertyColumn TGridItem="WorkSchedule"
+                                        TProp="string"
+                                        Title="@Localizer[nameof(ResourceKey.DATAGRID_COLUMN_TITLE_SCHEDULES)]"
+                                        Align="@Align.Start"
+                                        Property="@(schedule => schedule.Metadata.Name)"
+                                        Sortable="@true"
+                                        SortBy="@(GridSort<WorkSchedule>.ByAscending(schedule => schedule.Metadata.Name))"/>
+                    </ChildContent>
+                </FluentDataGrid>
+            }
+        }
     </FluentGridItem>
 
 </FluentGrid>
