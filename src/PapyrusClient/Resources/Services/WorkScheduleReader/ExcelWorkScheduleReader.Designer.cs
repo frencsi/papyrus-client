@@ -69,7 +69,11 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The month in year and month is invalid. Value: {0}. Please check the cell (column, row): {1}, {2}..
+        ///   Looks up a localized string similar to The month in year and month is invalid. 
+        ///
+        ///Value: &apos;{0}&apos;. 
+        ///
+        ///Please check the cell (column, row): &apos;{1}&apos;, &apos;{2}&apos;..
         /// </summary>
         internal static string INVALID_MONTH_IN_YEARMONTH {
             get {
@@ -78,7 +82,11 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid work schedule type. Value: {0}. Please check the cell (column, row): {1}, {2}..
+        ///   Looks up a localized string similar to Invalid work schedule type. 
+        ///
+        ///Value: &apos;{0}&apos;. 
+        ///
+        ///Please check the cell (column, row): &apos;{1}&apos;, &apos;{2}&apos;..
         /// </summary>
         internal static string INVALID_SCHEDULE_TYPE {
             get {
@@ -87,7 +95,11 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid shift date. Value: {0}. Please check the cell (column, row): {1}, {2}..
+        ///   Looks up a localized string similar to Invalid shift date. 
+        ///
+        ///Value: &apos;{0}&apos;. 
+        ///
+        ///Please check the cell (column, row): &apos;{1}&apos;, &apos;{2}&apos;..
         /// </summary>
         internal static string INVALID_SHIFT_DATE {
             get {
@@ -96,7 +108,11 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid shift time. Value: {0}. Please check the cell (column, row): {1}, {2}..
+        ///   Looks up a localized string similar to Invalid shift time.
+        ///
+        ///Value: &apos;{0}&apos;. 
+        ///
+        ///Please check the cell (column, row): &apos;{1}&apos;, &apos;{2}&apos;..
         /// </summary>
         internal static string INVALID_SHIFT_TIME {
             get {
@@ -105,7 +121,11 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The year in year and month is invalid. Value: {0}. Please check the cell (column, row): {1}, {2}..
+        ///   Looks up a localized string similar to The year in year and month is invalid. 
+        ///
+        ///Value: &apos;{0}&apos;. 
+        ///
+        ///Please check the cell (column, row): &apos;{1}&apos;, &apos;{2}&apos;..
         /// </summary>
         internal static string INVALID_YEAR_IN_YEARMONTH {
             get {
@@ -114,7 +134,9 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company name is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Company name is missing. 
+        ///
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_COMPANY_NAME {
             get {
@@ -132,7 +154,9 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location address is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Location address is missing. 
+        ///
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_LOCATION_ADDRESS {
             get {
@@ -141,7 +165,9 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Work schedule type is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Work schedule type is missing. 
+        ///
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_SCHEDULE_TYPE {
             get {
@@ -150,7 +176,9 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift date is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Shift date is missing. 
+        ///
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_SHIFT_DATE {
             get {
@@ -159,7 +187,9 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Employee on shift is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Employee on shift is missing. 
+        /// 
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_SHIFT_EMPLOYEE {
             get {
@@ -168,7 +198,9 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift time is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Shift time is missing. 
+        ///
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_SHIFT_TIME {
             get {
@@ -177,11 +209,22 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Year &amp; month is missing. Please check the cell (column, row): {0}, {1}..
+        ///   Looks up a localized string similar to Year &amp; month is missing. 
+        ///
+        ///Please check the cell (column, row): &apos;{0}&apos;, &apos;{1}&apos;..
         /// </summary>
         internal static string MISSING_YEARMONTH {
             get {
                 return ResourceManager.GetString("MISSING_YEARMONTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operator,Operátor.
+        /// </summary>
+        internal static string SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES {
+            get {
+                return ResourceManager.GetString("SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES", resourceCulture);
             }
         }
         
