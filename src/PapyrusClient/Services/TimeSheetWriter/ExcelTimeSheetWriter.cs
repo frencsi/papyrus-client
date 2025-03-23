@@ -814,7 +814,7 @@ public class ExcelTimeSheetWriter(
         const string fileExtension = ".xlsx";
 
         var fileName =
-            $"{localizer[nameof(ResourceKey.TIMESHEET)]} {GetLocalizedWorksheetType(workSchedule.Type)} {workSchedule.YearMonth.Year}{workSchedule.YearMonth.Month} {employee.Name}{fileExtension}";
+            $"{localizer[ResourceKey.TIMESHEET]} {GetLocalizedWorksheetType(workSchedule.Type)} {workSchedule.YearMonth.Year}{workSchedule.YearMonth.Month} {employee.Name}{fileExtension}";
 
         ref var counter = ref CollectionsMarshal
             .GetValueRefOrAddDefault(fileNameCounter, fileName, out var keyExists);
@@ -842,9 +842,9 @@ public class ExcelTimeSheetWriter(
     {
         return workScheduleType switch
         {
-            WorkScheduleType.Operator => localizer[nameof(ResourceKey.TYPE_OPERATOR)],
-            WorkScheduleType.Unknown => localizer[nameof(ResourceKey.TYPE_UNKNOWN)],
-            _ => localizer[nameof(ResourceKey.TYPE_UNKNOWN)]
+            WorkScheduleType.Operator => localizer[ResourceKey.TYPE_OPERATOR],
+            WorkScheduleType.Unknown => localizer[ResourceKey.TYPE_UNKNOWN],
+            _ => localizer[ResourceKey.TYPE_UNKNOWN],
         };
     }
 

@@ -29,76 +29,39 @@
         <value>The file size ({0}) exceeds the maximum allowed size ({1}).</value>
     </data>
     <data name="MISSING_COMPANY_NAME" xml:space="preserve">
-        <value>Company name is missing. 
-
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Company name is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="MISSING_LOCATION_ADDRESS" xml:space="preserve">
-        <value>Location address is missing. 
-
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Location address is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="MISSING_YEARMONTH" xml:space="preserve">
-        <value>Year &amp; month is missing. 
-
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Year &amp; month is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="INVALID_YEAR_IN_YEARMONTH" xml:space="preserve">
-        <value>The year in year and month is invalid. 
-
-Value: '{0}'. 
-
-Please check the cell (column, row): '{1}', '{2}'.</value>
+        <value>The year in year and month is invalid. Value: {0}. Please check the cell (column, row): {1}, {2}.</value>
     </data>
     <data name="INVALID_MONTH_IN_YEARMONTH" xml:space="preserve">
-        <value>The month in year and month is invalid. 
-
-Value: '{0}'. 
-
-Please check the cell (column, row): '{1}', '{2}'.</value>
+        <value>The month in year and month is invalid. Value: {0}. Please check the cell (column, row): {1}, {2}.</value>
     </data>
     <data name="MISSING_SCHEDULE_TYPE" xml:space="preserve">
-        <value>Work schedule type is missing. 
-
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Work schedule type is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="INVALID_SCHEDULE_TYPE" xml:space="preserve">
-        <value>Invalid work schedule type. 
-
-Value: '{0}'. 
-
-Please check the cell (column, row): '{1}', '{2}'.</value>
+        <value>Invalid work schedule type. Value: {0}. Please check the cell (column, row): {1}, {2}.</value>
     </data>
     <data name="MISSING_SHIFT_DATE" xml:space="preserve">
-        <value>Shift date is missing. 
-
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Shift date is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="INVALID_SHIFT_DATE" xml:space="preserve">
-        <value>Invalid shift date. 
-
-Value: '{0}'. 
-
-Please check the cell (column, row): '{1}', '{2}'.</value>
+        <value>Invalid shift date. Value: {0}. Please check the cell (column, row): {1}, {2}.</value>
     </data>
     <data name="MISSING_SHIFT_EMPLOYEE" xml:space="preserve">
-        <value>Employee on shift is missing. 
- 
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Employee on shift is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="MISSING_SHIFT_TIME" xml:space="preserve">
-        <value>Shift time is missing. 
-
-Please check the cell (column, row): '{0}', '{1}'.</value>
+        <value>Shift time is missing. Please check the cell (column, row): {0}, {1}.</value>
     </data>
     <data name="INVALID_SHIFT_TIME" xml:space="preserve">
-        <value>Invalid shift time.
-
-Value: '{0}'. 
-
-Please check the cell (column, row): '{1}', '{2}'.</value>
-    </data>
-    <data name="SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES" xml:space="preserve">
-        <value>Operator,Operátor</value>
+        <value>Invalid shift time. Value: {0}. Please check the cell (column, row): {1}, {2}.</value>
     </data>
 </root>

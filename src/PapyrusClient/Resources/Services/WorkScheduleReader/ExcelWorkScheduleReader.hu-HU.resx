@@ -28,76 +28,39 @@
         <value>A fájl mérete ({0}) meghaladja a megengedett maximális méretet ({1}).</value>
     </data>
     <data name="MISSING_COMPANY_NAME" xml:space="preserve">
-        <value>A cég neve hiányzik. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>A cég neve hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="MISSING_LOCATION_ADDRESS" xml:space="preserve">
-        <value>A hely címe hiányzik. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>A hely címe hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="MISSING_YEARMONTH" xml:space="preserve">
-        <value>Az év &amp; hónap hiányzik. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>Az év &amp; hónap hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="INVALID_YEAR_IN_YEARMONTH" xml:space="preserve">
-        <value>Az év az év és hónap mezőben érvénytelen. 
-
-Érték: '{0}'. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{1}', '{2}'.</value>
+        <value>Az év az év és hónap mezőben érvénytelen. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}.</value>
     </data>
     <data name="INVALID_MONTH_IN_YEARMONTH" xml:space="preserve">
-        <value>A hónap az év és hónap mezőben érvénytelen. 
-
-Érték: '{0}'. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{1}', '{2}'.</value>
+        <value>A hónap az év és hónap mezőben érvénytelen. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}.</value>
     </data>
     <data name="MISSING_SCHEDULE_TYPE" xml:space="preserve">
-        <value>Munkaidő-beosztás típusa hiányzik. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>Munkaidő-beosztás típusa hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="INVALID_SCHEDULE_TYPE" xml:space="preserve">
-        <value>Munkaidő-beosztás típusa érvénytelen. 
-
-Érték: '{0}'. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{1}', '{2}'.</value>
+        <value>Munkaidő-beosztás típusa érvénytelen. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}.</value>
     </data>
     <data name="MISSING_SHIFT_DATE" xml:space="preserve">
-        <value>A műszak dátuma hiányzik.
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>A műszak dátuma hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="INVALID_SHIFT_DATE" xml:space="preserve">
-        <value>Érvénytelen műszak dátum. 
-
-Érték: '{0}'. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{1}', '{2}'.</value>
+        <value>Érvénytelen műszak dátum. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}.</value>
     </data>
     <data name="MISSING_SHIFT_EMPLOYEE" xml:space="preserve">
-        <value>A műszakban lévő dolgozó hiányzik. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>A műszakban lévő dolgozó hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="MISSING_SHIFT_TIME" xml:space="preserve">
-        <value>A műszak ideje hiányzik. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{0}', '{1}'.</value>
+        <value>A műszak ideje hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}.</value>
     </data>
     <data name="INVALID_SHIFT_TIME" xml:space="preserve">
-        <value>Érvénytelen a műszak ideje. 
-
-Érték: '{0}'. 
-
-Kérlek, ellenőrizd a cellát (oszlop, sor): '{1}', '{2}'.</value>
-    </data>
-    <data name="SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES" xml:space="preserve">
-        <value>Operátor,Operator</value>
+        <value>Érvénytelen a műszak ideje. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}.</value>
     </data>
 </root>

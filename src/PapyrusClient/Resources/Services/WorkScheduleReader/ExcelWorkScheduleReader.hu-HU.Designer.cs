@@ -70,11 +70,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A hónap az év és hónap mezőben érvénytelen. 
-        ///
-        ///Érték: &apos;{0}&apos;. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{1}&apos;, &apos;{2}&apos;..
+        ///   Looks up a localized string similar to A hónap az év és hónap mezőben érvénytelen. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}..
         /// </summary>
         internal static string INVALID_MONTH_IN_YEARMONTH {
             get {
@@ -83,11 +79,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Munkaidő-beosztás típusa érvénytelen. 
-        ///
-        ///Érték: &apos;{0}&apos;. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{1}&apos;, &apos;{2}&apos;..
+        ///   Looks up a localized string similar to Munkaidő-beosztás típusa érvénytelen. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}..
         /// </summary>
         internal static string INVALID_SCHEDULE_TYPE {
             get {
@@ -96,11 +88,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Érvénytelen műszak dátum. 
-        ///
-        ///Érték: &apos;{0}&apos;. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{1}&apos;, &apos;{2}&apos;..
+        ///   Looks up a localized string similar to Érvénytelen műszak dátum. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}..
         /// </summary>
         internal static string INVALID_SHIFT_DATE {
             get {
@@ -109,11 +97,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Érvénytelen a műszak ideje. 
-        ///
-        ///Érték: &apos;{0}&apos;. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{1}&apos;, &apos;{2}&apos;..
+        ///   Looks up a localized string similar to Érvénytelen a műszak ideje. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}..
         /// </summary>
         internal static string INVALID_SHIFT_TIME {
             get {
@@ -122,11 +106,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Az év az év és hónap mezőben érvénytelen. 
-        ///
-        ///Érték: &apos;{0}&apos;. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{1}&apos;, &apos;{2}&apos;..
+        ///   Looks up a localized string similar to Az év az év és hónap mezőben érvénytelen. Érték: {0}. Kérlek, ellenőrizd a cellát (oszlop, sor): {1}, {2}..
         /// </summary>
         internal static string INVALID_YEAR_IN_YEARMONTH {
             get {
@@ -135,9 +115,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A cég neve hiányzik. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to A cég neve hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_COMPANY_NAME {
             get {
@@ -155,9 +133,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A hely címe hiányzik. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to A hely címe hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_LOCATION_ADDRESS {
             get {
@@ -166,9 +142,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Munkaidő-beosztás típusa hiányzik. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Munkaidő-beosztás típusa hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_SCHEDULE_TYPE {
             get {
@@ -177,9 +151,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A műszak dátuma hiányzik.
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to A műszak dátuma hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_SHIFT_DATE {
             get {
@@ -188,9 +160,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A műszakban lévő dolgozó hiányzik. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to A műszakban lévő dolgozó hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_SHIFT_EMPLOYEE {
             get {
@@ -199,9 +169,7 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A műszak ideje hiányzik. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to A műszak ideje hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_SHIFT_TIME {
             get {
@@ -210,22 +178,11 @@ namespace PapyrusClient.Resources.Services.WorkScheduleReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Az év &amp; hónap hiányzik. 
-        ///
-        ///Kérlek, ellenőrizd a cellát (oszlop, sor): &apos;{0}&apos;, &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Az év &amp; hónap hiányzik. Kérlek, ellenőrizd a cellát (oszlop, sor): {0}, {1}..
         /// </summary>
         internal static string MISSING_YEARMONTH {
             get {
                 return ResourceManager.GetString("MISSING_YEARMONTH", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Operátor,Operator.
-        /// </summary>
-        internal static string SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES {
-            get {
-                return ResourceManager.GetString("SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES", resourceCulture);
             }
         }
         

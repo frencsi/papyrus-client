@@ -25,6 +25,14 @@ public class ExcelWorkScheduleReader(
         .Select(pair => pair.Key)
         .ToFrozenSet();
 
+    private static readonly FrozenDictionary<string, WorkScheduleType> WorkTypes =
+        new Dictionary<string, WorkScheduleType>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Operator", WorkScheduleType.Operator },
+                { "Operátor", WorkScheduleType.Operator }
+            }
+            .ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
+
     public IReadOnlySet<string> SupportedFileExtensions => FileExtensionsSet;
 
     public long MaxFileSizeInBytes => 10 * 1024 * 1024; // 10 MB
@@ -263,19 +271,13 @@ public class ExcelWorkScheduleReader(
                 ]);
         }
 
-        var valueSpan = value.Span;
+        var span = value.Span;
 
-        const char separator = ',';
-
-        var localizeSpan = localizer[nameof(ResourceKey.SCHEDULE_TYPE_OPERATOR_ACCEPTABLE_VALUES)].Value
-            .AsSpan()
-            .Trim();
-
-        foreach (var range in localizeSpan.Split(separator))
+        foreach (var pair in WorkTypes)
         {
-            if (valueSpan.Equals(localizeSpan[range], StringComparison.OrdinalIgnoreCase))
+            if (pair.Key.AsSpan().Equals(span, StringComparison.OrdinalIgnoreCase))
             {
-                return WorkScheduleType.Operator;
+                return pair.Value;
             }
         }
 
