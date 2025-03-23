@@ -1,11 +1,7 @@
-﻿using PapyrusClient.Models;
-
-namespace PapyrusClient.Services.TimeSheetWriter;
+﻿namespace PapyrusClient.Services.TimeSheetWriter;
 
 public interface ITimeSheetWriter
 {
-    Task<string> CreateFileNameAsync(TimeSheet timeSheet, CancellationToken cancellationToken = default);
-
-    Task WriteAsync(Stream destination, TimeSheet timeSheet, IReadOnlySet<DateOnly> holidays,
-        CancellationToken cancellationToken = default);
+    Task<string> WriteAsZipAsync(IEnumerable<WorkSchedule> workSchedules, Holidays holidays, Stream zipStream,
+        bool leaveOpen, CancellationToken cancellationToken = default);
 }

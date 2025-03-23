@@ -1,6 +1,4 @@
-﻿using PapyrusClient.Models;
-
-namespace PapyrusClient.Services.WorkScheduleReader;
+﻿namespace PapyrusClient.Services.WorkScheduleReader;
 
 public interface IWorkScheduleReader
 {
@@ -8,6 +6,6 @@ public interface IWorkScheduleReader
 
     long MaxFileSizeInBytes { get; }
 
-    Task<WorkSchedule> ReadAsync(string fileName, Stream fileSource, WorkOptions? options,
+    Task<WorkSchedule> ReadAsync(string fileName, Stream fileSource, WorkScheduleOptions options,
         CancellationToken cancellationToken = default);
 }

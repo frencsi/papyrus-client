@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-
-namespace PapyrusClient.Utilities;
+﻿namespace PapyrusClient.Utilities;
 
 public class LocalizableException : Exception
 {

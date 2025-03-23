@@ -1,0 +1,101 @@
+﻿@using ResourceKey = PapyrusClient.Resources.Ui.Pages.Load
+@inject IStringLocalizer<Load> Localizer
+@page "/Load"
+
+<PageTitle>Load</PageTitle>
+
+<FluentGrid AdaptiveRendering="@true"
+            Justify="@JustifyContent.Center">
+
+    <!-- Icons and Texts -->
+    <FluentGridItem sm="12" md="9" lg="7" xl="7" xxl="7"
+                    HiddenWhen="@GridItemHidden.XsAndDown">
+        <FluentToolbar Style="width: 100%;">
+            <FluentButton
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.Apps())"
+                OnClick="@OpenDashboardPanelAsync">
+                @Localizer[nameof(ResourceKey.BUTTON_TEXT_DASHBOARD)]
+            </FluentButton>
+        </FluentToolbar>
+    </FluentGridItem>
+
+    <!-- Icons only -->
+    <FluentGridItem xs="12"
+                    HiddenWhen="@GridItemHidden.SmAndUp">
+        <FluentToolbar Style="width: 100%;">
+            <FluentButton
+                Style="width: 4rem;"
+                Disabled="@(_processing || _dialog != null)"
+                IconStart="@(new Icons.Regular.Size24.Apps())"
+                OnClick="@OpenDashboardPanelAsync"/>
+        </FluentToolbar>
+    </FluentGridItem>
+
+    <FluentGridItem xs="12" sm="12" md="9" lg="7" xl="7" xxl="7">
+        <div style="width: 100%; height: 1rem;">
+            <FluentProgress Visible="@_processing" Min="0" Max="100" Value="@_loadProgressPercent"/>
+        </div>
+        <FluentInputFile Id="file-loader"
+                         Style="width: 100%; min-height: 20rem; margin-top: 0.5rem;"
+                         Disabled="@_processing"
+                         Multiple="@true"
+                         MaximumFileSize="@(long.MaxValue)"
+                         MaximumFileCount="@_maximumFileCountPerLoad"
+                         Mode="@InputFileMode.Stream"
+                         Accept="@string.Join(",", WorkScheduleReader.SupportedFileExtensions)"
+                         OnFileUploaded="@OnFileLoadedAsync"
+                         OnCompleted="@OnLoadCompletedAsync"
+                         OnFileCountExceeded="@OnFileCountExceededAsync">
+            <!-- Using ChildContent as a progress bar since ProgressTemplate is not responsive -->
+            <ProgressTemplate>
+                <span></span>
+            </ProgressTemplate>
+            <ChildContent>
+                <FluentStack
+                    Style="padding: 1rem;"
+                    Orientation="@Orientation.Vertical"
+                    HorizontalAlignment="@HorizontalAlignment.Center"
+                    VerticalAlignment="@VerticalAlignment.Top">
+                    <div>
+                        @if (!_processing)
+                        {
+                            <FluentIcon Value="@(new Icons.Filled.Size32.ArrowUpload())"/>
+                        }
+                        else
+                        {
+                            <FluentIcon Value="@(new Icons.Filled.Size32.Document())"/>
+                        }
+                    </div>
+
+                    <div>
+                        @if (!_processing)
+                        {
+                            <div>
+                                @Localizer[nameof(ResourceKey.INPUTFILE_LABEL_PART1)]
+                                <label for="file-loader">@Localizer[nameof(ResourceKey.INPUTFILE_LABEL_PART2)]</label>
+                                @Localizer[nameof(ResourceKey.INPUTFILE_LABEL_PART3)]
+                                <br/>
+                                <em>@Localizer.GetString(nameof(ResourceKey.INPUTFILE_LABEL_MAX_LOAD_PER_BATCH), _maximumFileCountPerLoad)</em>
+                            </div>
+
+                            <div style="margin-top: 1rem;">
+                                @Localizer.GetString(nameof(ResourceKey.INPUTFILE_LABEL_SUPPORTED_FORMATS), string.Join(",", WorkScheduleReader.SupportedFileExtensions))
+                            </div>
+                        }
+                        else
+                        {
+                            @_loadProgressFileName
+                        }
+                    </div>
+                </FluentStack>
+            </ChildContent>
+        </FluentInputFile>
+    </FluentGridItem>
+
+    <FluentGridItem xs="12" sm="12" md="9" lg="7" xl="7" xxl="7">
+        <FluentMessageBarProvider Section="@nameof(Load)"
+                                  ClearAfterNavigation="@true"/>
+    </FluentGridItem>
+
+</FluentGrid>

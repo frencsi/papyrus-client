@@ -1,6 +1,4 @@
-﻿using PapyrusClient.Models;
-
-namespace PapyrusClient.Services.WorkScheduleValidator;
+﻿namespace PapyrusClient.Services.WorkScheduleValidator;
 
 public interface IWorkScheduleValidator
 {

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="COLUMN_DAY" xml:space="preserve">
+        <value>NAP</value>
+    </data>
+    <data name="COLUMN_DATE" xml:space="preserve">
+        <value>DÁT.</value>
+    </data>
+    <data name="COLUMN_ARRIVE" xml:space="preserve">
+        <value>ÉRK.</value>
+    </data>
+    <data name="COLUMN_LEAVE" xml:space="preserve">
+        <value>TÁV.</value>
+    </data>
+    <data name="COLUMN_DAY_PERIOD" xml:space="preserve">
+        <value>N.</value>
+    </data>
+    <data name="COLUMN_NIGHT_PERIOD" xml:space="preserve">
+        <value>É.</value>
+    </data>
+    <data name="COLUMN_AFTERNOON_PERIOD" xml:space="preserve">
+        <value>D.</value>
+    </data>
+    <data name="COLUMN_SUMMARY" xml:space="preserve">
+        <value>ÖSSZ.</value>
+    </data>
+    <data name="COLUMN_NOTE" xml:space="preserve">
+        <value>MEGJ.</value>
+    </data>
+    <data name="TYPE_OPERATOR" xml:space="preserve">
+        <value>Operátor</value>
+    </data>
+    <data name="TIMESHEET" xml:space="preserve">
+        <value>Jelenléti ív</value>
+    </data>
+    <data name="TYPE_UNKNOWN" xml:space="preserve">
+        <value>Ismeretlen</value>
+    </data>
+    <data name="VALUE_TBD" xml:space="preserve">
+        <value>TRV.</value>
+    </data>
+    <data name="VALUE_HOLIDAY" xml:space="preserve">
+        <value>MSZ.</value>
+    </data>
+    <data name="FOOTER_COLUMN_SUMMARY" xml:space="preserve">
+        <value>Összesen (perc):</value>
+    </data>
+    <data name="FOOTER_MONTH_WORK_TIME" xml:space="preserve">
+        <value>havi összes munkaidő:</value>
+    </data>
+    <data name="FOOTER_ACTUAL_WORKED_HOURS" xml:space="preserve">
+        <value>tényleges ledolgozott munkaidő:</value>
+    </data>
+    <data name="FOOTER_WORKED_HOURS_ON_HOLIDAY" xml:space="preserve">
+        <value>munkaszüneti napokon végzett munkaidő:</value>
+    </data>
+    <data name="FOOTER_PAID_LEAVE" xml:space="preserve">
+        <value>fizetett szabadság:</value>
+    </data>
+    <data name="FOOTER_OVERTIME" xml:space="preserve">
+        <value>rendkívüli munkaidő:</value>
+    </data>
+</root>

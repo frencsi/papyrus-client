@@ -61,57 +61,25 @@ namespace PapyrusClient.Resources.Services.WorkScheduleValidator {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nincs beállítva semmilyen opció ehhez a munkarendhez..
-        /// </summary>
-        internal static string NoOptionsSet {
-            get {
-                return ResourceManager.GetString("NoOptionsSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Hiányzik végzésnél a folytatás jelölő az alábbi alkalmazottnál: &apos;{0}&apos;, dátum: &apos;{1}&apos;. 
-        /// 
-        ///Ez azért kell, mert &apos;{2}&apos; dátumon folytatás jelölővel kezdődik a műszak ugyanannál az alkalmazottnál. 
+        ///   Looks up a localized string similar to Nem lehet érvényesíteni a munkaidő-beosztást, mert korábban olvasási hiba történt. 
         ///
-        ///Nézd át ezeket a dátumokat: &apos;{2}&apos; és &apos;{1}&apos;..
+        ///Kérlek, először oldd meg az olvasási hibát.
+        ///.
         /// </summary>
-        internal static string PreviousShiftMissingEndContinuationMarker {
+        internal static string CANT_VALIDATE_BECAUSE_READ_ERROR {
             get {
-                return ResourceManager.GetString("PreviousShiftMissingEndContinuationMarker", resourceCulture);
+                return ResourceManager.GetString("CANT_VALIDATE_BECAUSE_READ_ERROR", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Több folytatás jelölőt találtam végzésre ennél az alkalmazottnál: &apos;{0}&apos;, dátum: &apos;{1}&apos;. 
-        ///        
-        ///Nézd át ezeket a dátumokat: &apos;{2}&apos; és &apos;{1}&apos;..
-        /// </summary>
-        internal static string PreviousShiftMultipleEndContinuationMarkerFound {
-            get {
-                return ResourceManager.GetString("PreviousShiftMultipleEndContinuationMarkerFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A műszak időtartama nem lehet negatív vagy nulla. 
-        ///        
-        ///Részletek: {0}..
-        /// </summary>
-        internal static string ShiftDurationNegativeOrZero {
-            get {
-                return ResourceManager.GetString("ShiftDurationNegativeOrZero", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A teljes műszakidő &apos;{0}&apos; meghaladta a megengedett maximumot: &apos;{1}&apos;. 
+        ///   Looks up a localized string similar to A teljes összeadott műszakidő &apos;{0}&apos; meghaladta a megengedett maximumot: &apos;{1}&apos;. 
         ///
-        ///Nézd meg ezt a dátumot: &apos;{2}&apos;..
+        ///Kérlek, nézd meg ezen a dátumon a műszakokat: &apos;{2}&apos;..
         /// </summary>
-        internal static string ShiftExceedsMaxDurationCombinedPerDay {
+        internal static string COMBINED_SHIFTS_DURATION_IS_GREATER_THAN_RULE {
             get {
-                return ResourceManager.GetString("ShiftExceedsMaxDurationCombinedPerDay", resourceCulture);
+                return ResourceManager.GetString("COMBINED_SHIFTS_DURATION_IS_GREATER_THAN_RULE", resourceCulture);
             }
         }
         
@@ -120,80 +88,133 @@ namespace PapyrusClient.Resources.Services.WorkScheduleValidator {
         ///
         ///Nézd meg ezt a dátumot: &apos;{3}&apos;..
         /// </summary>
-        internal static string ShiftExceedsMaxDurationPerEmployeePerDay {
+        internal static string EMPLOYEE_SHIFT_DURATION_IS_GREATER_THAN_RULE {
             get {
-                return ResourceManager.GetString("ShiftExceedsMaxDurationPerEmployeePerDay", resourceCulture);
+                return ResourceManager.GetString("EMPLOYEE_SHIFT_DURATION_IS_GREATER_THAN_RULE", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rés van a műszakok között: &apos;{0}&apos; dátumán. 
+        ///   Looks up a localized string similar to Rést találtam a műszakok között a következő napon: &apos;{0}&apos;. 
         ///
-        ///Részletek: 
-        ///    - Előző műszak: Alkalmazott &apos;{1}&apos; {2} és {3} között 
-        ///    - Következő műszak: Alkalmazott &apos;{4}&apos; {5} és {6} között 
-        ///    - Rés: &apos;{7}&apos;
-        ///
-        ///Győződj meg róla, hogy nincsenek rések a műszakok között..
+        ///- Előző műszak: &apos;{1}&apos; dolgozó, &apos;{2}&apos;-tól &apos;{3}&apos;-ig. 
+        ///- Következő műszak: &apos;{4}&apos; dolgozó, &apos;{5}&apos;-től &apos;{6}&apos;-ig.
+        ///- A rés hossza: &apos;{7}&apos;. 
+        ///            
+        ///Kérlek, nézd át a műszakokat.
+        ///.
         /// </summary>
-        internal static string ShiftGapDetected {
+        internal static string GAP_DETECTED_BETWEEN_SHIFTS {
             get {
-                return ResourceManager.GetString("ShiftGapDetected", resourceCulture);
+                return ResourceManager.GetString("GAP_DETECTED_BETWEEN_SHIFTS", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hiányzik a műszak adata a következő napokon: [{0}]..
+        ///   Looks up a localized string similar to Hiányoznak műszakok a következő napokon: [{0}]..
         /// </summary>
-        internal static string ShiftMissingRequiredDays {
+        internal static string MISSING_REQUIRED_DATES {
             get {
-                return ResourceManager.GetString("ShiftMissingRequiredDays", resourceCulture);
+                return ResourceManager.GetString("MISSING_REQUIRED_DATES", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Átfedés van a műszakok között: &apos;{0}&apos; dátumán. 
+        ///   Looks up a localized string similar to Átfedés van a műszakok között &apos;{0}&apos;-n. 
         ///
-        ///Részletek:
-        ///    - Előző műszak: Alkalmazott &apos;{1}&apos; {2} és {3} között 
-        ///    - Következő műszak: Alkalmazott &apos;{4}&apos; {5} és {6} között. 
+        ///Előző műszak: &apos;{1}&apos; dolgozó, &apos;{2}&apos;-tól &apos;{3}&apos;-ig. 
+        ///Következő műszak: &apos;{4}&apos; dolgozó, &apos;{5}&apos;-től &apos;{6}&apos;-ig. 
         ///
-        ///Nézd át kérlek az átfedéseket..
+        ///Kérlek, nézd át a műszakok időpontját..
         /// </summary>
-        internal static string ShiftOverlapDetected {
+        internal static string OVERLAP_DETECTED_BETWEEN_SHIFTS {
             get {
-                return ResourceManager.GetString("ShiftOverlapDetected", resourceCulture);
+                return ResourceManager.GetString("OVERLAP_DETECTED_BETWEEN_SHIFTS", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Az egyik vagy több műszak dátuma nem az előírt hónapban van: &apos;{0}&apos;. 
+        ///   Looks up a localized string similar to Hiányzik végzésnél a folytatás jelölő az alábbi alkalmazottnál: &apos;{0}&apos;, dátum: &apos;{1}&apos;. 
+        ///    
+        ///Azért kell, mert &apos;{2}&apos; dátumon folytatás jelölővel kezdődik a műszak ugyanannál az alkalmazottnál. 
         ///
-        ///Nézd meg ezt a dátumot: &apos;{1}&apos;..
+        ///Kérlek, nézd át ezeket a dátumokat: &apos;{2}&apos; és &apos;{1}&apos;..
         /// </summary>
-        internal static string ShiftsDateNotInSpecifiedMonth {
+        internal static string PREVIOUS_SHIFT_MISSING_END_CONTINUATION_MARKER {
             get {
-                return ResourceManager.GetString("ShiftsDateNotInSpecifiedMonth", resourceCulture);
+                return ResourceManager.GetString("PREVIOUS_SHIFT_MISSING_END_CONTINUATION_MARKER", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Az egyik vagy több műszak dátuma nem az előírt évben van: &apos;{0}&apos;. 
+        ///   Looks up a localized string similar to Több folytatás jelölőt találtam végzésre ennél az alkalmazottnál: &apos;{0}&apos;, dátum: &apos;{1}&apos;. 
         ///
-        ///Nézd meg ezt a dátumot: &apos;{1}&apos;..
+        ///Kérlek, nézd át ezeket a dátumokat: &apos;{2}&apos; és &apos;{1}&apos;..
         /// </summary>
-        internal static string ShiftsDateNotInSpecifiedYear {
+        internal static string PREVIOUS_SHIFT_MULTIPLE_END_CONTINUATION_MARKER_FOUND {
             get {
-                return ResourceManager.GetString("ShiftsDateNotInSpecifiedYear", resourceCulture);
+                return ResourceManager.GetString("PREVIOUS_SHIFT_MULTIPLE_END_CONTINUATION_MARKER_FOUND", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Most csak az operátor munkatípusnál működik a munkaidő rés-ellenőrzés..
+        ///   Looks up a localized string similar to Nincs szabály beállítva a munkaidő-beosztáshoz, ezért az érvényesítés nem folytatható. 
+        ///
+        ///Kérlek, rendelj hozzá szabályt.
+        ///.
         /// </summary>
-        internal static string WorTypeGapValidationNotSupported {
+        internal static string RULE_NOT_SET {
             get {
-                return ResourceManager.GetString("WorTypeGapValidationNotSupported", resourceCulture);
+                return ResourceManager.GetString("RULE_NOT_SET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Jelenleg csak az operátor munkarend típus támogatja a műszakfolytonosság ellenőrzését.
+        ///.
+        /// </summary>
+        internal static string SHIFT_CONTINUITY_VALIDATION_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("SHIFT_CONTINUITY_VALIDATION_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A műszak hossza nem lehet negatív vagy nulla. 
+        ///
+        ///Részletek: {0}..
+        /// </summary>
+        internal static string SHIFT_DURATION_IS_NEGATIVE_OR_ZERO {
+            get {
+                return ResourceManager.GetString("SHIFT_DURATION_IS_NEGATIVE_OR_ZERO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A műszak(ok) dátumának hónapja nem egyezik a munkidő-beosztás hónapjával. 
+        ///            
+        ///A műszak(ok) hónapja: &apos;{0}&apos;. 
+        ///A munkidő-beosztás hónapja: &apos;{1}&apos;. 
+        ///
+        ///Kérlek, ellenőrizd a következő műszak(ok) dátumát: &apos;{2}&apos;..
+        /// </summary>
+        internal static string SHIFTS_DATE_MONTH_NOT_MATCH_SCHEDULE_MONTH {
+            get {
+                return ResourceManager.GetString("SHIFTS_DATE_MONTH_NOT_MATCH_SCHEDULE_MONTH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A műszak(ok) dátumának éve nem egyezik a munkidő-beosztás évével. 
+        ///
+        ///A műszak(ok) éve: &apos;{0}&apos;. 
+        ///A munkidő-beosztás éve: &apos;{1}&apos;. 
+        ///
+        ///Kérlek, ellenőrizd a következő műszak(ok) dátumát: &apos;{2}&apos;..
+        /// </summary>
+        internal static string SHIFTS_DATE_YEAR_NOT_MATCH_SCHEDULE_YEAR {
+            get {
+                return ResourceManager.GetString("SHIFTS_DATE_YEAR_NOT_MATCH_SCHEDULE_YEAR", resourceCulture);
             }
         }
     }

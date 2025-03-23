@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using PapyrusClient.Utilities;
-
-namespace PapyrusClient.Services.WorkScheduleValidator;
+﻿namespace PapyrusClient.Services.WorkScheduleValidator;
 
 public class WorkScheduleValidatorException : LocalizableException
 {

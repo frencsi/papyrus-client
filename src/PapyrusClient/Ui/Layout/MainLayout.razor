@@ -1,98 +1,23 @@
-﻿@using System.Runtime.InteropServices
-@using Microsoft.Extensions.Localization
-@using ResourceKey = PapyrusClient.Resources.Ui.Layout.MainLayout
-@inherits LayoutComponentBase
-@implements IAsyncDisposable
-@inject ISettingsManager SettingsManager
-@inject IStringLocalizer<MainLayout> Localizer
+﻿@inherits LayoutComponentBase
 
 <FluentLayout>
-    <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
+    <FluentStack Class="main" Orientation="@Orientation.Vertical" Width="100%">
         <FluentBodyContent Class="body-content">
             <ErrorBoundary>
                 <ChildContent>
                     <div class="content">
+                        <FluentMessageBarProvider Section="@App.MessageBarTop"/>
                         @Body
+                        <FluentToastProvider/>
+                        <FluentDialogProvider/>
+                        <FluentTooltipProvider/>
+                        <FluentMenuProvider/>
                     </div>
                 </ChildContent>
                 <ErrorContent Context="ex">
                     <div class="blazor-error-boundary">@ex.Message</div>
                 </ErrorContent>
             </ErrorBoundary>
-            <FluentToastProvider/>
-            <FluentDialogProvider/>
-            <FluentTooltipProvider/>
-            <FluentMessageBarProvider/>
-            <FluentMenuProvider/>
         </FluentBodyContent>
     </FluentStack>
-    <FluentFooter>
-        <span style="margin-right: 0.3rem">@Localizer[nameof(ResourceKey.Version)]:</span>
-        @if (SettingsManager.Version == null)
-        {
-            <FluentSkeleton Shimmer="@true" Height="1rem;" Width="4rem;"/>
-        }
-        else if (SettingsManager.Version.State == VersionState.Valid)
-        {
-            <span>@(SettingsManager.Version.Value.ToString())+<a
-                    href="https://github.com/frencsi/papyrus-client/commit/@SettingsManager.Version.CommitHash.ToString()"
-                    target="_blank">@SettingsManager.Version.ShortCommitHash.ToString()</a>
-            </span>
-        }
-        else
-        {
-            <span>@Localizer[nameof(ResourceKey.VersionUnknown)]</span>
-        }
-        <FluentSpacer/>
-        <span>
-            <a href="https://github.com/frencsi/papyrus-client"
-               target="_blank">@Localizer[nameof(ResourceKey.SourceCode)]</a>,
-            <a href="https://dotnet.microsoft.com/" target="_blank">@RuntimeInformation.FrameworkDescription</a>
-        </span>
-    </FluentFooter>
 </FluentLayout>
-
-@code {
-
-    private volatile bool _disposed;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-
-        if (!firstRender)
-        {
-            return;
-        }
-
-        SettingsManager.VersionLoaded += OnVersionLoaded;
-
-        await SettingsManager.LoadVersionAsync();
-    }
-
-    protected virtual ValueTask DisposeAsyncCore()
-    {
-        if (_disposed)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        _disposed = true;
-
-        SettingsManager.VersionLoaded -= OnVersionLoaded;
-
-        return ValueTask.CompletedTask;
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        await DisposeAsyncCore();
-        GC.SuppressFinalize(this);
-    }
-
-    private void OnVersionLoaded(object? sender, VersionLoadedEventArgs e)
-    {
-        StateHasChanged();
-    }
-
-}

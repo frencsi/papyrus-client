@@ -1,7 +1,4 @@
-﻿@inject ISettingsManager SettingsManager
-@inject IToastService ToastService
-
-<FluentDesignTheme Mode="@SettingsManager.Theme"/>
+﻿<FluentDesignTheme Mode="@ClientManager.Theme"/>
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>

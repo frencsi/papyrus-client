@@ -1,4 +1,4 @@
-﻿window.settingsManager = {
+﻿window.clientManagerStorage = {
     get: (key) => {
         const value = window.localStorage.getItem(key);
         return value ? JSON.parse(value) : null;
